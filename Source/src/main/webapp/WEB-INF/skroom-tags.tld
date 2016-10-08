@@ -1,0 +1,13 @@
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>2.0</jsp-version>
+  <short-name>Skroom TLD</short-name>
+  <tag>
+    <name>bundle</name>
+    <tag-class>pl.pg.eti.kio.skroom.tags.ResourceBundleTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+       <name>name</name>
+    </attribute>
+  </tag>
+</taglib>

@@ -1,0 +1,42 @@
+.dashboard {
+	text-align: center;
+	padding-top: 50px;
+	font-family: "Trebuchet MS";
+}
+
+.project-description {
+	width: 330px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 30px;
+}
+
+.dashboard button {
+	background-color: #CA6144;
+	color: white;
+	width: 120px;
+	height: 30px;
+	margin: 5px;
+	border: 0;
+}
+
+.dashboard-task-list {
+	width: 394px;
+	height: 116px;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	background-color: #566683;
+}
+
+.dashboard-task-list ul {
+	list-style-type: none;
+}
+
+.dashboard-task-list li {
+	text-align: left;
+	margin-left: -20px;
+	color: white;
+	font-size: 12pt;
+	font-weight: bold;
+}

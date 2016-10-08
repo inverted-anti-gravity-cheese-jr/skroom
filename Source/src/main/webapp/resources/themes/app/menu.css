@@ -1,0 +1,30 @@
+#main-menu {
+	background-color: #393E51;
+	text-align: center;
+}
+
+#main-menu h1 {
+	font-family: Gadget;
+	color: #CA6144;
+}
+
+.menu-heavy {
+	font-weight: bolder;
+}
+
+#main-menu a {
+	text-decoration: none;
+	color: #DDD;
+}
+
+.menu-list {
+	padding: 0;
+	font-family: "Trebuchet MS";
+	font-size: 14pt;
+	color: #DDD;
+	list-style-type: none;
+}
+
+.menu-list li {
+	padding-bottom: 10px;
+}

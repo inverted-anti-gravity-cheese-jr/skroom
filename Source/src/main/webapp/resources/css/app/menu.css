@@ -1,0 +1,56 @@
+#main-menu {
+	background-color: #393E51;
+	text-align: center;
+	padding-right: 0px;
+	color: #C2C3CA;
+	position: fixed;
+	overflow-x: hidden;
+	overflow-y: auto;
+	z-index: 1000;
+	top: 0;
+	bottom: 0;
+}
+
+#main-menu h1 {
+	font-family: Gadget;
+	color: #CA6144;
+}
+
+#main-menu .nav-sidebar {
+	font-size: 11pt;
+	text-align: left;
+	margin: 0;
+}
+
+#main-menu .nav-sidebar a {
+	padding-left: 15px;
+	color: inherit;
+}
+
+#main-menu .nav-sidebar .active a {
+	padding-left: 10px;
+}
+
+#main-menu .nav-sidebar .active {
+	border-left: 5px solid #CA6144;
+}
+
+#main-menu .nav-sidebar a:hover {
+	background-color: #566683;
+}
+
+#main-menu .nav-sidebar li img {
+	height: 20px;
+	margin-right: 12px;
+}
+
+.menu-list {
+	padding: 0;
+	font-size: 14pt;
+	color: #DDD;
+	list-style-type: none;
+}
+
+.menu-list li {
+	padding-bottom: 10px;
+}
