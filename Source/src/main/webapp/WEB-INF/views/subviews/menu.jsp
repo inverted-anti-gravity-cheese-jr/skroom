@@ -1,3 +1,6 @@
+<%@page import="pl.pg.eti.kio.skroom.model.enumeration.UserRole" %>
+<%@page import="pl.pg.eti.kio.skroom.model.User" %>
+
 <div id="main-menu" class="col-sm-3 sidebar">
 	<h1>Skroom</h1>
 	<ul class="menu-list">
@@ -41,6 +44,9 @@
 	<hr>
 	<ul class="nav nav-sidebar">
 		<li><a href="#">User settings</a></li>
+		<% if (((User)request.getAttribute("loggedUser")).getRole().equals(UserRole.ADMIN)) { %>
+			<li><a href="#">User privilages settings</a></li>
+		<% } %>
 		<li><a href="logout">Sign out</a></li>
 
 		<!--

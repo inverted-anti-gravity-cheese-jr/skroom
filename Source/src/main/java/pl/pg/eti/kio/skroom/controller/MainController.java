@@ -11,6 +11,7 @@ import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import javax.annotation.PostConstruct;
@@ -119,6 +120,22 @@ public class MainController {
 
 		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
 		model.addObject("siteName", "settings");
+
+		return model;
+	}
+
+	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
+	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user) {
+		if (isUserNull(user)) {
+			return getLoginModel();
+		}
+
+		if(!user.getRole().equals(UserRole.ADMIN)) {
+			return showDashboard(user);
+		}
+
+		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
+		model.addObject("siteName", "userAdmin");
 
 		return model;
 	}

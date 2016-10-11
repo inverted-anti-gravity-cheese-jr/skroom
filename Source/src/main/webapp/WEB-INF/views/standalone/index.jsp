@@ -28,6 +28,12 @@
 				<c:if test="${ siteName eq 'kanban' }">
 					<%@include file="/WEB-INF/views/subviews/kanbanBoard.jsp" %>
 				</c:if>
+				<c:if test="${ siteName eq 'kanban' }">
+					<%@include file="/WEB-INF/views/subviews/kanbanBoard.jsp" %>
+				</c:if>
+				<c:if test="${ siteName eq 'userAdmin' }">
+					<%@include file="/WEB-INF/views/subviews/userAdmin.jsp" %>
+				</c:if>
 			</div>
 		</div>
 	</body>
