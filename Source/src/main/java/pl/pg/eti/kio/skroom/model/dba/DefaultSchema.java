@@ -17,9 +17,12 @@ import org.jooq.impl.SchemaImpl;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 import pl.pg.eti.kio.skroom.model.dba.tables.Users;
+import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
+import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 
 
 /**
@@ -35,7 +38,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1006446552;
+    private static final long serialVersionUID = -1268727225;
 
     /**
      * The reference instance of <code></code>
@@ -58,9 +61,24 @@ public class DefaultSchema extends SchemaImpl {
     public final Users USERS = pl.pg.eti.kio.skroom.model.dba.tables.Users.USERS;
 
     /**
+     * The table <code>USERS_PROJECTS</code>.
+     */
+    public final UsersProjects USERS_PROJECTS = pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects.USERS_PROJECTS;
+
+    /**
      * The table <code>USERS_SECURITY</code>.
      */
     public final UsersSecurity USERS_SECURITY = pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity.USERS_SECURITY;
+
+    /**
+     * The table <code>USERS_SETTINGS</code>.
+     */
+    public final UsersSettings USERS_SETTINGS = pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings.USERS_SETTINGS;
+
+    /**
+     * The table <code>USER_ROLES_IN_PROJECT</code>.
+     */
+    public final UserRolesInProject USER_ROLES_IN_PROJECT = pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject.USER_ROLES_IN_PROJECT;
 
     /**
      * The table <code>USER_STORIES</code>.
@@ -100,7 +118,10 @@ public class DefaultSchema extends SchemaImpl {
             Projects.PROJECTS,
             Tasks.TASKS,
             Users.USERS,
+            UsersProjects.USERS_PROJECTS,
             UsersSecurity.USERS_SECURITY,
+            UsersSettings.USERS_SETTINGS,
+            UserRolesInProject.USER_ROLES_IN_PROJECT,
             UserStories.USER_STORIES,
             SqliteSequence.SQLITE_SEQUENCE);
     }

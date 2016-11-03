@@ -110,15 +110,18 @@ public class UserDao {
 
 				int usersSecurityCreatedRows = query.insertInto(Tables.USERS_SECURITY).values(null, userId.intValue() + 1,
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
-						userSecurity.getSecureAnswer()).execute();
+						userSecurity.getSecureAnswer(), 0).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1) {
 					// rollback
 					throw new Exception();
 				}
+
+				userSecurity.setId(userId);
 			});
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			throw new UserAccountCreationErrorException();
 		}
 	}

@@ -36,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSecurity extends TableImpl<UsersSecurityRecord> {
 
-    private static final long serialVersionUID = 1936802331;
+    private static final long serialVersionUID = 1743668329;
 
     /**
      * The reference instance of <code>USERS_SECURITY</code>
@@ -80,6 +80,11 @@ public class UsersSecurity extends TableImpl<UsersSecurityRecord> {
      * The column <code>USERS_SECURITY.SECURE_ANSWER</code>.
      */
     public final TableField<UsersSecurityRecord, String> SECURE_ANSWER = createField("SECURE_ANSWER", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>USERS_SECURITY.ACCEPTED</code>.
+     */
+    public final TableField<UsersSecurityRecord, Integer> ACCEPTED = createField("ACCEPTED", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>USERS_SECURITY</code> table reference

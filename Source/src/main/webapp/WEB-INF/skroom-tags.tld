@@ -1,13 +1,41 @@
-<taglib>
-  <tlib-version>1.0</tlib-version>
-  <jsp-version>2.0</jsp-version>
-  <short-name>Skroom TLD</short-name>
-  <tag>
-    <name>bundle</name>
-    <tag-class>pl.pg.eti.kio.skroom.tags.ResourceBundleTag</tag-class>
-    <body-content>empty</body-content>
-    <attribute>
-       <name>name</name>
-    </attribute>
-  </tag>
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <tlib-version>2.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Skroom TLD</short-name>
+    <tag>
+        <name>bundle</name>
+        <tag-class>pl.pg.eti.kio.skroom.tags.ResourceBundleTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+    <tag>
+        <name>menuitem</name>
+        <tag-class>pl.pg.eti.kio.skroom.tags.MenuElementTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>href</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>siteName</name>
+            <required>false</required>
+        </attribute>
+        <attribute>
+            <name>imgSrc</name>
+            <required>false</required>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <required>false</required>
+            <type>boolean</type>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

@@ -12,5 +12,34 @@ INSERT INTO USERS_SECURITY VALUES (
 	"admin",
 	"SALT",
 	"Secure question",
-	"Secure answer"
+	"Secure answer",
+    1
+);
+
+INSERT INTO USER_ROLES_IN_PROJECT VALUES (
+    NULL, /* autoincremented value */
+    'Project Manager',
+    '#3F51B5',
+    1
+);
+
+INSERT INTO USER_ROLES_IN_PROJECT VALUES (
+    NULL, /* autoincremented value */
+    'Tester',
+    '#F44336',
+    0
+);
+
+INSERT INTO USER_ROLES_IN_PROJECT VALUES (
+    NULL, /* autoincremented value */
+    'Programmer',
+    '#8BC34A',
+    0
+);
+
+INSERT INTO USER_ROLES_IN_PROJECT VALUES (
+    NULL, /* autoincremented value */
+    'Analyst',
+    '#FFC107',
+    0
 );

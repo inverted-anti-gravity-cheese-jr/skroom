@@ -9,9 +9,12 @@ import javax.annotation.Generated;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 import pl.pg.eti.kio.skroom.model.dba.tables.Users;
+import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
+import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 
 
 /**
@@ -43,9 +46,24 @@ public class Tables {
     public static final Users USERS = pl.pg.eti.kio.skroom.model.dba.tables.Users.USERS;
 
     /**
+     * The table <code>USERS_PROJECTS</code>.
+     */
+    public static final UsersProjects USERS_PROJECTS = pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects.USERS_PROJECTS;
+
+    /**
      * The table <code>USERS_SECURITY</code>.
      */
     public static final UsersSecurity USERS_SECURITY = pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity.USERS_SECURITY;
+
+    /**
+     * The table <code>USERS_SETTINGS</code>.
+     */
+    public static final UsersSettings USERS_SETTINGS = pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings.USERS_SETTINGS;
+
+    /**
+     * The table <code>USER_ROLES_IN_PROJECT</code>.
+     */
+    public static final UserRolesInProject USER_ROLES_IN_PROJECT = pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject.USER_ROLES_IN_PROJECT;
 
     /**
      * The table <code>USER_STORIES</code>.
