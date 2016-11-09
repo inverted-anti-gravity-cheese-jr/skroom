@@ -34,6 +34,9 @@
 				<c:if test="${ siteName eq 'userAdmin' }">
 					<%@include file="/WEB-INF/views/subviews/userAdmin.jsp" %>
 				</c:if>
+				<c:if test="${ siteName eq 'projectForm' }">
+                    <%@include file="/WEB-INF/views/subviews/project-form.jsp" %>
+                </c:if>
 			</div>
 		</div>
 	</body>

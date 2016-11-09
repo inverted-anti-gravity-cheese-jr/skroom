@@ -20,7 +20,7 @@
         <c:forEach var="project" items="${availableProjects}">
             <li><a>${project.name}</a></li>
         </c:forEach>
-        <li><a>Add project</a></li>
+        <li><a href="addProject">Add project</a></li>
     </ul>
     </c:if>
 	<hr>

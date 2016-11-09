@@ -23,6 +23,14 @@ import java.util.List;
 @Service
 public class ProjectDao {
 
+	public void addProject(Connection connection, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		Integer projectId = (Integer) query.fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + Tables.PROJECTS.getName() +"'").get(0);
+
+		query.insertInto(Tables.PROJECTS).values(null, project.getName(), project.getDescription()).execute();
+	}
+
 	public List<Project> getProjectsForUser(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
