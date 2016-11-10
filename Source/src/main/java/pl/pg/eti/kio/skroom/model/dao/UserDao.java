@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
+import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSecurity;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
@@ -29,6 +30,26 @@ import static org.jooq.impl.DSL.table;
  */
 @Service
 public class UserDao {
+
+	private static final int USER_PRIVILAGE_TO_EDIT_PROJECT = 1;
+
+	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		Result<Record1<Integer>> allPrivilages = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)
+				.from(Tables.USERS_PROJECTS, Tables.USER_ROLES_IN_PROJECT)
+				.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
+						.and(Tables.USERS_PROJECTS.PROJECT_ID.eq(project.getId())
+								.and(Tables.USER_ROLES_IN_PROJECT.ID.eq(Tables.USERS_PROJECTS.USER_ROLE_ID)))).fetch();
+
+		for(Record1<Integer> privilage: allPrivilages) {
+			if(privilage.value1().intValue() == USER_PRIVILAGE_TO_EDIT_PROJECT) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Finds in database user by name and convers it to app model.
