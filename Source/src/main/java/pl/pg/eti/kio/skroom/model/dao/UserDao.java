@@ -18,6 +18,8 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
@@ -33,6 +35,36 @@ public class UserDao {
 
 	private static final int USER_PRIVILAGE_TO_EDIT_PROJECT = 1;
 
+	/**
+	 * Lists all users in database, proceed with caution
+	 *
+	 * @param connection Connection to a database
+	 * @return List of all users
+	 */
+	public List<User> listAllUsers(Connection connection) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		List<User> users = new ArrayList<User>();
+
+		Result<UsersRecord> usersRecords = query.selectFrom(Tables.USERS).fetch();
+		try {
+			for(UsersRecord record : usersRecords) {
+				users.add(User.fromDba(record));
+			}
+		} catch (NoSuchUserRoleException e) {
+			users.clear();
+		}
+
+		return users;
+	}
+
+	/**
+	 *
+	 * @param connection
+	 * @param user
+	 * @param project
+	 * @return
+	 */
 	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
 		if(project == null) {
 			return false;

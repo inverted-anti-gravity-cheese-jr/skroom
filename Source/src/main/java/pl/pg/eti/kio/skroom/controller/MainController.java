@@ -3,10 +3,7 @@ package pl.pg.eti.kio.skroom.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Task;
@@ -130,9 +127,15 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
-	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
+	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project,
+												   @RequestParam(value = "upp", required = false) String usersPerPageString) {
 		if (isUserNull(user)) {
 			return getLoginModel();
+		}
+
+		int usersPerPage = 5;
+		if(usersPerPageString != null) {
+			usersPerPage = Integer.parseInt(usersPerPageString);
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -146,6 +149,8 @@ public class MainController {
 
 		ModelAndView model = injector.getIndexForSiteName("userAdmin", project, user);
 		model.addObject("canEdit", canEdit);
+		List<User> allUsers = userDao.listAllUsers(dbConnection);
+		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
 		return model;
 	}
 
