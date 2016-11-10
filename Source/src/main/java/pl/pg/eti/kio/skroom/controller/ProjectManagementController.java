@@ -21,12 +21,14 @@ public class ProjectManagementController {
 
 	@Autowired
 	private ProjectDao projectDao;
+	@Autowired
+	private DefaultTemplateDataInjector injector;
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.GET)
 	public ModelAndView addProjectForm(@ModelAttribute("loggedUser") User user) {
-		ModelAndView modelAndView = new ModelAndView(Views.INDEX_JSP_LOCATION);
+		ModelAndView modelAndView = injector.getIndexForSiteName("projectForm", null, user);
 
-		modelAndView.addObject("siteName", "projectForm");
+		modelAndView.addObject("submitButtonText", "Add Project");
 
 		return modelAndView;
 	}
@@ -45,9 +47,17 @@ public class ProjectManagementController {
 		return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(value = "/editProject")
+	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
 	public ModelAndView editProject(@ModelAttribute("loggedUser") User user) {
-		return new ModelAndView(Views.INDEX_JSP_LOCATION);
+
+		ModelAndView modelAndView = new ModelAndView(Views.INDEX_JSP_LOCATION);
+
+		modelAndView.addObject("siteName", "projectForm");
+		modelAndView.addObject("name", "AAA");
+		modelAndView.addObject("description", "BBB");
+		modelAndView.addObject("submitButtonText", "Update Project");
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "/removeProject")
