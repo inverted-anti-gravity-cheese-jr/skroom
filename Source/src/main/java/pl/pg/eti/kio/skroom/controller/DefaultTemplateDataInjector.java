@@ -21,7 +21,9 @@ public class DefaultTemplateDataInjector {
 	public ModelAndView getIndexForSiteName(String siteName, Project selectedProject, User user) {
 		ModelAndView modelAndView = new ModelAndView(Views.INDEX_JSP_LOCATION);
 		modelAndView.addObject("siteName", siteName);
-		modelAndView.addObject("selectedProject", selectedProject);
+		if(selectedProject != null) {
+			modelAndView.addObject("selectedProject", selectedProject);
+		}
 		modelAndView.addObject("availableProjects", projectDao.getProjectsForUser(DatabaseSettings.getDatabaseConnection(), user));
 		return modelAndView;
 	}
