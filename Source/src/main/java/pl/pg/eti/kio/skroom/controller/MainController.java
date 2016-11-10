@@ -36,7 +36,7 @@ public class MainController {
 
 	@Autowired private TaskDao taskDao;
 	@Autowired private UserDao userDao;
-	@Autowired private ProjectDao projectDao;
+	@Autowired private DefaultTemplateDataInjector injector;
 
 	@PostConstruct
 	public void initDatabase() {
@@ -64,11 +64,8 @@ public class MainController {
 
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "dashboard");
+		ModelAndView model = injector.getIndexForSiteName("dashboard", project, user);
 		model.addObject("list", taskList);
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
 
 		return model;
 	}
@@ -80,13 +77,7 @@ public class MainController {
 			return check;
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "productBacklog");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("productBacklog", project, user);
 		return model;
 	}
 
@@ -97,13 +88,7 @@ public class MainController {
 			return check;
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "sprintBacklog");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("sprintBacklog", project, user);
 		return model;
 	}
 
@@ -117,12 +102,8 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "kanban");
+		ModelAndView model = injector.getIndexForSiteName("kanban", project, user);
 		model.addObject("list", taskList);
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
 		return model;
 	}
 
@@ -133,13 +114,7 @@ public class MainController {
 			return check;
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "issues");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("issues", project, user);
 		return model;
 	}
 
@@ -150,13 +125,7 @@ public class MainController {
 			return check;
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "settings");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("settings", project, user);
 		return model;
 	}
 
@@ -170,13 +139,7 @@ public class MainController {
 			return showDashboard(user, project);
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "userAdmin");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("userAdmin", project, user);
 		return model;
 	}
 
@@ -186,13 +149,7 @@ public class MainController {
 			return getLoginModel();
 		}
 
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-
-		ModelAndView model = new ModelAndView(INDEX_JSP_LOCATION);
-		model.addObject("siteName", "userSettings");
-		model.addObject("selectedProject", project);
-		model.addObject("availableProjects", projectDao.getProjectsForUser(dbConnection, user));
-
+		ModelAndView model = injector.getIndexForSiteName("userSettings", project, user);
 		return model;
 	}
 
