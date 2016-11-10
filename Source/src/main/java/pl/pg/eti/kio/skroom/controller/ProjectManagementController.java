@@ -47,13 +47,17 @@ public class ProjectManagementController {
 		return new ModelAndView("redirect:/");
 	}
 
+	@RequestMapping(value = "/editProject", method = RequestMethod.GET)
+	public ModelAndView editProject() {
+		return new ModelAndView("redirect:/");
+	}
+
 	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
-	public ModelAndView editProject(@ModelAttribute("loggedUser") User user) {
+	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable String projectId) {
 
-		ModelAndView modelAndView = new ModelAndView(Views.INDEX_JSP_LOCATION);
 
-		modelAndView.addObject("siteName", "projectForm");
-		modelAndView.addObject("name", "AAA");
+		ModelAndView modelAndView = injector.getIndexForSiteName("projectForm", null, user);
+		modelAndView.addObject("name", "AAA" + projectId);
 		modelAndView.addObject("description", "BBB");
 		modelAndView.addObject("submitButtonText", "Update Project");
 
