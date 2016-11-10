@@ -135,11 +135,17 @@ public class MainController {
 			return getLoginModel();
 		}
 
-		if(!user.getRole().equals(UserRole.ADMIN)) {
-			return showDashboard(user, project);
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		boolean isAdmin = UserRole.ADMIN.equals(user.getRole());
+		boolean canEdit = userDao.checkIfHasProjectEditPreferences(dbConnection, user, project);
+
+		if(!isAdmin && !canEdit) {
+			return new ModelAndView("redirect:/");
 		}
 
 		ModelAndView model = injector.getIndexForSiteName("userAdmin", project, user);
+		model.addObject("canEdit", canEdit);
 		return model;
 	}
 

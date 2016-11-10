@@ -34,6 +34,10 @@ public class UserDao {
 	private static final int USER_PRIVILAGE_TO_EDIT_PROJECT = 1;
 
 	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
+		if(project == null) {
+			return false;
+		}
+
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		Result<Record1<Integer>> allPrivilages = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)

@@ -1,15 +1,3 @@
-<%@page import="pl.pg.eti.kio.skroom.model.enumeration.UserRole" %>
-<%@page import="pl.pg.eti.kio.skroom.model.User" %>
-<%@page import="pl.pg.eti.kio.skroom.model.Project" %>
-
-
-<%
-   User logged = (User)request.getAttribute("loggedUser");
-   pageContext.setAttribute("canCreateProjects", logged.getRole().equals(UserRole.ADMIN) || logged.getRole().equals(UserRole.PROJECT_MANAGER));
-   pageContext.setAttribute("isAdmin", logged.getRole().equals(UserRole.ADMIN));
-   pageContext.setAttribute("isProjectSelected", ((Project)request.getAttribute("selectedProject")).getId() > 0 );
-%>
-
 <div id="main-menu" class="col-sm-3 sidebar">
 	<h1>Skroom</h1>
 	<ul class="menu-list">

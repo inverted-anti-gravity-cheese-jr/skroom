@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
+import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
@@ -24,6 +25,11 @@ public class DefaultTemplateDataInjector {
 		if(selectedProject != null) {
 			modelAndView.addObject("selectedProject", selectedProject);
 		}
+
+		modelAndView.addObject("canCreateProjects", UserRole.ADMIN.equals(user.getRole()) || UserRole.PROJECT_MANAGER.equals(user.getRole()));
+		modelAndView.addObject("isAdmin", UserRole.ADMIN.equals(user.getRole()));
+		modelAndView.addObject("isProjectSelected", selectedProject == null || selectedProject.getId() > 0 );
+
 		modelAndView.addObject("availableProjects", projectDao.getProjectsForUser(DatabaseSettings.getDatabaseConnection(), user));
 		return modelAndView;
 	}
