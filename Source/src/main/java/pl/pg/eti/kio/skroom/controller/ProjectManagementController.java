@@ -12,7 +12,7 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 import java.sql.Connection;
 
 /**
- * @author Wojciech Stanisławski
+ * @author Wojciech Stanisławski, Krzysztof Świeczkowski
  * @since 09.11.16
  */
 @Controller
@@ -21,6 +21,7 @@ public class ProjectManagementController {
 
 	@Autowired
 	private ProjectDao projectDao;
+
 	@Autowired
 	private DefaultTemplateDataInjector injector;
 
@@ -53,12 +54,16 @@ public class ProjectManagementController {
 	}
 
 	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
-	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable String projectId) {
+	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-
+		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
+		if(project == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView modelAndView = injector.getIndexForSiteName("projectForm", null, user);
-		modelAndView.addObject("name", "AAA" + projectId);
-		modelAndView.addObject("description", "BBB");
+		modelAndView.addObject("name", project.getName());
+		modelAndView.addObject("description", project.getDescription());
 		modelAndView.addObject("submitButtonText", "Update Project");
 
 		return modelAndView;
