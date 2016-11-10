@@ -31,7 +31,8 @@ public class AccountManagementController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountManagementController.class);
 
 	// Messages
-	private static final String WRONG_USERNAME_OR_PASSWORD_MESSAGE = "Wrong username or password";
+	private static final String YOUR_ACCOUNT_MUST_BE_ACCEPTED = "Your account hasn't been accepted yet. Please contact your system administrator.";
+	private static final String WRONG_USERNAME_OR_PASSWORD_MESSAGE = "You entered wrong username or password. Please try again.";
 
 	// Redirects
 	private static final String REDIRECT_AFTER_SUCCESSFULL_LOGIN = "redirect:/dashboard";
@@ -55,6 +56,9 @@ public class AccountManagementController {
 			return getLoginModel(WRONG_USERNAME_OR_PASSWORD_MESSAGE);
 		}
 		UserSecurity userSecurity = userDao.fetchUserSecurityData(dbConnection, user);
+		if(!userSecurity.isAccepted()) {
+			return getLoginModel(YOUR_ACCOUNT_MUST_BE_ACCEPTED);
+		}
 		if(userSecurity.getPassword().equals(password)) {
 			ModelAndView model = new ModelAndView(REDIRECT_AFTER_SUCCESSFULL_LOGIN);
 			model.addObject("loggedUser", user);
@@ -63,6 +67,7 @@ public class AccountManagementController {
 		else {
 			return getLoginModel(WRONG_USERNAME_OR_PASSWORD_MESSAGE);
 		}
+
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)

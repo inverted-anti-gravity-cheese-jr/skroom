@@ -19,13 +19,6 @@ INSERT INTO USERS_SECURITY VALUES (
 INSERT INTO USER_ROLES_IN_PROJECT VALUES (
     NULL, /* autoincremented value */
     'Project Owner',
-    '#FF5ABB',
-    1
-);
-
-INSERT INTO USER_ROLES_IN_PROJECT VALUES (
-    NULL, /* autoincremented value */
-    'Project Manager',
     '#3F51B5',
     1
 );

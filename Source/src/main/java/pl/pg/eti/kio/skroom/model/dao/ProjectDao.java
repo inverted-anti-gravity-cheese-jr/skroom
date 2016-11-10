@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
+import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
@@ -36,10 +37,18 @@ public class ProjectDao {
 
 		List<Project> projects = new ArrayList<Project>();
 
-		Result<Record3<Integer, String, String>> result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
-				.from(Tables.PROJECTS, Tables.USERS_PROJECTS)
-				.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
-						.and(Tables.PROJECTS.ID.eq(Tables.USERS_PROJECTS.PROJECT_ID))).fetch();
+		Result<Record3<Integer, String, String>> result;
+
+		if(UserRole.ADMIN.equals(user.getRole())) {
+			result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
+					.from(Tables.PROJECTS).fetch();
+		}
+		else {
+			result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
+					.from(Tables.PROJECTS, Tables.USERS_PROJECTS)
+					.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
+							.and(Tables.PROJECTS.ID.eq(Tables.USERS_PROJECTS.PROJECT_ID))).fetch();
+		}
 
 		for(Record3<Integer, String, String> record : result) {
 			Project project = new Project();
