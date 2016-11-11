@@ -49,12 +49,12 @@ public class ProjectManagementController {
 	}
 
 	@RequestMapping(value = "/editProject", method = RequestMethod.GET)
-	public ModelAndView editProject() {
+	public ModelAndView editProjectRedirect() {
 		return new ModelAndView("redirect:/");
 	}
 
 	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
-	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
+	public ModelAndView editProjectForm(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
@@ -67,6 +67,23 @@ public class ProjectManagementController {
 		modelAndView.addObject("submitButtonText", "Update Project");
 
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.POST)
+	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId, @RequestParam String name, @RequestParam String description) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
+		if(project == null) {
+			return new ModelAndView("redirect:/");
+		}
+
+		project.setName(name);
+		project.setDescription(description);
+
+		projectDao.updateProject(dbConnection, project);
+
+		return new ModelAndView("redirect:/");
 	}
 
 	@RequestMapping(value = "/removeProject")

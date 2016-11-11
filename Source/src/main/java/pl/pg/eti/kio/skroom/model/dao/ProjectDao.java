@@ -34,6 +34,15 @@ public class ProjectDao {
 		query.insertInto(Tables.PROJECTS).values(null, project.getName(), project.getDescription()).execute();
 	}
 
+	public void updateProject(Connection connection, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		query.update(Tables.PROJECTS)
+				.set(Tables.PROJECTS.NAME, project.getName())
+				.set(Tables.PROJECTS.DESCRIPTION, project.getDescription())
+				.where(Tables.PROJECTS.ID.equal(project.getId())).execute();
+	}
+
 	public boolean checkPrivilegesForProject(Connection connection, int projectId, User user) {
 		if(UserRole.ADMIN.equals(user.getRole())) {
 			return true;

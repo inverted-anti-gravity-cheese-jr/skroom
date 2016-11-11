@@ -1,4 +1,4 @@
-<form action="addProject" method="post">
+<form method="post">
 
 <input name="name" value="${ name }" />
 <textarea name="description">${ description }</textarea>
