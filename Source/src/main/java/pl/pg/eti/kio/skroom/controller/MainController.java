@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.util.List;
 
-import static pl.pg.eti.kio.skroom.controller.Views.INDEX_JSP_LOCATION;
 import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
 
 /**
@@ -61,7 +60,7 @@ public class MainController {
 
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName("dashboard", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "dashboard", project, user);
 		model.addObject("list", taskList);
 
 		return model;
@@ -74,7 +73,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("productBacklog", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "productBacklog", project, user);
 		return model;
 	}
 
@@ -85,7 +84,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("sprintBacklog", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", project, user);
 		return model;
 	}
 
@@ -99,7 +98,7 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName("kanban", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "kanban", project, user);
 		model.addObject("list", taskList);
 		return model;
 	}
@@ -111,7 +110,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("issues", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "issues", project, user);
 		return model;
 	}
 
@@ -122,7 +121,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("settings", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "settings", project, user);
 		return model;
 	}
 
@@ -147,7 +146,7 @@ public class MainController {
 			return new ModelAndView("redirect:/");
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("userAdmin", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", project, user);
 		model.addObject("canEdit", canEdit);
 		List<User> allUsers = userDao.listAllUsers(dbConnection);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
@@ -160,7 +159,7 @@ public class MainController {
 			return getLoginModel();
 		}
 
-		ModelAndView model = injector.getIndexForSiteName("userSettings", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "userSettings", project, user);
 		return model;
 	}
 

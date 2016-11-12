@@ -1,9 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@tag description="Body Tag" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="s" uri="/WEB-INF/skroom-tags.tld"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -22,18 +23,7 @@
 		<div class="row">
 			<%@include file="/WEB-INF/views/subviews/menu.jsp" %>
 			<div id="page-content" class = "col-sm-9 col-sm-offset-3">
-				<c:if test="${ siteName eq 'dashboard' }">
-					<%@include file="/WEB-INF/views/subviews/dashboard.jsp" %>
-				</c:if>
-				<c:if test="${ siteName eq 'kanban' }">
-					<%@include file="/WEB-INF/views/subviews/kanbanBoard.jsp" %>
-				</c:if>
-				<c:if test="${ siteName eq 'userAdmin' }">
-					<%@include file="/WEB-INF/views/subviews/userAdmin.jsp" %>
-				</c:if>
-				<c:if test="${ siteName eq 'projectForm' }">
-                    <%@include file="/WEB-INF/views/subviews/projectForm.jsp" %>
-                </c:if>
+			    <jsp:doBody/>
 			</div>
 		</div>
 	</body>

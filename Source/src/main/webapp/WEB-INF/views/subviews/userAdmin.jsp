@@ -1,3 +1,9 @@
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<t:index>
+
 <spring:url value="/resources/css/app/adminPanel.css" var="adminCss" />
 <link href="${adminCss}" rel="stylesheet" />
 
@@ -45,3 +51,5 @@
 
     <h1>Projects</h1>
 </div>
+
+</t:index>

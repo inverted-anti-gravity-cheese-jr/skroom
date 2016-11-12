@@ -27,7 +27,7 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.GET)
 	public ModelAndView addProjectForm(@ModelAttribute("loggedUser") User user) {
-		ModelAndView modelAndView = injector.getIndexForSiteName("projectForm", null, user);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "projectForm", null, user);
 
 		modelAndView.addObject("submitButtonText", "Add Project");
 
@@ -61,7 +61,7 @@ public class ProjectManagementController {
 		if(project == null) {
 			return new ModelAndView("redirect:/");
 		}
-		ModelAndView modelAndView = injector.getIndexForSiteName("projectForm", null, user);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "projectForm", null, user);
 		modelAndView.addObject("name", project.getName());
 		modelAndView.addObject("description", project.getDescription());
 		modelAndView.addObject("submitButtonText", "Update Project");
@@ -88,6 +88,6 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/removeProject")
 	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user) {
-		return new ModelAndView(Views.INDEX_JSP_LOCATION);
+		return new ModelAndView("redirect:/");
 	}
 }

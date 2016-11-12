@@ -1,0 +1,1 @@
+<button action="deleteForm">Delete project</button>
