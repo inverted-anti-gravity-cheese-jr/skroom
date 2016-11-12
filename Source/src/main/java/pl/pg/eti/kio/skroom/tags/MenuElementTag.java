@@ -66,7 +66,7 @@ public class MenuElementTag extends SimpleTagSupport {
 			siteName = href;
 		}
 
-		if(currentSiteName.equals(siteName)) {
+		if(currentSiteName.equals(ROOT_PATH + siteName)) {
 			out.print("<li class=\"active\">");
 		}
 		else {

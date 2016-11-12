@@ -38,4 +38,9 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>pagetitle</name>
+        <tag-class>pl.pg.eti.kio.skroom.tags.PageTitleTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 </taglib>

@@ -1,19 +1,18 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.util.List;
@@ -33,6 +32,7 @@ public class MainController {
 	@Autowired private TaskDao taskDao;
 	@Autowired private UserDao userDao;
 	@Autowired private DefaultTemplateDataInjector injector;
+	@Autowired private WebRequest request;
 
 	@PostConstruct
 	public void initDatabase() {
@@ -60,7 +60,7 @@ public class MainController {
 
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "dashboard", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", project, user, request);
 		model.addObject("list", taskList);
 
 		return model;
@@ -73,7 +73,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "productBacklog", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", project, user, request);
 		return model;
 	}
 
@@ -84,7 +84,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", project, user, request);
 		return model;
 	}
 
@@ -98,7 +98,7 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "kanban", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", project, user, request);
 		model.addObject("list", taskList);
 		return model;
 	}
@@ -110,7 +110,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "issues", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues", project, user, request);
 		return model;
 	}
 
@@ -121,7 +121,7 @@ public class MainController {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "settings", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Settings", project, user, request);
 		return model;
 	}
 
@@ -146,7 +146,7 @@ public class MainController {
 			return new ModelAndView("redirect:/");
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", project, user, request);
 		model.addObject("canEdit", canEdit);
 		List<User> allUsers = userDao.listAllUsers(dbConnection);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
@@ -159,7 +159,7 @@ public class MainController {
 			return getLoginModel();
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "userSettings", project, user);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings", project, user, request);
 		return model;
 	}
 
