@@ -1,22 +1,18 @@
 <div id="main-menu" class="col-sm-3 sidebar">
 	<h1>Skroom</h1>
-	<ul class="nav nav-sidebar menu-list">
+	<ul class="menu-list">
 		<li><a>Select project</a></li>
 	</ul>
     <c:if test="${canCreateProjects}">
-    <ul class="nav nav-sidebar project-list">
+    <ul class="project-list">
         <c:forEach var="project" items="${availableProjects}">
-            <li><a>${project.name}</a><a><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+            <li><a>${project.name}</a><a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a></li>
         </c:forEach>
         <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
     </ul>
     </c:if>
 	<hr>
-	<!-- Entypo pictograms by Daniel Bruce — www.entypo.com -->
-	<!-- https://creativecommons.org/licenses/by-sa/4.0/ -->
 	<ul class="nav nav-sidebar">
-        
-        
         <s:menuitem href="dashboard" imgSrc="/resources/svg/gauge.svg" disabled="${not isProjectSelected}">Dashboard</s:menuitem>
         <s:menuitem href="productbacklog" siteName="productBacklog" imgSrc="/resources/svg/list.svg" disabled="${not isProjectSelected}">Product backlog</s:menuitem>
 		<s:menuitem href="sprintbacklog" siteName="sprintBacklog" disabled="${not isProjectSelected}">Sprint backlog</s:menuitem>
