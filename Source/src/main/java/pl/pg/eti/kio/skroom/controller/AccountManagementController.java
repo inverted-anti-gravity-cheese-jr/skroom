@@ -35,9 +35,12 @@ public class AccountManagementController {
 	// Messages
 	private static final String YOUR_ACCOUNT_MUST_BE_ACCEPTED = "Your account hasn't been accepted yet. Please contact your system administrator.";
 	private static final String WRONG_USERNAME_OR_PASSWORD_MESSAGE = "You entered wrong username or password. Please try again.";
+	private static final String SUCCESSFULLY_CREATED_ACCOUNT = "Thank you, your account has been created successfully.";
 
 	// Redirects
 	private static final String REDIRECT_AFTER_SUCCESSFULL_LOGIN = "redirect:/dashboard";
+	private static final String PASSWORDS_NOT_MATCH = "Passwords not match";
+	private static final String WRONG_EMAIL_FORMAT = "Wrong email format.";
 
 	@Autowired private UserDao userDao;
 
@@ -72,8 +75,13 @@ public class AccountManagementController {
 			return getLoginModel(YOUR_ACCOUNT_MUST_BE_ACCEPTED);
 		}
 		if(userSecurity.getPassword().equals(password)) {
+			UserSettings settings = userDao.fetchUserSettingsData(dbConnection, user);
+
 			ModelAndView model = new ModelAndView(REDIRECT_AFTER_SUCCESSFULL_LOGIN);
 			model.addObject("loggedUser", user);
+			if(settings != null) {
+				model.addObject("userSettings", settings);
+			}
 			return model;
 		}
 		else {
@@ -107,13 +115,13 @@ public class AccountManagementController {
 									  @RequestParam("confirm_password") String confirmPassword, @RequestParam("email") String email,
 									  @RequestParam("question") String question, @RequestParam("answer") String answer) {
 		if(!confirmPassword.equals(password)) {
-			LOGGER.debug("Passwords not match for user " + name + ".");
-			return getSignupModelWithErrorMessage("Passwords not match");
+			LOGGER.debug("Passwords not match for user {}.", name);
+			return getSignupModelWithErrorMessage(PASSWORDS_NOT_MATCH);
 		}
 
 		if(!email.matches("(.*@.*[.].*)")) {
-			LOGGER.debug("Wrong email format " + email + ".");
-			return getSignupModelWithErrorMessage("Wrong email format.");
+			LOGGER.debug("Wrong email format {}.", email);
+			return getSignupModelWithErrorMessage(WRONG_EMAIL_FORMAT);
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -130,7 +138,6 @@ public class AccountManagementController {
 		userSecurity.setSecureQuestion(question);
 		userSecurity.setSecureAnswer(answer);
 
-
 		try {
 			userDao.registerUser(dbConnection, user, userSecurity);
 		} catch (UserAlreadyExistsException e) {
@@ -139,7 +146,7 @@ public class AccountManagementController {
 			return getSignupModelWithErrorMessage(e.getMessage());
 		}
 
-		return getLoginModel("Thank you, your account has been created successfully.");
+		return getLoginModel(SUCCESSFULLY_CREATED_ACCOUNT);
 	}
 
 	private ModelAndView getSignupModelWithErrorMessage(String message) {

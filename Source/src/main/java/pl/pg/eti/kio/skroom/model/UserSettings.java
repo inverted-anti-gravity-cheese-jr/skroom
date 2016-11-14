@@ -8,6 +8,8 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 import java.sql.Connection;
 
 /**
+ * User settings model for use in the application. Stored in session.
+ *
  * @author Wojciech Stanisławski
  * @since 14.11.16
  */
@@ -35,10 +37,14 @@ public class UserSettings {
 	/**
 	 * Method for converting database records into model classes.
 	 *
-	 * @param record Database record fetched by jOOQ
-	 * @return Converted user
+	 * @param record	Database record fetched by jOOQ
+	 * @return			Converted user
 	 */
 	public static UserSettings fromDba(UsersSettingsRecord record, DSLContext query) {
+		if(record == null) {
+			return null;
+		}
+
 		UserSettings settings = new UserSettings();
 
 		settings.setId(record.getId());
@@ -50,5 +56,13 @@ public class UserSettings {
 		}
 
 		return settings;
+	}
+
+	@Override
+	public String toString() {
+		return "UserSettings{" +
+				"id=" + id +
+				", recentProject=" + recentProject +
+				'}';
 	}
 }

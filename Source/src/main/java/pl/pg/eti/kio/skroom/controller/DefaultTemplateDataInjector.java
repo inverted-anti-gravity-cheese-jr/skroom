@@ -11,6 +11,8 @@ import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
+ * Class for injecting default data inside a JSP page based on index
+ *
  * @author Wojciech Stanisławski
  * @since 10.11.16
  */
@@ -20,6 +22,16 @@ public class DefaultTemplateDataInjector {
 	@Autowired
 	private ProjectDao projectDao;
 
+	/**
+	 * Gets index site and injects important variables into it.
+	 *
+	 * @param viewName Name of a view, used for menu options
+	 * @param pageTitle
+	 * @param selectedProject
+	 * @param user
+	 * @param request
+	 * @return
+	 */
 	public ModelAndView getIndexForSiteName(String viewName, String pageTitle, Project selectedProject, User user, WebRequest request) {
 		ModelAndView modelAndView = new ModelAndView(viewName);
 		modelAndView.addObject("pageTitle", pageTitle);

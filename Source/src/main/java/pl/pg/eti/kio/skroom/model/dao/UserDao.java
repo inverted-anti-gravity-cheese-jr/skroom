@@ -46,7 +46,7 @@ public class UserDao {
 
 		Result<UsersRecord> usersRecords = query.selectFrom(Tables.USERS).fetch();
 		try {
-			for(UsersRecord record : usersRecords) {
+			for (UsersRecord record : usersRecords) {
 				users.add(User.fromDba(record));
 			}
 		} catch (NoSuchUserRoleException e) {
@@ -57,29 +57,29 @@ public class UserDao {
 	}
 
 	/**
+	 * Method check if user has any priviliges that allow him to edit project.
 	 *
-	 * @param connection
-	 * @param user
-	 * @param project
-	 * @return
+	 * @param connection Connection to a database
+	 * @param user User class from model
+	 * @param project Project class from model
+	 * @return Returns true if user has any privilagaes that allow him to edit project, and false otherwise
 	 */
 	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
-		if(project == null) {
+		if (project == null) {
 			return false;
 		}
 
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Result<Record1<Integer>> allPrivilages = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)
+		Record1<Integer> rolesWithPrivilages = query.selectCount()
 				.from(Tables.USERS_PROJECTS, Tables.USER_ROLES_IN_PROJECT)
 				.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
 						.and(Tables.USERS_PROJECTS.PROJECT_ID.eq(project.getId())
-								.and(Tables.USER_ROLES_IN_PROJECT.ID.eq(Tables.USERS_PROJECTS.USER_ROLE_ID)))).fetch();
+								.and(Tables.USER_ROLES_IN_PROJECT.ID.eq(Tables.USERS_PROJECTS.USER_ROLE_ID)))
+						.and(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES.eq(USER_PRIVILAGE_TO_EDIT_PROJECT))).fetchOne();
 
-		for(Record1<Integer> privilage: allPrivilages) {
-			if(privilage.value1().intValue() == USER_PRIVILAGE_TO_EDIT_PROJECT) {
-				return true;
-			}
+		if (rolesWithPrivilages != null && rolesWithPrivilages.value1().intValue() > 0) {
+			return true;
 		}
 
 		return false;
@@ -129,9 +129,10 @@ public class UserDao {
 
 
 	/**
+	 * Fetches user settings for supplied user
 	 *
-	 * @param connection
-	 * @param user
+	 * @param connection	Connection to a database
+	 * @param user			User from app model
 	 * @return
 	 */
 	public UserSettings fetchUserSettingsData(Connection connection, User user) {
@@ -145,10 +146,10 @@ public class UserDao {
 	/**
 	 * Registers user in the database. Throw exception when operation whas unsuccessfull.
 	 *
-	 * @param connection Connection to a database
-	 * @param user Basic user information
+	 * @param connection   Connection to a database
+	 * @param user         Basic user information
 	 * @param userSecurity Security settings for user (password, security question, etc.)
-	 * @throws UserAlreadyExistsException Thrown when user with that name or email already exists
+	 * @throws UserAlreadyExistsException        Thrown when user with that name or email already exists
 	 * @throws UserAccountCreationErrorException Thrown when an error occured
 	 */
 	public void registerUser(Connection connection, User user, UserSecurity userSecurity) throws UserAlreadyExistsException, UserAccountCreationErrorException {
@@ -164,7 +165,7 @@ public class UserDao {
 
 		try {
 			query.transaction(configuration -> {
-				Integer userId = (Integer) DSL.using(configuration).fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + Tables.USERS.getName() +"'").get(0);
+				Integer userId = (Integer) DSL.using(configuration).fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + Tables.USERS.getName() + "'").get(0);
 
 				if (userId == null) {
 					// rollback
@@ -187,8 +188,7 @@ public class UserDao {
 
 				userSecurity.setId(userId);
 			});
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UserAccountCreationErrorException();
 		}

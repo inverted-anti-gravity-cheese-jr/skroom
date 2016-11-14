@@ -41,8 +41,8 @@ public class Project {
 	/**
 	 * Method for converting database records into model classes.
 	 *
-	 * @param record Database project record
-	 * @return Model project class
+	 * @param record	Database project record
+	 * @return			Model project class
 	 */
 	public static Project fromDba(ProjectsRecord record) {
 		if (record == null) {
