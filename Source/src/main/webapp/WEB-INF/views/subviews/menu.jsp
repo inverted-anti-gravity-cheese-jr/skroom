@@ -1,12 +1,12 @@
 <div id="main-menu" class="col-sm-3 sidebar">
 	<h1>Skroom</h1>
-	<ul class="menu-list">
+	<ul class="nav nav-sidebar menu-list">
 		<li><a>Select project</a></li>
 	</ul>
     <c:if test="${canCreateProjects}">
-    <ul class="project-list">
+    <ul class="nav nav-sidebar project-list">
         <c:forEach var="project" items="${availableProjects}">
-            <li><a>${project.name}</a></li>
+            <li><a>${project.name}</a><a><i class="fa fa-pencil" aria-hidden="true"></i></a></li>
         </c:forEach>
         <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
     </ul>

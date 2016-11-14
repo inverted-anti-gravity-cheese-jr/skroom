@@ -14,6 +14,7 @@
 		<s:bundle name="jquery" />
 		<s:bundle name="jquery-ui" />
 		<s:bundle name="bootstrap" />
+		<s:bundle name="font-awesome" />
 		<s:bundle name="main" />
 
 	    <s:pagetitle />

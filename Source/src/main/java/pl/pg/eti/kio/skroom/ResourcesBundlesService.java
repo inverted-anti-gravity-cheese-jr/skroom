@@ -24,6 +24,7 @@ public class ResourcesBundlesService {
 		bundles.put("jquery", getJqueryBundle());
 		bundles.put("main", getMainBundle());
 		bundles.put("bootstrap", getBootstrapBundle());
+		bundles.put("font-awesome", getFontAwesomeBundle());
 	}
 
 	public List<String> getBundle(String bundleName) {
@@ -51,6 +52,10 @@ public class ResourcesBundlesService {
 		return Arrays.asList("resources/js/bootstrap/bootstrap.min.js",
 				"resources/css/bootstrap/bootstrap.min.css",
 				"resources/css/bootstrap/bootstrap-theme.min.css");
+	}
+
+	private List<String> getFontAwesomeBundle() {
+		return Arrays.asList("resources/css/font-awesome.css");
 	}
 
 }
