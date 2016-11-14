@@ -6,6 +6,7 @@ import org.jooq.Record3;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.jooq.util.xml.jaxb.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
@@ -25,6 +26,8 @@ import java.util.List;
  */
 @Service
 public class ProjectDao {
+
+	@Autowired private UserDao userDao;
 
 	/**
 	 * Gets project with supplied id
@@ -107,10 +110,10 @@ public class ProjectDao {
 		return project;
 	}
 
-	public List<Project> getProjectsForUser(Connection connection, User user) {
+	public List<ProjectContainer> getProjectsForUser(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		List<Project> projects = new ArrayList<Project>();
+		List<ProjectContainer> projects = new ArrayList<ProjectContainer>();
 
 		Result<Record3<Integer, String, String>> result;
 
@@ -130,9 +133,27 @@ public class ProjectDao {
 			project.setId(record.value1());
 			project.setName(record.value2());
 			project.setDescription(record.value3());
-			projects.add(project);
+			projects.add(new ProjectContainer(project, userDao.checkIfHasProjectEditPreferences(connection, user, project)));
 		}
 
 		return projects;
 	}
+
+	public class ProjectContainer {
+		public Project project;
+		public Boolean editable;
+
+		public Project getProject() {
+			return project;
+		}
+
+		public Boolean getEditable() {
+			return editable;
+		}
+		ProjectContainer(Project project, Boolean editable) {
+			this.project = project;
+			this.editable = editable;
+		}
+	}
+
 }

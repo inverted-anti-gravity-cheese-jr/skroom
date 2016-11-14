@@ -4,11 +4,11 @@
 		<li><a>Select project</a></li>
 	</ul>
     <ul class="project-list">
-        <c:forEach var="project" items="${availableProjects}">
+        <c:forEach var="projectContainer" items="${menuAvailableProjects}">
             <li>
-                <a>${project.name}</a>
-                <c:if test="${canCreateProjects}">
-                <a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a>${projectContainer.project.name}</a>
+                <c:if test="${projectContainer.editable}">
+                <a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${projectContainer.project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </c:if>
             </li>
         </c:forEach>

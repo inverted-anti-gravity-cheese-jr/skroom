@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
+import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
@@ -21,6 +22,7 @@ import java.sql.Connection;
 public class ProjectManagementController {
 
 	@Autowired private ProjectDao projectDao;
+	@Autowired private UserDao userDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
 
@@ -58,7 +60,7 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(project == null) {
+		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "Edit Project", null, user, request);
@@ -75,7 +77,7 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(project == null) {
+		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
 
@@ -91,10 +93,11 @@ public class ProjectManagementController {
 	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-
-		if(!projectDao.checkPrivilegesForProject(dbConnection, projectId, user)) {
+		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
+		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
+
 		projectDao.removeProject(dbConnection, projectId);
 		return new ModelAndView("redirect:/");
 	}

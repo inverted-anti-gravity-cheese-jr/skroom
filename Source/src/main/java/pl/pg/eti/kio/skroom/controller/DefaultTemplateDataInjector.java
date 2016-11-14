@@ -43,7 +43,7 @@ public class DefaultTemplateDataInjector {
 		modelAndView.addObject("isAdmin", UserRole.ADMIN.equals(user.getRole()));
 		modelAndView.addObject("isProjectSelected", selectedProject != null);
 
-		modelAndView.addObject("availableProjects", projectDao.getProjectsForUser(DatabaseSettings.getDatabaseConnection(), user));
+		modelAndView.addObject("menuAvailableProjects", projectDao.getProjectsForUser(DatabaseSettings.getDatabaseConnection(), user));
 		return modelAndView;
 	}
 
