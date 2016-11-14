@@ -11,6 +11,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSettings extends TableImpl<UsersSettingsRecord> {
 
-    private static final long serialVersionUID = -1877467705;
+    private static final long serialVersionUID = -2000666184;
 
     /**
      * The reference instance of <code>USERS_SETTINGS</code>
@@ -54,6 +55,11 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
      * The column <code>USERS_SETTINGS.ID</code>.
      */
     public final TableField<UsersSettingsRecord, Integer> ID = createField("ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>USERS_SETTINGS.USER_ID</code>.
+     */
+    public final TableField<UsersSettingsRecord, Integer> USER_ID = createField("USER_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>USERS_SETTINGS.RECENT_PROJECT_ID</code>.
@@ -94,6 +100,14 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
      * {@inheritDoc}
      */
     @Override
+    public Identity<UsersSettingsRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USERS_SETTINGS;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public UniqueKey<UsersSettingsRecord> getPrimaryKey() {
         return Keys.PK_USERS_SETTINGS;
     }
@@ -111,7 +125,7 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
      */
     @Override
     public List<ForeignKey<UsersSettingsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UsersSettingsRecord, ?>>asList(Keys.FK_USERS_SETTINGS_PROJECTS_1);
+        return Arrays.<ForeignKey<UsersSettingsRecord, ?>>asList(Keys.FK_USERS_SETTINGS_USERS_1, Keys.FK_USERS_SETTINGS_PROJECTS_1);
     }
 
     /**

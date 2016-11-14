@@ -26,6 +26,21 @@ import java.util.List;
 @Service
 public class ProjectDao {
 
+	/**
+	 * Gets project with supplied id
+	 *
+	 * @param connection Connection to a database
+	 * @param id Id of the project
+	 * @return Project class from the model
+	 */
+	public Project fetchProjectById(Connection connection, int id) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		ProjectsRecord projectRecord = query.selectFrom(Tables.PROJECTS).where(Tables.PROJECTS.ID.eq(id)).fetchOne();
+
+		return Project.fromDba(projectRecord);
+	}
+
 	public void addProject(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 

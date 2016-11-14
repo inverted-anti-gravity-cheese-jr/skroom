@@ -16,6 +16,12 @@ INSERT INTO USERS_SECURITY VALUES (
     1
 );
 
+INSERT INTO USERS_SETTINGS VALUES (
+    NULL, /* autoincremented value */
+    1,
+    -1
+);
+
 INSERT INTO USER_ROLES_IN_PROJECT VALUES (
     NULL, /* autoincremented value */
     'Project Owner',

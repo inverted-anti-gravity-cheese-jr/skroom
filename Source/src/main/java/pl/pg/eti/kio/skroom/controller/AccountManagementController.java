@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
+import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSecurity;
+import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
@@ -26,7 +28,7 @@ import static pl.pg.eti.kio.skroom.controller.Views.SIGNUP_JSP_LOCATION;
  * @since 22.08.16
  */
 @Controller
-@SessionAttributes({"loggedUser"})
+@SessionAttributes({"loggedUser", "userSettings", "selectedProject"})
 public class AccountManagementController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountManagementController.class);
 
@@ -42,6 +44,16 @@ public class AccountManagementController {
 	@ModelAttribute("loggedUser")
 	public User defaultNullUser() {
 		return new User();
+	}
+
+	@ModelAttribute("selectedProject")
+	public Project defaultNullProject() {
+		return new Project();
+	}
+
+	@ModelAttribute("userSettings")
+	public UserSettings defaultNullUserSettings() {
+		return new UserSettings();
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

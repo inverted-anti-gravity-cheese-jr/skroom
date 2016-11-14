@@ -1,10 +1,9 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import org.jooq.*;
-import org.jooq.exception.DataAccessException;
+import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
-import org.jooq.util.derby.sys.Sys;
-import org.jooq.util.xml.jaxb.Table;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
@@ -12,17 +11,16 @@ import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSecurity;
+import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.table;
 
 /**
  * Class to access model's User from database.
@@ -124,13 +122,24 @@ public class UserDao {
 	public UserSecurity fetchUserSecurityData(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Result<UsersSecurityRecord> securityRecords = query.selectFrom(Tables.USERS_SECURITY).where(Tables.USERS_SECURITY.USER_ID.eq(user.getId())).fetch();
+		UsersSecurityRecord usersSecurityRecord = query.selectFrom(Tables.USERS_SECURITY).where(Tables.USERS_SECURITY.USER_ID.eq(user.getId())).fetchOne();
 
-		if (securityRecords.isEmpty()) {
-			return null;
-		}
+		return UserSecurity.fromDba(usersSecurityRecord);
+	}
 
-		return UserSecurity.fromDba(securityRecords.get(0));
+
+	/**
+	 *
+	 * @param connection
+	 * @param user
+	 * @return
+	 */
+	public UserSettings fetchUserSettingsData(Connection connection, User user) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		UsersSettingsRecord usersSettingsRecord = query.selectFrom(Tables.USERS_SETTINGS).where(Tables.USERS_SETTINGS.USER_ID.eq(user.getId())).fetchOne();
+
+		return UserSettings.fromDba(usersSettingsRecord, query);
 	}
 
 	/**
@@ -169,7 +178,9 @@ public class UserDao {
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
 						userSecurity.getSecureAnswer(), 0).execute();
 
-				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1) {
+				int usersSettingsCreateRows = query.insertInto(Tables.USERS_SETTINGS).values(null, -1).execute();
+
+				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1 || usersSettingsCreateRows != 1) {
 					// rollback
 					throw new Exception();
 				}

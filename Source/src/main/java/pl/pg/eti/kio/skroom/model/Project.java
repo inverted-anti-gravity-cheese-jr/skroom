@@ -45,6 +45,10 @@ public class Project {
 	 * @return Model project class
 	 */
 	public static Project fromDba(ProjectsRecord record) {
+		if (record == null) {
+			return null;
+		}
+
 		Project project = new Project();
 
 		project.setId(record.getId());

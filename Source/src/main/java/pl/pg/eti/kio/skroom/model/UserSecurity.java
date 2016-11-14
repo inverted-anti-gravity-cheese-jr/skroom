@@ -82,6 +82,10 @@ public class UserSecurity {
 	 * @return Converted user
 	 */
 	public static UserSecurity fromDba(UsersSecurityRecord record) {
+		if(record == null) {
+			return null;
+		}
+
 		UserSecurity userSecurity = new UserSecurity();
 
 		userSecurity.setId(record.getId());

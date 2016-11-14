@@ -1,6 +1,5 @@
 package pl.pg.eti.kio.skroom.controller;
 
-import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,10 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.User;
+import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.util.List;
@@ -26,7 +28,7 @@ import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
  * @since 22.05.16
  */
 @Controller
-@SessionAttributes({"loggedUser", "selectedProject"})
+@SessionAttributes({"loggedUser", "userSettings"})
 public class MainController {
 
 	@Autowired private TaskDao taskDao;
@@ -44,14 +46,14 @@ public class MainController {
 		return new User();
 	}
 
-	@ModelAttribute("selectedProject")
-	public Project defaultNullProject() {
-		return new Project();
+	@ModelAttribute("userSettings")
+	public UserSettings defaultNullUserSettings() {
+		return new UserSettings();
 	}
 
 	@RequestMapping(value = { "/", "/dashboard" }, method = RequestMethod.GET)
-	public ModelAndView showDashboard(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showDashboard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
@@ -60,37 +62,37 @@ public class MainController {
 
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", userSettings.getRecentProject(), user, request);
 		model.addObject("list", taskList);
 
 		return model;
 	}
 
 	@RequestMapping(value = "/productbacklog", method = RequestMethod.GET)
-	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	@RequestMapping(value = "/sprintbacklog", method = RequestMethod.GET)
-	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	@RequestMapping(value = "/kanban", method = RequestMethod.GET)
-	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
@@ -98,35 +100,35 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<Task> taskList = taskDao.fetchTasks(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
 		model.addObject("list", taskList);
 		return model;
 	}
 
 	@RequestMapping(value = "/issues", method = RequestMethod.GET)
-	public ModelAndView showIssues(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showIssues(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	@RequestMapping(value = "/settings", method = RequestMethod.GET)
-	public ModelAndView showProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
-		ModelAndView check = checkSessionAttributes(user, project);
+	public ModelAndView showProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Settings", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Settings", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
-	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project,
+	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) String usersPerPageString) {
 		if (isUserNull(user)) {
 			return getLoginModel();
@@ -140,13 +142,13 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		boolean isAdmin = UserRole.ADMIN.equals(user.getRole());
-		boolean canEdit = userDao.checkIfHasProjectEditPreferences(dbConnection, user, project);
+		boolean canEdit = userDao.checkIfHasProjectEditPreferences(dbConnection, user, userSettings.getRecentProject());
 
 		if(!isAdmin && !canEdit) {
 			return new ModelAndView("redirect:/");
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
 		List<User> allUsers = userDao.listAllUsers(dbConnection);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
@@ -154,22 +156,22 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/userSettings", method = RequestMethod.GET)
-	public ModelAndView showUserSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("selectedProject") Project project) {
+	public ModelAndView showUserSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
 		if (isUserNull(user)) {
 			return getLoginModel();
 		}
 
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings", project, user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
-	private ModelAndView checkSessionAttributes(User user, Project project) {
+	private ModelAndView checkSessionAttributes(User user, UserSettings usersSettings) {
 		if (isUserNull(user)) {
 			return getLoginModel();
 		}
 
-		if (isProjectNull(project)) {
-			return showUserSettings(user, project);
+		if (usersSettings.getRecentProject() == null) {
+			return showUserSettings(user, usersSettings);
 		}
 
 		return null;
@@ -187,9 +189,5 @@ public class MainController {
 
 	private boolean isUserNull(User user) {
 		return user.getId() < 0;
-	}
-
-	private boolean isProjectNull(Project project) {
-		return project.getId() < 0;
 	}
 }

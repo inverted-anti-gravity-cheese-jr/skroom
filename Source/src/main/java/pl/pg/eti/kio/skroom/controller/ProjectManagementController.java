@@ -17,7 +17,7 @@ import java.sql.Connection;
  * @since 09.11.16
  */
 @Controller
-@SessionAttributes({"loggedUser", "selectedProject"})
+@SessionAttributes({"loggedUser", "userSettings"})
 public class ProjectManagementController {
 
 	@Autowired private ProjectDao projectDao;
