@@ -89,6 +89,13 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/removeProject/{projectId}")
 	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+
+		if(!projectDao.checkPrivilegesForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
+		projectDao.removeProject(dbConnection, projectId);
 		return new ModelAndView("redirect:/");
 	}
 }

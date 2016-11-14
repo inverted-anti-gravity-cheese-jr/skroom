@@ -58,6 +58,12 @@ public class ProjectDao {
 				.where(Tables.PROJECTS.ID.equal(project.getId())).execute();
 	}
 
+	public void removeProject(Connection connection, Integer projectId) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		query.delete(Tables.PROJECTS).where(Tables.PROJECTS.ID.equal(projectId)).execute();
+	}
+
 	public boolean checkPrivilegesForProject(Connection connection, int projectId, User user) {
 		if(UserRole.ADMIN.equals(user.getRole())) {
 			return true;
