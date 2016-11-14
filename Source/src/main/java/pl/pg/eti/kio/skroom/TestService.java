@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 public class TestService {
 
 	// komentarz
+	// test
 	public String getHelloMessage() {
 		return "Hello World!";
 	}

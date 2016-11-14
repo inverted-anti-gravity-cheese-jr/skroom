@@ -3,4 +3,9 @@
 .classpath
 build/
 bin/
+gradle/
+gradlew
+gradlew.bat
 data.db
+Skroom.iml
+skroom.iml

@@ -1,3 +1,9 @@
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<t:index>
+
 <div id="taskBoard" class="onerow">
 	<div id="notStarted" class="col5thsr dragDrop">
 		<h2>
@@ -113,7 +119,7 @@
 	function handleTaskUpdate(item, newTaskStatus) {
 		var taskId = item.find(".taskId").data('taskid');
 		//var taskName = item.find(".taskName").val();
-		//var taskAssignee = item.find(".taskAssigne").val();
+		//var taskAssignee = item.find(".taskAssignee").val();
 		//var taskSP = item.find(".taskSP").val();
 		var serializedItem = {
 			TaskId : taskId,
@@ -138,3 +144,5 @@
 	makeTaskItemsDraggable($container);
 	makeTaskItemStatusDroppable($container);
 </script>
+
+</t:index>

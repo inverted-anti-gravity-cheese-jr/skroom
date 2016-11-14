@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'eclipse-wtp'
 apply plugin: 'jetty'
 
 // JDK 8
@@ -25,21 +24,15 @@ dependencies {
 	//compile group: 'log4j', name: 'log4j', version: '1.2.17'
 }
 
-/*
-def jooqGenerateClasses(String targetXml) {
-	javaexec {
-		classpath = sourceSets.main.runtimeClasspath
-		main = 'org.jooq.util.GenerationTool'
-		args targetXml
+buildscript {
+	repositories {
+		jcenter()
+	}
+
+	dependencies {
+		classpath 'org.akhikhl.gretty:gretty:+'
 	}
 }
-
-task doIt {
-    doLast {
-        jooqGenerateClasses("src/main/webapp/WEB-INF/jooq-class-gen.xml")
-    }
-}
-*/
 
 task generateClasses(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
@@ -48,28 +41,12 @@ task generateClasses(type: JavaExec) {
 }
 
 // Embeded Jetty for testing
-jettyRun{
+jettyRun {
 	contextPath = "skroom"
 	httpPort = 8080
-}
 
-jettyRunWar{
-	contextPath = "skroom"
-	httpPort = 8080
-}
-
-//For Eclipse IDE only
-eclipse {
-
-  wtp {
-    component {
-
-      //define context path, default to project folder name
-      contextPath = 'skroom'
-
-    }
-
-  }
+	reload = "automatic"
+	scanIntervalSeconds = 5
 }
 
 defaultTasks 'generateClasses jettyRun'

@@ -14,6 +14,7 @@ public class UserSecurity {
 	private String salt;
 	private String secureQuestion;
 	private String secureAnswer;
+	private boolean accepted;
 
 	public int getId() {
 		return id;
@@ -55,6 +56,14 @@ public class UserSecurity {
 		this.secureAnswer = secureAnswer;
 	}
 
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
+
 	@Override
 	public String toString() {
 		return "UserSecurity{" +
@@ -80,6 +89,7 @@ public class UserSecurity {
 		userSecurity.setSalt(record.getSalt());
 		userSecurity.setSecureQuestion(record.getSecureQuestion());
 		userSecurity.setSecureAnswer(record.getSecureAnswer());
+		userSecurity.setAccepted(record.getAccepted() == 1);
 
 		return userSecurity;
 	}

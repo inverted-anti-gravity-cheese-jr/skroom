@@ -1,56 +1,35 @@
-<%@page import="pl.pg.eti.kio.skroom.model.enumeration.UserRole" %>
-<%@page import="pl.pg.eti.kio.skroom.model.User" %>
-
 <div id="main-menu" class="col-sm-3 sidebar">
 	<h1>Skroom</h1>
 	<ul class="menu-list">
-		<li>Test project</li>
+		<li><a>Select project</a></li>
 	</ul>
+    <c:if test="${canCreateProjects}">
+    <ul class="project-list">
+        <c:forEach var="project" items="${availableProjects}">
+            <li><a>${project.name}</a></li>
+        </c:forEach>
+        <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
+    </ul>
+    </c:if>
 	<hr>
 	<!-- Entypo pictograms by Daniel Bruce — www.entypo.com -->
 	<!-- https://creativecommons.org/licenses/by-sa/4.0/ -->
 	<ul class="nav nav-sidebar">
-		<li
-			<%if (request.getAttribute("siteName").equals("dashboard")) {
-				out.print("class=\"active\""); }%>>
-			<a href="dashboard"><img src="<c:url value="/resources/svg/gauge.svg" />" />Dashboard</a>
-		</li>
-		<li
-			<%if (request.getAttribute("siteName").equals("productBacklog")) {
-				out.print("class=\"active\""); }%>>
-			<a href="productbacklog"><img src="<c:url value="/resources/svg/list.svg" />" />Product backlog</a>
-		</li>
-		<li
-			<%if (request.getAttribute("siteName").equals("sprintBacklog")) {
-				out.print("class=\"active\""); }%>>
-			<a href="sprintbacklog">Sprint backlog</a>
-		</li>
-		<li
-			<%if (request.getAttribute("siteName").equals("kanban")) {
-				out.print("class=\"active\""); }%>>
-			<a href="kanban">Kanban board</a>
-		</li>
-		<li
-			<%if (request.getAttribute("siteName").equals("issues")) {
-				out.print("class=\"active\""); }%>>
-			<a href="issues">Issues</a>
-		</li>
-		<li
-			<%if (request.getAttribute("siteName").equals("settings")) {
-				out.print("class=\"active\""); }%>>
-			<a href="settings">Project settings</a>
-		</li>
+        
+        
+        <s:menuitem href="dashboard" imgSrc="/resources/svg/gauge.svg" disabled="${not isProjectSelected}">Dashboard</s:menuitem>
+        <s:menuitem href="productbacklog" siteName="productBacklog" imgSrc="/resources/svg/list.svg" disabled="${not isProjectSelected}">Product backlog</s:menuitem>
+		<s:menuitem href="sprintbacklog" siteName="sprintBacklog" disabled="${not isProjectSelected}">Sprint backlog</s:menuitem>
+        <s:menuitem href="kanban" disabled="${not isProjectSelected}">Kanban board</s:menuitem>
+        <s:menuitem href="issues" disabled="${not isProjectSelected}">Issues</s:menuitem>
+        <s:menuitem href="settings" disabled="${not isProjectSelected}">Project settings</s:menuitem>
 	</ul>
 	<hr>
 	<ul class="nav nav-sidebar">
-		<li><a href="#">User settings</a></li>
-		<% if (((User)request.getAttribute("loggedUser")).getRole().equals(UserRole.ADMIN)) { %>
-			<li><a href="#">User privilages settings</a></li>
-		<% } %>
-		<li><a href="logout">Sign out</a></li>
-
-		<!--
-		<li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li><li><a href="logout">Sign out</a></li>
-	-->
+        <%  %>
+        
+		<s:menuitem href="userSettings">User settings</s:menuitem>
+        <s:menuitem href="userAdmin" disabled="${not isAdmin}">User privilages settings</s:menuitem>
+		<s:menuitem href="logout">Sign out</s:menuitem>
 	</ul>
 </div>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
+import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSecurity;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
@@ -17,6 +18,8 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
@@ -29,6 +32,60 @@ import static org.jooq.impl.DSL.table;
  */
 @Service
 public class UserDao {
+
+	private static final int USER_PRIVILAGE_TO_EDIT_PROJECT = 1;
+
+	/**
+	 * Lists all users in database, proceed with caution
+	 *
+	 * @param connection Connection to a database
+	 * @return List of all users
+	 */
+	public List<User> listAllUsers(Connection connection) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		List<User> users = new ArrayList<User>();
+
+		Result<UsersRecord> usersRecords = query.selectFrom(Tables.USERS).fetch();
+		try {
+			for(UsersRecord record : usersRecords) {
+				users.add(User.fromDba(record));
+			}
+		} catch (NoSuchUserRoleException e) {
+			users.clear();
+		}
+
+		return users;
+	}
+
+	/**
+	 *
+	 * @param connection
+	 * @param user
+	 * @param project
+	 * @return
+	 */
+	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
+		if(project == null) {
+			return false;
+		}
+
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		Result<Record1<Integer>> allPrivilages = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)
+				.from(Tables.USERS_PROJECTS, Tables.USER_ROLES_IN_PROJECT)
+				.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
+						.and(Tables.USERS_PROJECTS.PROJECT_ID.eq(project.getId())
+								.and(Tables.USER_ROLES_IN_PROJECT.ID.eq(Tables.USERS_PROJECTS.USER_ROLE_ID)))).fetch();
+
+		for(Record1<Integer> privilage: allPrivilages) {
+			if(privilage.value1().intValue() == USER_PRIVILAGE_TO_EDIT_PROJECT) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	/**
 	 * Finds in database user by name and convers it to app model.
@@ -110,15 +167,18 @@ public class UserDao {
 
 				int usersSecurityCreatedRows = query.insertInto(Tables.USERS_SECURITY).values(null, userId.intValue() + 1,
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
-						userSecurity.getSecureAnswer()).execute();
+						userSecurity.getSecureAnswer(), 0).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1) {
 					// rollback
 					throw new Exception();
 				}
+
+				userSecurity.setId(userId);
 			});
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			throw new UserAccountCreationErrorException();
 		}
 	}

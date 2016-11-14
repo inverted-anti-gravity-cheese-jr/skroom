@@ -27,14 +27,17 @@
 	color: inherit;
 }
 
+#main-menu .menu-list .active a,
 #main-menu .nav-sidebar .active a {
 	padding-left: 10px;
 }
 
+#main-menu .menu-list .active,
 #main-menu .nav-sidebar .active {
 	border-left: 5px solid #CA6144;
 }
 
+#main-menu .menu-list a:hover,
 #main-menu .nav-sidebar a:hover {
 	background-color: #566683;
 }
@@ -42,6 +45,10 @@
 #main-menu .nav-sidebar li img {
 	height: 20px;
 	margin-right: 12px;
+}
+
+#main-menu .project-list {
+    
 }
 
 .menu-list {
