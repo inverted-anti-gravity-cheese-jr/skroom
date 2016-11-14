@@ -8,7 +8,7 @@
         <c:forEach var="project" items="${availableProjects}">
             <li><a>${project.name}</a></li>
         </c:forEach>
-        <li><a href="/addProject">Add project</a></li>
+        <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
     </ul>
     </c:if>
 	<hr>
