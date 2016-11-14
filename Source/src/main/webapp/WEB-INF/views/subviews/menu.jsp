@@ -3,14 +3,19 @@
 	<ul class="menu-list">
 		<li><a>Select project</a></li>
 	</ul>
-    <c:if test="${canCreateProjects}">
     <ul class="project-list">
         <c:forEach var="project" items="${availableProjects}">
-            <li><a>${project.name}</a><a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+            <li>
+                <a>${project.name}</a>
+                <c:if test="${canCreateProjects}">
+                <a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                </c:if>
+            </li>
         </c:forEach>
+        <c:if test="${canCreateProjects}">
         <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
+        </c:if>
     </ul>
-    </c:if>
 	<hr>
 	<ul class="nav nav-sidebar">
         <s:menuitem href="dashboard" imgSrc="/resources/svg/gauge.svg" disabled="${not isProjectSelected}">Dashboard</s:menuitem>
