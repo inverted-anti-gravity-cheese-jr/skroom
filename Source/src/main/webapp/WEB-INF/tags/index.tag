@@ -23,7 +23,7 @@
         <div class="container-fluid">
             <div class="row">
                 <%@include file="/WEB-INF/views/subviews/menu.jsp" %>
-                <div id="page-content" class = "col-sm-9 col-sm-offset-3">
+                <div id="page-content" class = "col-xs-12 col-sm-9 col-sm-offset-3">
                     <jsp:doBody/>
                 </div>
             </div>

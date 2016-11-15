@@ -1,4 +1,4 @@
-<div id="main-menu" class="col-sm-3 sidebar">
+<div id="main-menu" class="col-xs-12 col-sm-3 sidebar">
 	<h1>Skroom</h1>
 	<ul class="menu-list">
 		<li><a>Select project</a></li>
