@@ -98,6 +98,9 @@ public class ProjectDao {
 	 * @return Returns true if user has any privileges that allow him to edit project, and false otherwise
 	 */
 	public boolean checkUserEditPermissionsForProject(Connection connection, Project project, User user) {
+		if(project == null) {
+			return false;
+		}
 		if(UserRole.ADMIN.equals(user.getRole())) {
 			return true;
 		}
