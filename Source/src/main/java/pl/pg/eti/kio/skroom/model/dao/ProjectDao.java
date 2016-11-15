@@ -5,8 +5,6 @@ import org.jooq.Record1;
 import org.jooq.Record3;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
-import org.jooq.util.xml.jaxb.Table;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
@@ -16,7 +14,6 @@ import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +23,6 @@ import java.util.List;
  */
 @Service
 public class ProjectDao {
-
-	@Autowired private UserDao userDao;
 
 	/**
 	 * Gets project with supplied id
@@ -67,26 +62,75 @@ public class ProjectDao {
 		query.delete(Tables.PROJECTS).where(Tables.PROJECTS.ID.equal(projectId)).execute();
 	}
 
-	public boolean checkPrivilegesForProject(Connection connection, int projectId, User user) {
+	/**
+	 * Method check if user is assigned to given project.
+	 *
+	 * @param connection Connection to a database
+	 * @param project Project class from model
+	 * @param user User class from model
+	 * @return Returns true if user has any privileges that allow him to edit project, and false otherwise
+	 */
+	public boolean checkUserViewPermissionsForProject(Connection connection, Project project, User user) {
 		if(UserRole.ADMIN.equals(user.getRole())) {
 			return true;
 		}
 
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Result<Record1<Integer>> resultPrivileges;
-		resultPrivileges = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)
+		Record1<Integer> resultPrivilege;
+		resultPrivilege = query.select(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES)
 				.from(Tables.USER_ROLES_IN_PROJECT, Tables.USERS_PROJECTS)
 				.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId()))
-				.fetch();
-		if(resultPrivileges.isNotEmpty() && resultPrivileges.get(0).value1() == 1) {
+				.and(Tables.USERS_PROJECTS.PROJECT_ID.eq(project.getId()))
+				.fetchOne();
+		if(resultPrivilege != null && resultPrivilege.value1() == 1) {
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Method check if user has any privileges that allow him to edit project.
+	 *
+	 * @param connection Connection to a database
+	 * @param project Project class from model
+	 * @param user User class from model
+	 * @return Returns true if user has any privileges that allow him to edit project, and false otherwise
+	 */
+	public boolean checkUserEditPermissionsForProject(Connection connection, Project project, User user) {
+		if(UserRole.ADMIN.equals(user.getRole())) {
+			return true;
+		}
+		UserDao userDao = new UserDao();
+		return userDao.checkIfHasProjectEditPermissions(connection, user, project);
+	}
+
+	/**
+	 * Method check if user has any privileges that allow him to edit project.
+	 *
+	 * @param connection Connection to a database
+	 * @param projectId Project Id changed into the class from model
+	 * @param user User class from model
+	 * @return Returns true if user has any privileges that allow him to edit project, and false otherwise
+	 */
+	public boolean checkUserEditPermissionsForProject(Connection connection, int projectId, User user) {
+		Project project = new Project();
+		project.setId(projectId);
+		return checkUserEditPermissionsForProject(connection, project, user);
+	}
+
+	/**
+	 * Gets project with supplied project id
+	 *
+	 * @param connection Connection to a database
+	 * @param projectId Id of the project
+	 * @param user User class for model
+	 * @return Project class from the model
+	 */
 	public Project getProjectForUser(Connection connection, int projectId, User user) {
-		if(!checkPrivilegesForProject(connection, projectId, user)) {
+		Project tempProject = new Project();
+		tempProject.setId(projectId);
+		if(!checkUserViewPermissionsForProject(connection, tempProject, user)) {
 			return null;
 		}
 
@@ -110,10 +154,17 @@ public class ProjectDao {
 		return project;
 	}
 
+	/**
+	 * Gets all available projects for user
+	 *
+	 * @param connection Connection to a database
+	 * @param user User class for model
+	 * @return ProjectContainer class containing project and editable flag
+	 */
 	public List<ProjectContainer> getProjectsForUser(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		List<ProjectContainer> projects = new ArrayList<ProjectContainer>();
+		List<ProjectContainer> projects = new ArrayList<>();
 
 		Result<Record3<Integer, String, String>> result;
 
@@ -133,12 +184,15 @@ public class ProjectDao {
 			project.setId(record.value1());
 			project.setName(record.value2());
 			project.setDescription(record.value3());
-			projects.add(new ProjectContainer(project, userDao.checkIfHasProjectEditPreferences(connection, user, project)));
+			projects.add(new ProjectContainer(project, checkUserEditPermissionsForProject(connection, project, user)));
 		}
 
 		return projects;
 	}
 
+	/**
+	 * ProjectContainer class containing project and editable flag
+	 */
 	public class ProjectContainer {
 		public Project project;
 		public Boolean editable;
@@ -150,6 +204,7 @@ public class ProjectDao {
 		public Boolean getEditable() {
 			return editable;
 		}
+
 		ProjectContainer(Project project, Boolean editable) {
 			this.project = project;
 			this.editable = editable;

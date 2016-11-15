@@ -142,7 +142,7 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		boolean isAdmin = UserRole.ADMIN.equals(user.getRole());
-		boolean canEdit = userDao.checkIfHasProjectEditPreferences(dbConnection, user, userSettings.getRecentProject());
+		boolean canEdit = userDao.checkIfHasProjectEditPermissions(dbConnection, user, userSettings.getRecentProject());
 
 		if(!isAdmin && !canEdit) {
 			return new ModelAndView("redirect:/");

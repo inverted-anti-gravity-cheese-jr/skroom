@@ -60,7 +60,7 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
+		if(project == null || !userDao.checkIfHasProjectEditPermissions(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "Edit Project", null, user, request);
@@ -77,7 +77,7 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
+		if(project == null || !userDao.checkIfHasProjectEditPermissions(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
 
@@ -94,7 +94,7 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(project == null || !userDao.checkIfHasProjectEditPreferences(dbConnection, user, project)) {
+		if(project == null || !userDao.checkIfHasProjectEditPermissions(dbConnection, user, project)) {
 			return new ModelAndView("redirect:/");
 		}
 

@@ -57,14 +57,14 @@ public class UserDao {
 	}
 
 	/**
-	 * Method check if user has any priviliges that allow him to edit project.
+	 * Method check if user has any privileges that allow him to edit project.
 	 *
 	 * @param connection Connection to a database
 	 * @param user User class from model
 	 * @param project Project class from model
-	 * @return Returns true if user has any privilagaes that allow him to edit project, and false otherwise
+	 * @return Returns true if user has any privileges that allow him to edit project, and false otherwise
 	 */
-	public boolean checkIfHasProjectEditPreferences(Connection connection, User user, Project project) {
+	public boolean checkIfHasProjectEditPermissions(Connection connection, User user, Project project) {
 		if (project == null) {
 			return false;
 		}
@@ -78,7 +78,7 @@ public class UserDao {
 								.and(Tables.USER_ROLES_IN_PROJECT.ID.eq(Tables.USERS_PROJECTS.USER_ROLE_ID)))
 						.and(Tables.USER_ROLES_IN_PROJECT.PRIVILIGES.eq(USER_PRIVILAGE_TO_EDIT_PROJECT))).fetchOne();
 
-		if (rolesWithPrivilages != null && rolesWithPrivilages.value1().intValue() > 0) {
+		if (rolesWithPrivilages != null && rolesWithPrivilages.value1() > 0) {
 			return true;
 		}
 
