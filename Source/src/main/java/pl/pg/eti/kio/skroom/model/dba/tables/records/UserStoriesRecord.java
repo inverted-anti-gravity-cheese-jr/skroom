@@ -28,7 +28,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> implements Record6<Integer, String, Integer, Integer, Integer, Integer> {
 
-    private static final long serialVersionUID = -586651558;
+    private static final long serialVersionUID = 1649943920;
 
     /**
      * Setter for <code>USER_STORIES.ID</code>.
@@ -87,16 +87,16 @@ public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> im
     }
 
     /**
-     * Setter for <code>USER_STORIES.STATUS</code>.
+     * Setter for <code>USER_STORIES.STATUS_ID</code>.
      */
-    public void setStatus(Integer value) {
+    public void setStatusId(Integer value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>USER_STORIES.STATUS</code>.
+     * Getter for <code>USER_STORIES.STATUS_ID</code>.
      */
-    public Integer getStatus() {
+    public Integer getStatusId() {
         return (Integer) get(4);
     }
 
@@ -183,7 +183,7 @@ public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> im
      */
     @Override
     public Field<Integer> field5() {
-        return UserStories.USER_STORIES.STATUS;
+        return UserStories.USER_STORIES.STATUS_ID;
     }
 
     /**
@@ -231,7 +231,7 @@ public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> im
      */
     @Override
     public Integer value5() {
-        return getStatus();
+        return getStatusId();
     }
 
     /**
@@ -283,7 +283,7 @@ public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> im
      */
     @Override
     public UserStoriesRecord value5(Integer value) {
-        setStatus(value);
+        setStatusId(value);
         return this;
     }
 
@@ -324,14 +324,14 @@ public class UserStoriesRecord extends UpdatableRecordImpl<UserStoriesRecord> im
     /**
      * Create a detached, initialised UserStoriesRecord
      */
-    public UserStoriesRecord(Integer id, String name, Integer priority, Integer storyPoints, Integer status, Integer projectId) {
+    public UserStoriesRecord(Integer id, String name, Integer priority, Integer storyPoints, Integer statusId, Integer projectId) {
         super(UserStories.USER_STORIES);
 
         set(0, id);
         set(1, name);
         set(2, priority);
         set(3, storyPoints);
-        set(4, status);
+        set(4, statusId);
         set(5, projectId);
     }
 }

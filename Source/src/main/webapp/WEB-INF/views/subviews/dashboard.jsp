@@ -1,15 +1,18 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="s" uri="/WEB-INF/skroom-tags.tld"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<c:set var="newLine" value="\n" />
 <t:index>
 
 <div class="dashboard">
 	<h2>Hello ${ loggedUser.name }.</h2>
-	<h1>Welcome to TestProject.</h1>
-	<p class="project-description">Lorem ipsum dolor sit amet,
-		consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat
-		volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.</p>
+	<h1>Welcome to ${userSettings.recentProject.name}.</h1>
+	<p class="project-description">${userSettings.recentProject.description}</p>
 	<h2>What do you want to do?</h2>
 	<button class="btn btn-sm btn-accent">Create task</button>
 	<button class="btn btn-sm btn-accent">Create issue</button>

@@ -11,6 +11,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserStoryStatus;
 import pl.pg.eti.kio.skroom.model.dba.tables.Users;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
@@ -69,6 +70,11 @@ public class Tables {
      * The table <code>USER_STORIES</code>.
      */
     public static final UserStories USER_STORIES = pl.pg.eti.kio.skroom.model.dba.tables.UserStories.USER_STORIES;
+
+    /**
+     * The table <code>USER_STORY_STATUS</code>.
+     */
+    public static final UserStoryStatus USER_STORY_STATUS = pl.pg.eti.kio.skroom.model.dba.tables.UserStoryStatus.USER_STORY_STATUS;
 
     /**
      * The table <code>sqlite_sequence</code>.

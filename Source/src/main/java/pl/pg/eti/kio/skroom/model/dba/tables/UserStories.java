@@ -36,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserStories extends TableImpl<UserStoriesRecord> {
 
-    private static final long serialVersionUID = 1872265301;
+    private static final long serialVersionUID = 160990311;
 
     /**
      * The reference instance of <code>USER_STORIES</code>
@@ -72,9 +72,9 @@ public class UserStories extends TableImpl<UserStoriesRecord> {
     public final TableField<UserStoriesRecord, Integer> STORY_POINTS = createField("STORY_POINTS", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>USER_STORIES.STATUS</code>.
+     * The column <code>USER_STORIES.STATUS_ID</code>.
      */
-    public final TableField<UserStoriesRecord, Integer> STATUS = createField("STATUS", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserStoriesRecord, Integer> STATUS_ID = createField("STATUS_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>USER_STORIES.PROJECT_ID</code>.
@@ -140,7 +140,7 @@ public class UserStories extends TableImpl<UserStoriesRecord> {
      */
     @Override
     public List<ForeignKey<UserStoriesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserStoriesRecord, ?>>asList(Keys.FK_USER_STORIES_PROJECTS_1);
+        return Arrays.<ForeignKey<UserStoriesRecord, ?>>asList(Keys.FK_USER_STORIES_USER_STORY_STATUS_1, Keys.FK_USER_STORIES_PROJECTS_1);
     }
 
     /**

@@ -57,4 +57,13 @@ public class Project {
 
 		return project;
 	}
+
+	@Override
+	public String toString() {
+		return "Project{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				'}';
+	}
 }

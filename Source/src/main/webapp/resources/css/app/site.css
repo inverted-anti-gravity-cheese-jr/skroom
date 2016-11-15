@@ -105,3 +105,37 @@ textarea {
 .validation-summary-valid {
 	display: none;
 }
+
+/* Global styles
+-----------------------------------------------------------*/
+
+#page-content {
+    font-size: 11pt;
+}
+
+.management-bar {
+    background-color: rgba(100, 100, 100, 0.4);
+    border-radius: 5px;
+    width: 100%;
+    height: 35px;
+}
+
+.management-bar .btn{
+    background-color: rgba(0,0,0,0);
+    height: 100%;
+    margin-bottom: -1px !important;
+}
+
+.management-bar .btn:hover {
+    background-color: rgba(100, 100, 100, 0.8);
+    color: white;
+}
+
+.management-bar .btn.green {
+    background-color: #aed581;
+}
+
+.management-bar .btn.green:hover {
+    background-color: #8bc34a;
+    color: black;
+}

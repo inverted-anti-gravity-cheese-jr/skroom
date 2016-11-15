@@ -1,0 +1,11 @@
+.user-story-row {
+    background-color: white;
+    border-left: 3px solid black;
+}
+
+.user-story-round-text {
+    color: white;
+    background-color: dimgray;
+    border-radius: 20px;
+    padding: 3px 10px;
+}

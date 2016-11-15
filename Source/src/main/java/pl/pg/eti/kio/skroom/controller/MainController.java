@@ -5,18 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.Task;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserSettings;
+import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
@@ -33,6 +33,7 @@ public class MainController {
 
 	@Autowired private TaskDao taskDao;
 	@Autowired private UserDao userDao;
+	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
 
@@ -69,13 +70,38 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/productbacklog", method = RequestMethod.GET)
-	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
+										   @RequestParam(value = "upp", required = false) String userStoriesPerPageString, @RequestParam(value = "p", required = false) String pageString) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
+		int userStoriesPerPage = 20, page=0;
+		try {
+			if(userStoriesPerPageString != null && !userStoriesPerPageString.isEmpty()) {
+					userStoriesPerPage = Integer.parseInt(userStoriesPerPageString);
+			}
+			if(pageString != null && !pageString.isEmpty()) {
+				page = Integer.parseInt(pageString);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
 		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", userSettings.getRecentProject(), user, request);
+
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
+		boolean userStoriesFit = userStoriesPerPage > userStories.size();
+		if(!userStoriesFit) {
+			userStories = userStories.subList(Math.min(userStories.size() - 1, page * userStoriesPerPage), Math.min(userStories.size(), (page + 1) * userStoriesPerPage));
+		}
+		model.addObject("userStories", userStories);
+		model.addObject("userStoriesFit", userStoriesFit);
+		model.addObject("pages", userStories.size() / userStoriesPerPage);
+
 		return model;
 	}
 
@@ -136,7 +162,11 @@ public class MainController {
 
 		int usersPerPage = 5;
 		if(usersPerPageString != null) {
-			usersPerPage = Integer.parseInt(usersPerPageString);
+			try {
+				usersPerPage = Integer.parseInt(usersPerPageString);
+			}
+			catch (Exception e) {
+			}
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();

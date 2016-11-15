@@ -19,6 +19,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserStoryStatus;
 import pl.pg.eti.kio.skroom.model.dba.tables.Users;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
@@ -38,7 +39,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1268727225;
+    private static final long serialVersionUID = -1687352458;
 
     /**
      * The reference instance of <code></code>
@@ -86,6 +87,11 @@ public class DefaultSchema extends SchemaImpl {
     public final UserStories USER_STORIES = pl.pg.eti.kio.skroom.model.dba.tables.UserStories.USER_STORIES;
 
     /**
+     * The table <code>USER_STORY_STATUS</code>.
+     */
+    public final UserStoryStatus USER_STORY_STATUS = pl.pg.eti.kio.skroom.model.dba.tables.UserStoryStatus.USER_STORY_STATUS;
+
+    /**
      * The table <code>sqlite_sequence</code>.
      */
     public final SqliteSequence SQLITE_SEQUENCE = pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence.SQLITE_SEQUENCE;
@@ -123,6 +129,7 @@ public class DefaultSchema extends SchemaImpl {
             UsersSettings.USERS_SETTINGS,
             UserRolesInProject.USER_ROLES_IN_PROJECT,
             UserStories.USER_STORIES,
+            UserStoryStatus.USER_STORY_STATUS,
             SqliteSequence.SQLITE_SEQUENCE);
     }
 }

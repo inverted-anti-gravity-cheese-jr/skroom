@@ -15,6 +15,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
+import pl.pg.eti.kio.skroom.model.dba.tables.UserStoryStatus;
 import pl.pg.eti.kio.skroom.model.dba.tables.Users;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
@@ -23,6 +24,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UserRolesInProjectRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoryStatusRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersProjectsRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
@@ -54,6 +56,7 @@ public class Keys {
     public static final Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = Identities0.IDENTITY_USERS_SETTINGS;
     public static final Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = Identities0.IDENTITY_USER_ROLES_IN_PROJECT;
     public static final Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = Identities0.IDENTITY_USER_STORIES;
+    public static final Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = Identities0.IDENTITY_USER_STORY_STATUS;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -67,6 +70,7 @@ public class Keys {
     public static final UniqueKey<UsersSettingsRecord> PK_USERS_SETTINGS = UniqueKeys0.PK_USERS_SETTINGS;
     public static final UniqueKey<UserRolesInProjectRecord> PK_USER_ROLES_IN_PROJECT = UniqueKeys0.PK_USER_ROLES_IN_PROJECT;
     public static final UniqueKey<UserStoriesRecord> PK_USER_STORIES = UniqueKeys0.PK_USER_STORIES;
+    public static final UniqueKey<UserStoryStatusRecord> PK_USER_STORY_STATUS = UniqueKeys0.PK_USER_STORY_STATUS;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -80,6 +84,7 @@ public class Keys {
     public static final ForeignKey<UsersSecurityRecord, UsersRecord> FK_USERS_SECURITY_USERS_1 = ForeignKeys0.FK_USERS_SECURITY_USERS_1;
     public static final ForeignKey<UsersSettingsRecord, UsersRecord> FK_USERS_SETTINGS_USERS_1 = ForeignKeys0.FK_USERS_SETTINGS_USERS_1;
     public static final ForeignKey<UsersSettingsRecord, ProjectsRecord> FK_USERS_SETTINGS_PROJECTS_1 = ForeignKeys0.FK_USERS_SETTINGS_PROJECTS_1;
+    public static final ForeignKey<UserStoriesRecord, UserStoryStatusRecord> FK_USER_STORIES_USER_STORY_STATUS_1 = ForeignKeys0.FK_USER_STORIES_USER_STORY_STATUS_1;
     public static final ForeignKey<UserStoriesRecord, ProjectsRecord> FK_USER_STORIES_PROJECTS_1 = ForeignKeys0.FK_USER_STORIES_PROJECTS_1;
 
     // -------------------------------------------------------------------------
@@ -94,6 +99,7 @@ public class Keys {
         public static Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = createIdentity(UsersSettings.USERS_SETTINGS, UsersSettings.USERS_SETTINGS.ID);
         public static Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = createIdentity(UserRolesInProject.USER_ROLES_IN_PROJECT, UserRolesInProject.USER_ROLES_IN_PROJECT.ID);
         public static Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = createIdentity(UserStories.USER_STORIES, UserStories.USER_STORIES.ID);
+        public static Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = createIdentity(UserStoryStatus.USER_STORY_STATUS, UserStoryStatus.USER_STORY_STATUS.ID);
     }
 
     private static class UniqueKeys0 extends AbstractKeys {
@@ -105,6 +111,7 @@ public class Keys {
         public static final UniqueKey<UsersSettingsRecord> PK_USERS_SETTINGS = createUniqueKey(UsersSettings.USERS_SETTINGS, "pk_USERS_SETTINGS", UsersSettings.USERS_SETTINGS.ID);
         public static final UniqueKey<UserRolesInProjectRecord> PK_USER_ROLES_IN_PROJECT = createUniqueKey(UserRolesInProject.USER_ROLES_IN_PROJECT, "pk_USER_ROLES_IN_PROJECT", UserRolesInProject.USER_ROLES_IN_PROJECT.ID);
         public static final UniqueKey<UserStoriesRecord> PK_USER_STORIES = createUniqueKey(UserStories.USER_STORIES, "pk_USER_STORIES", UserStories.USER_STORIES.ID);
+        public static final UniqueKey<UserStoryStatusRecord> PK_USER_STORY_STATUS = createUniqueKey(UserStoryStatus.USER_STORY_STATUS, "pk_USER_STORY_STATUS", UserStoryStatus.USER_STORY_STATUS.ID);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
@@ -116,6 +123,7 @@ public class Keys {
         public static final ForeignKey<UsersSecurityRecord, UsersRecord> FK_USERS_SECURITY_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, UsersSecurity.USERS_SECURITY, "fk_USERS_SECURITY_USERS_1", UsersSecurity.USERS_SECURITY.USER_ID);
         public static final ForeignKey<UsersSettingsRecord, UsersRecord> FK_USERS_SETTINGS_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, UsersSettings.USERS_SETTINGS, "fk_USERS_SETTINGS_USERS_1", UsersSettings.USERS_SETTINGS.USER_ID);
         public static final ForeignKey<UsersSettingsRecord, ProjectsRecord> FK_USERS_SETTINGS_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, UsersSettings.USERS_SETTINGS, "fk_USERS_SETTINGS_PROJECTS_1", UsersSettings.USERS_SETTINGS.RECENT_PROJECT_ID);
+        public static final ForeignKey<UserStoriesRecord, UserStoryStatusRecord> FK_USER_STORIES_USER_STORY_STATUS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USER_STORY_STATUS, UserStories.USER_STORIES, "fk_USER_STORIES_USER_STORY_STATUS_1", UserStories.USER_STORIES.STATUS_ID);
         public static final ForeignKey<UserStoriesRecord, ProjectsRecord> FK_USER_STORIES_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, UserStories.USER_STORIES, "fk_USER_STORIES_PROJECTS_1", UserStories.USER_STORIES.PROJECT_ID);
     }
 }
