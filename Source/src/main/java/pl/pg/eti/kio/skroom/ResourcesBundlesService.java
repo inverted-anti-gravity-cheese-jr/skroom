@@ -37,7 +37,8 @@ public class ResourcesBundlesService {
 				"resources/css/app/kanbanBoard.css",
 				"resources/css/app/dashboard.css",
 				"resources/css/app/login.css",
-				"resources/css/app/productBacklog.css");
+				"resources/css/app/productBacklog.css",
+				"resources/js/app/skroom.js");
 	}
 
 	private List<String> getJqueryBundle() {

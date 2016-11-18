@@ -3,6 +3,8 @@ package pl.pg.eti.kio.skroom.model.enumeration;
 
 import pl.pg.eti.kio.skroom.enumeration.TextColor;
 
+import java.util.ArrayList;
+
 import static pl.pg.eti.kio.skroom.enumeration.TextColor.BLACK;
 import static pl.pg.eti.kio.skroom.enumeration.TextColor.WHITE;
 
@@ -33,6 +35,23 @@ public enum StoryPoints {
 		this.displayName = displayName;
 		this.color = color;
 		this.textColor = textColor;
+	}
+
+	public static StoryPoints fromDisplayName(String displayName) {
+		for(StoryPoints storyPointsEnum: values()) {
+			if(storyPointsEnum.displayName.equals(displayName)) {
+				return storyPointsEnum;
+			}
+		}
+		return SP_1;
+	}
+
+	public static ArrayList<String> getAvailableDisplayNames() {
+		ArrayList<String> available = new ArrayList<String>();
+		for(StoryPoints storyPointsEnum: values()) {
+			available.add(storyPointsEnum.displayName);
+		}
+		return available;
 	}
 
 	public static StoryPoints fromValue(int storyPoints) {

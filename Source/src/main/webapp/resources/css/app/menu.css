@@ -1,7 +1,8 @@
 #main-menu {
 	background-color: #393E51;
 	text-align: center;
-	padding-right: 0px;
+	padding-right: 0;
+    padding-left: 0;
 	color: #C2C3CA;
 	position: fixed;
 	overflow-x: hidden;

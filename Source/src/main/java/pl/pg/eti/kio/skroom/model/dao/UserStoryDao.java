@@ -42,4 +42,18 @@ public class UserStoryDao {
 
 		return list;
 	}
+
+	/**
+	 * Finds user story with id in the database and returns it.
+	 *
+	 * @param connection	Connection to a database.
+	 * @param id			Id of a user story to search for.
+	 * @return				User story with supplied id.
+	 */
+	public UserStory fetchUserStoryById(Connection connection, int id) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		UserStoriesRecord userStoryRecord = query.selectFrom(Tables.USER_STORIES).where(Tables.USER_STORIES.ID.eq(id)).fetchOne();
+		return UserStory.fromDba(userStoryRecord, query);
+	}
 }

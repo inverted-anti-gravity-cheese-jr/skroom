@@ -11,6 +11,6 @@
 <button type="submit" >${ submitButtonText }</button>
 </form>
 <c:if test="${ displayDeleteButton eq 'true' }">
-    <%@include file="/WEB-INF/views/subviews/projectDeleteForm.jsp" %>
+    <%@include file="/WEB-INF/views/subviews/forms/projectDeleteForm.jsp" %>
 </c:if>
 </t:index>

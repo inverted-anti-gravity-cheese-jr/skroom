@@ -156,10 +156,6 @@ public class MainController {
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) String usersPerPageString) {
-		if (isUserNull(user)) {
-			return getLoginModel();
-		}
-
 		int usersPerPage = 5;
 		if(usersPerPageString != null) {
 			try {
@@ -187,23 +183,14 @@ public class MainController {
 
 	@RequestMapping(value = "/userSettings", method = RequestMethod.GET)
 	public ModelAndView showUserSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		if (isUserNull(user)) {
-			return getLoginModel();
-		}
-
 		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	private ModelAndView checkSessionAttributes(User user, UserSettings usersSettings) {
-		if (isUserNull(user)) {
-			return getLoginModel();
-		}
-
 		if (usersSettings.getRecentProject() == null) {
 			return showUserSettings(user, usersSettings);
 		}
-
 		return null;
 	}
 
@@ -215,9 +202,5 @@ public class MainController {
 		ModelAndView model = new ModelAndView(LOGIN_JSP_LOCATION);
 		model.addObject("loginError", error);
 		return model;
-	}
-
-	private boolean isUserNull(User user) {
-		return user.getId() < 0;
 	}
 }

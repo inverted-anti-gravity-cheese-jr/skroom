@@ -9,3 +9,12 @@
     border-radius: 20px;
     padding: 3px 10px;
 }
+
+.user-story-form .form-control,
+.user-story-form .input-group {
+    margin-bottom: 5px;
+}
+
+.user-story-form .input-group .form-control {
+    margin: 0;
+}

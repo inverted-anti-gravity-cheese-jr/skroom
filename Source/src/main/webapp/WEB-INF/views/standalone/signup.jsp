@@ -21,7 +21,7 @@
 	<body>
 		<div class="login-form signup-form<%if (request.getAttribute("signupError") != null) { out.print(" withmessage"); }%>">
 			<form action="signup" method="post">
-				<%@include file="/WEB-INF/views/subviews/signupForm.jsp" %>
+				<%@include file="/WEB-INF/views/subviews/forms/signupForm.jsp" %>
 				<input class="btn btn-sm btn-accent" type="submit" />
 			</form>
 			<a href="."><button class="btn btn-sm btn-accent">Cancel</button></a>

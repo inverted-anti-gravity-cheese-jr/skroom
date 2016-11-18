@@ -19,20 +19,41 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 @Service
 public class DefaultTemplateDataInjector {
 
+	private static final String REDIRECT_TO_LOGIN = "redirect:/login";
+
 	@Autowired
 	private ProjectDao projectDao;
 
 	/**
-	 * Gets index site and injects important variables into it.
+	 * Gets index site and injects important variables into it. If user is not logged in, then
+	 * he will be redirected to login page.
 	 *
-	 * @param viewName Name of a view, used for menu options
-	 * @param pageTitle
-	 * @param selectedProject
-	 * @param user
-	 * @param request
-	 * @return
+	 * @param viewName			Name of a view, used for menu options.
+	 * @param pageTitle			Page title, displayed in title bar.
+	 * @param selectedProject	Currently selected project or null if there is none selected.
+	 * @param user				Logged in user (from the session)
+	 * @param request			?
+	 * @return					View with injected all necessary variables.
 	 */
 	public ModelAndView getIndexForSiteName(String viewName, String pageTitle, Project selectedProject, User user, WebRequest request) {
+		return getIndexForSiteName(viewName, pageTitle, selectedProject, user, request, true);
+	}
+
+	/**
+	 * Gets index site and injects important variables into it.
+	 *
+	 * @param viewName			Name of a view, used for menu options.
+	 * @param pageTitle			Page title, displayed in title bar.
+	 * @param selectedProject	Currently selected project or null if there is none selected.
+	 * @param user				Logged in user (from the session)
+	 * @param request			?
+	 * @param checkForLogin		If true then method redirects to login page if user is not logged in.
+	 * @return					View with injected all necessary variables.
+	 */
+	public ModelAndView getIndexForSiteName(String viewName, String pageTitle, Project selectedProject, User user, WebRequest request, boolean checkForLogin) {
+		if(checkForLogin && (user == null || user.getId() < 0)) {
+			return new ModelAndView(REDIRECT_TO_LOGIN);
+		}
 		ModelAndView modelAndView = new ModelAndView(viewName);
 		modelAndView.addObject("pageTitle", pageTitle);
 		modelAndView.addObject("siteName", request.getDescription(false).substring(4));

@@ -9,8 +9,9 @@
 <t:index>
     <h1>Product backlog</h1>
     <div class="management-bar">
-        <button class="btn green">Add user story</button>
+        <a href="addUserStory"><button class="btn green">Add user story</button></a>
         <button class="btn">Show filters</button>
+        <button class="btn">Order by <span class="caret"></span></button>
     </div>
     <table class="table">
         <thead>
