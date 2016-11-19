@@ -25,6 +25,7 @@
     <form class="user-story-form" method="post">
 
         <input name="name" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />  
+        <textarea name="description" class="form-control" placeholder="Description">${userStory.description}</textarea> 
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">P</span>
           <input name="priority" type="text" class="form-control" placeholder="Priority" value="${userStory.priority}" />
@@ -47,7 +48,7 @@
         <input type="submit" class="btn" />
     </form>
     <c:if test="${ not empty userStory }">
-        <button class="btn">Delete</button>
+        <a href="../../removeUserStory/${userStory.id}/"><button class="btn">Delete</button></a>
     </c:if>
     
     

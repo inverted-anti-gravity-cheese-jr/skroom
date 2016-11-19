@@ -14,6 +14,7 @@ public class UserStory {
 
 	private int id;
 	private String name;
+	private String description;
 	private int priority;
 	private StoryPoints storyPoints;
 	private UserStoryStatus status;
@@ -33,6 +34,7 @@ public class UserStory {
 		UserStory userStory = new UserStory();
 		userStory.setId(record.getId());
 		userStory.setName(record.getName());
+		userStory.setDescription(record.getDescription());
 		userStory.setPriority(record.getPriority());
 		userStory.setStoryPoints(StoryPoints.fromValue(record.getStoryPoints()));
 
@@ -57,6 +59,14 @@ public class UserStory {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getPriority() {

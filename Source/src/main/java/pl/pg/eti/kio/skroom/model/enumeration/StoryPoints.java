@@ -37,6 +37,13 @@ public enum StoryPoints {
 		this.textColor = textColor;
 	}
 
+	public int getValue() {
+		if(this.equals(SP_INF)) {
+			return Integer.parseInt(INF_LABEL);
+		}
+		return Integer.parseInt(displayName);
+	}
+
 	public static StoryPoints fromDisplayName(String displayName) {
 		for(StoryPoints storyPointsEnum: values()) {
 			if(storyPointsEnum.displayName.equals(displayName)) {

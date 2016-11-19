@@ -88,19 +88,28 @@ public class UserStoriesManagementController {
 
 	@RequestMapping(value = "addUserStory", method = RequestMethod.POST)
 	public ModelAndView addUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-									  @RequestParam String name, @RequestParam("priority") String priorityString,
+									  @RequestParam String name, @RequestParam String description, @RequestParam("priority") String priorityString,
 									  @RequestParam String storyPoints, @RequestParam String status) {
-		return addOrEditUserStory(user, userSettings, null, name, priorityString, storyPoints, status);
+		return addOrEditUserStory(user, userSettings, null, name, description, priorityString, storyPoints, status);
 	}
 
 	@RequestMapping(value = "editUserStory/{userStoryId}/", method = RequestMethod.POST)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-									  @PathVariable Integer userStoryId, @RequestParam String name, @RequestParam("priority") String priorityString,
-									  @RequestParam String storyPoints, @RequestParam String status) {
-		return addOrEditUserStory(user, userSettings, userStoryId, name, priorityString, storyPoints, status);
+									  @PathVariable Integer userStoryId, @RequestParam String name, @RequestParam String description,
+									  @RequestParam("priority") String priorityString, @RequestParam String storyPoints, @RequestParam String status) {
+		return addOrEditUserStory(user, userSettings, userStoryId, name, description, priorityString, storyPoints, status);
 	}
 
-	private ModelAndView addOrEditUserStory(User user, UserSettings userSettings, Integer userStoryId, String name, String priorityString, String storyPoints, String status) {
+	@RequestMapping(value = "removeUserStory/{userStoryId}/", method = RequestMethod.GET)
+	public ModelAndView removeUserStory(@ModelAttribute("loggedUser") User user, @PathVariable Integer userStoryId) {
+		if(user == null || user.getId() < 0)
+			return new ModelAndView("redirect:/");
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		userStoryDao.removeUserStoryWithId(dbConnection, userStoryId.intValue());
+		return new ModelAndView("redirect:/productbacklog");
+	}
+
+	private ModelAndView addOrEditUserStory(User user, UserSettings userSettings, Integer userStoryId, String name, String description, String priorityString, String storyPoints, String status) {
 		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
 		if (userSettings.getRecentProject() == null) {
 			return new ModelAndView("redirect:/");
@@ -110,8 +119,11 @@ public class UserStoriesManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		UserStory userStory = new UserStory();
-		userStory.setId(userStoryId.intValue());
+		if(userStoryId != null) {
+			userStory.setId(userStoryId.intValue());
+		}
 		userStory.setName(name);
+		userStory.setDescription(description);
 		userStory.setStatus(userStoryStatusDao.getUserStoryStatusForName(dbConnection, status));
 		userStory.setStoryPoints(StoryPoints.fromDisplayName(storyPoints));
 		userStory.setPriority(1);
@@ -137,7 +149,12 @@ public class UserStoriesManagementController {
 			model.addObject("errorMessage", errorMessage);
 		}
 		else {
-			// TODO: add or update model and view
+			if(userStoryId == null) {
+				userStoryDao.insertNewUserStory(dbConnection, userStory, userSettings.getRecentProject());
+			}
+			else {
+				userStoryDao.updateUserStory(dbConnection, userStory);
+			}
 			return new ModelAndView("redirect:/productbacklog");
 		}
 

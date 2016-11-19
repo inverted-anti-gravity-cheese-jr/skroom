@@ -36,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserStories extends TableImpl<UserStoriesRecord> {
 
-    private static final long serialVersionUID = 160990311;
+    private static final long serialVersionUID = -462166255;
 
     /**
      * The reference instance of <code>USER_STORIES</code>
@@ -60,6 +60,11 @@ public class UserStories extends TableImpl<UserStoriesRecord> {
      * The column <code>USER_STORIES.NAME</code>.
      */
     public final TableField<UserStoriesRecord, String> NAME = createField("NAME", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>USER_STORIES.DESCRIPTION</code>.
+     */
+    public final TableField<UserStoriesRecord, String> DESCRIPTION = createField("DESCRIPTION", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>USER_STORIES.PRIORITY</code>.
