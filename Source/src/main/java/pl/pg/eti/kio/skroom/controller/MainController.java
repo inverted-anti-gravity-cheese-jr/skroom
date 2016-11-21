@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dao.UserRolesInProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
@@ -36,6 +37,7 @@ public class MainController {
 	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
+	@Autowired private UserRolesInProjectDao userRolesInProjectDao;
 
 	@PostConstruct
 	public void initDatabase() {
@@ -178,6 +180,9 @@ public class MainController {
 		model.addObject("canEdit", canEdit);
 		List<User> allUsers = userDao.listAllUsers(dbConnection);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
+
+		List<UserRolesInProject> allUserRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
+		model.addObject("globalUserRolesInProjects", allUserRolesInProjects);
 		return model;
 	}
 

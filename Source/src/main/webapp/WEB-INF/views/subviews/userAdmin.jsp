@@ -45,7 +45,7 @@
     </script>
     
     <table class="table">
-        <thead><tr><td>Name</td><td>Email</td><td>Global privilages</td></tr></thead>
+        <thead><tr><td>Name</td><td>Email</td><td>Global privileges</td></tr></thead>
         <tbody>
             <c:forEach var="user" items="${globalUsers}">
                 <tr><td>${user.name}</td><td>${user.email}</td><td>${user.role}</td></tr>
@@ -54,6 +54,20 @@
     </table>
 
     <h1>Projects</h1>
+
+    <table class="table">
+        <thead><tr><td>Role</td><td>Color</td><td>Privileges</td></tr></thead>
+        <tbody>
+            <c:forEach var="userRoleInProject" items="${globalUserRolesInProjects}">
+                <tr>
+                    <td>${userRoleInProject.role}</td>
+                    <td>${userRoleInProject.color}</td>
+                    <td>${userRoleInProject.privileges}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+
 </div>
 
 </t:index>
