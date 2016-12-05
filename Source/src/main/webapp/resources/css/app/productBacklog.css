@@ -13,14 +13,6 @@
 .user-story-form {
     display: none;
 }
-.user-story-form .form-control,
-.user-story-form .input-group {
-    margin-bottom: 5px;
-}
-
-.user-story-form .input-group .form-control {
-    margin: 0;
-}
 
 .user-story-body .management-bar,
 .user-story-form .management-bar {
@@ -34,4 +26,8 @@
 
 .sprints-calendar-container {
     width: 60%;
+}
+
+.fc-left h2 {
+    font-size: 18pt;
 }

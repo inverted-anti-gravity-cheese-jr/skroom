@@ -7,11 +7,11 @@ package pl.pg.eti.kio.skroom.model.dba;
 import javax.annotation.Generated;
 
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.AbstractKeys;
 
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
+import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
@@ -21,6 +21,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersProjects;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSecurity;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UserRolesInProjectRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
@@ -49,20 +50,13 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
-    public static final Identity<ProjectsRecord, Integer> IDENTITY_PROJECTS = Identities0.IDENTITY_PROJECTS;
-    public static final Identity<UsersRecord, Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
-    public static final Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = Identities0.IDENTITY_USERS_PROJECTS;
-    public static final Identity<UsersSecurityRecord, Integer> IDENTITY_USERS_SECURITY = Identities0.IDENTITY_USERS_SECURITY;
-    public static final Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = Identities0.IDENTITY_USERS_SETTINGS;
-    public static final Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = Identities0.IDENTITY_USER_ROLES_IN_PROJECT;
-    public static final Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = Identities0.IDENTITY_USER_STORIES;
-    public static final Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = Identities0.IDENTITY_USER_STORY_STATUS;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<ProjectsRecord> PK_PROJECTS = UniqueKeys0.PK_PROJECTS;
+    public static final UniqueKey<SprintsRecord> PK_SPRINTS = UniqueKeys0.PK_SPRINTS;
     public static final UniqueKey<TasksRecord> PK_TASKS = UniqueKeys0.PK_TASKS;
     public static final UniqueKey<UsersRecord> PK_USERS = UniqueKeys0.PK_USERS;
     public static final UniqueKey<UsersProjectsRecord> PK_USERS_PROJECTS = UniqueKeys0.PK_USERS_PROJECTS;
@@ -76,6 +70,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<SprintsRecord, ProjectsRecord> FK_SPRINTS_PROJECTS_1 = ForeignKeys0.FK_SPRINTS_PROJECTS_1;
     public static final ForeignKey<TasksRecord, UsersRecord> FK_TASKS_USERS_1 = ForeignKeys0.FK_TASKS_USERS_1;
     public static final ForeignKey<TasksRecord, ProjectsRecord> FK_TASKS_PROJECTS_1 = ForeignKeys0.FK_TASKS_PROJECTS_1;
     public static final ForeignKey<UsersProjectsRecord, UsersRecord> FK_USERS_PROJECTS_USERS_1 = ForeignKeys0.FK_USERS_PROJECTS_USERS_1;
@@ -91,19 +86,9 @@ public class Keys {
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
-    private static class Identities0 extends AbstractKeys {
-        public static Identity<ProjectsRecord, Integer> IDENTITY_PROJECTS = createIdentity(Projects.PROJECTS, Projects.PROJECTS.ID);
-        public static Identity<UsersRecord, Integer> IDENTITY_USERS = createIdentity(Users.USERS, Users.USERS.ID);
-        public static Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = createIdentity(UsersProjects.USERS_PROJECTS, UsersProjects.USERS_PROJECTS.ID);
-        public static Identity<UsersSecurityRecord, Integer> IDENTITY_USERS_SECURITY = createIdentity(UsersSecurity.USERS_SECURITY, UsersSecurity.USERS_SECURITY.ID);
-        public static Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = createIdentity(UsersSettings.USERS_SETTINGS, UsersSettings.USERS_SETTINGS.ID);
-        public static Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = createIdentity(UserRolesInProject.USER_ROLES_IN_PROJECT, UserRolesInProject.USER_ROLES_IN_PROJECT.ID);
-        public static Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = createIdentity(UserStories.USER_STORIES, UserStories.USER_STORIES.ID);
-        public static Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = createIdentity(UserStoryStatus.USER_STORY_STATUS, UserStoryStatus.USER_STORY_STATUS.ID);
-    }
-
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<ProjectsRecord> PK_PROJECTS = createUniqueKey(Projects.PROJECTS, "pk_PROJECTS", Projects.PROJECTS.ID);
+        public static final UniqueKey<SprintsRecord> PK_SPRINTS = createUniqueKey(Sprints.SPRINTS, "pk_SPRINTS", Sprints.SPRINTS.ID);
         public static final UniqueKey<TasksRecord> PK_TASKS = createUniqueKey(Tasks.TASKS, "pk_TASKS", Tasks.TASKS.ID);
         public static final UniqueKey<UsersRecord> PK_USERS = createUniqueKey(Users.USERS, "pk_USERS", Users.USERS.ID);
         public static final UniqueKey<UsersProjectsRecord> PK_USERS_PROJECTS = createUniqueKey(UsersProjects.USERS_PROJECTS, "pk_USERS_PROJECTS", UsersProjects.USERS_PROJECTS.ID);
@@ -115,6 +100,7 @@ public class Keys {
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
+        public static final ForeignKey<SprintsRecord, ProjectsRecord> FK_SPRINTS_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, Sprints.SPRINTS, "fk_SPRINTS_PROJECTS_1", Sprints.SPRINTS.PROJECT_ID);
         public static final ForeignKey<TasksRecord, UsersRecord> FK_TASKS_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, Tasks.TASKS, "fk_TASKS_USERS_1", Tasks.TASKS.ASSIGNEE);
         public static final ForeignKey<TasksRecord, ProjectsRecord> FK_TASKS_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, Tasks.TASKS, "fk_TASKS_PROJECTS_1", Tasks.TASKS.PROJECT_ID);
         public static final ForeignKey<UsersProjectsRecord, UsersRecord> FK_USERS_PROJECTS_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, UsersProjects.USERS_PROJECTS, "fk_USERS_PROJECTS_USERS_1", UsersProjects.USERS_PROJECTS.USER_ID);

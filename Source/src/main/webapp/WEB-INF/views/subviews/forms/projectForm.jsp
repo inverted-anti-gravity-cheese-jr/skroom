@@ -4,13 +4,34 @@
     pageEncoding="UTF-8"%>
 
 <t:index>
-<form method="post">
+<form method="post" class="skroom-form">
+    <c:choose>
+        <c:when test="${ displayDeleteButton eq 'true' }">
+            <h1>Edit project ${project.name}</h1>
+        </c:when>
+        <c:otherwise>
+            <h1>Create new project</h1>
+        </c:otherwise>
+    </c:choose>
 
-<input name="name" value="${ name }" />
-<textarea name="description">${ description }</textarea>
-<button type="submit" >${ submitButtonText }</button>
+    <div class="management-bar" style="margin-bottom: 5px;">
+        <input type="submit" class="btn green" />   
+        <c:if test="${ displayDeleteButton eq 'true' }">
+            <a href="/skroom/removeProject/${projectId}" class="btn red pull-right">Delete project</a>
+        </c:if>
+    </div>
+    
+    <input name="name" placeholder="Project name" value="${project.name}" class="form-control" />
+    <textarea name="description" placeholder="Project description" class="form-control">${project.description}</textarea>
+    <div class="input-group">
+        <span class="input-group-addon">Sprint length</span>
+        <input name="sprint-length" placeholder="Sprint length" class="form-control" value="${project.defaultSprintLength}" />
+        <span class="input-group-addon">[weeks]</span>
+    </div>
+    <c:if test="${ not displayDeleteButton eq 'true' }">
+    <input name="first-sprint-name" placeholder="Name of a first sprint" value="Sprint 1" class="form-control" />
+    </c:if>
+
 </form>
-<c:if test="${ displayDeleteButton eq 'true' }">
-    <%@include file="/WEB-INF/views/subviews/forms/projectDeleteForm.jsp" %>
-</c:if>
+
 </t:index>

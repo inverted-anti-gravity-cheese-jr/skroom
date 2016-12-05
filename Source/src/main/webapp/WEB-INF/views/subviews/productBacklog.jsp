@@ -38,7 +38,7 @@
             </c:forEach>
         </tbody>
     </table>
-    <c:if test="${pages > 1}">
+    <c:if test="${pages > 0}">
     <div class="btn-group" role="group">
     <c:forEach var="page" begin="0" end="${pages}">
         <a href="?p=${page}" class="btn btn-default">${page + 1}</a>
@@ -48,6 +48,12 @@
 
     <h1>Sprints</h1>
 
+    <form action="" method="post">
+        <div class="management-bar">
+            <button class="btn green">Create new sprint</button>
+            <span class="bar-text">Creating a new sprint will close current one.</span>
+        </div>
+    </form>
     <div id="sprints-calendar-container">
         <div id="sprints-calendar"></div>
     </div>
@@ -63,24 +69,24 @@
 
 
         function createCalendar() {
-
+            var evs = [
+            <c:forEach var="sprint" items="${sprints}">
+                {
+                    id: ${sprint.id},
+                    title: "${sprint.name}",
+                    start: "${sprint.startDate}",
+                    end: "${sprint.endDate}"
+                },
+            </c:forEach>
+                {}
+            ];
+            evs.pop();
+            
             $("#sprints-calendar").fullCalendar({
                 locale: "${pageContext.response.locale}",
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
-                events: [
-                    {
-                        title: 'Sprint 1',
-                        start: '2016-12-01',
-                        end: "2016-12-07"
-                    },
-                    {
-                        title: 'Sprint 2',
-                        start: '2016-12-08',
-                        end: '2016-12-14',
-                        url: 'http://google.com/'
-                    }
-                ]
+                events: evs
             });
             
         }

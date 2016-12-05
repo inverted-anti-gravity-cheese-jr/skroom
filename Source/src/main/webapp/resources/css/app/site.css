@@ -163,3 +163,12 @@ textarea {
 .management-bar a.btn {
 	color: black;
 }
+
+.skroom-form .form-control,
+.skroom-form .input-group {
+    margin-bottom: 5px;
+}
+
+.skroom-form .input-group .form-control {
+    margin: 0;
+}

@@ -73,6 +73,7 @@ public class UserSettings {
 		return "UserSettings{" +
 				"id=" + id +
 				", recentProject=" + recentProject +
+				", userStoriesPerPage=" + userStoriesPerPage +
 				'}';
 	}
 }

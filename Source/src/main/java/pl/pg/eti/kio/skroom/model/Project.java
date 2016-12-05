@@ -13,6 +13,7 @@ public class Project {
 	private int id = -1;
 	private String name;
 	private String description;
+	private int defaultSprintLength;
 
 	public int getId() {
 		return id;
@@ -38,6 +39,14 @@ public class Project {
 		this.description = description;
 	}
 
+	public int getDefaultSprintLength() {
+		return defaultSprintLength;
+	}
+
+	public void setDefaultSprintLength(int defaultSprintLength) {
+		this.defaultSprintLength = defaultSprintLength;
+	}
+
 	/**
 	 * Method for converting database records into model classes.
 	 *
@@ -54,6 +63,7 @@ public class Project {
 		project.setId(record.getId());
 		project.setName(record.getName());
 		project.setDescription(record.getDescription());
+		project.setDefaultSprintLength(record.getDefaultSprintLength());
 
 		return project;
 	}
@@ -64,6 +74,7 @@ public class Project {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", description='" + description + '\'' +
+				", defaultSprintLength=" + defaultSprintLength +
 				'}';
 	}
 }

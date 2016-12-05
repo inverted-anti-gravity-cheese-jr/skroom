@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.UserSettings;
+import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.enumeration.TaskStatus;
@@ -20,15 +21,13 @@ import java.util.Optional;
  * @since 22.05.16
  */
 @RestController
-@RequestMapping(value = "/rest")
+@RequestMapping("/rest")
 @SessionAttributes({"userSettings"})
 public class MainRestController {
 
-	@Autowired
-	private TaskDao taskDao;
-
-	@Autowired
-	private UserDao userDao;
+	@Autowired private TaskDao taskDao;
+	@Autowired private UserDao userDao;
+	@Autowired private ProjectDao projectDao;
 
 	@RequestMapping(value = "/task/update", method = RequestMethod.POST)
 	public void reloadTask(@RequestParam("taskId") String taskId, @RequestParam("status") String status) {
@@ -75,6 +74,22 @@ public class MainRestController {
 			userSettings.setUserStoriesPerPage(perPageInt);
 
 			userDao.saveUserSettings(connection, userSettings);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value="userSettings/selectProject", method = RequestMethod.POST)
+	public void pickProject(@RequestParam Integer projectId, @ModelAttribute("userSettings") UserSettings userSettings) {
+		Connection connection = DatabaseSettings.getDatabaseConnection();
+		System.out.println("------------------------------------------------------------------------------------------");
+		System.out.println(projectId);
+		try {
+			userSettings.setRecentProject(projectDao.fetchProjectById(connection, projectId));
+
+			userDao.saveUserSettings(connection, userSettings);
+			System.out.println("selected project " + userSettings.getRecentProject());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

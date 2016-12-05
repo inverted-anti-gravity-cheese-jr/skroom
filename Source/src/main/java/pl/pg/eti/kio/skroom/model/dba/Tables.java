@@ -7,6 +7,7 @@ package pl.pg.eti.kio.skroom.model.dba;
 import javax.annotation.Generated;
 
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
+import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
@@ -35,6 +36,11 @@ public class Tables {
      * The table <code>PROJECTS</code>.
      */
     public static final Projects PROJECTS = pl.pg.eti.kio.skroom.model.dba.tables.Projects.PROJECTS;
+
+    /**
+     * The table <code>SPRINTS</code>.
+     */
+    public static final Sprints SPRINTS = pl.pg.eti.kio.skroom.model.dba.tables.Sprints.SPRINTS;
 
     /**
      * The table <code>TASKS</code>.

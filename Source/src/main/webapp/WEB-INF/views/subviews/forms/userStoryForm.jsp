@@ -48,7 +48,7 @@
         
     </div>
     
-    <form class="user-story-form" method="post">
+    <form class="skroom-form user-story-form" method="post">
         <div class="management-bar">
             <input type="submit" class="btn" value="Save changes" />
             <button type="button" class="btn" onclick="switchViews(false)">Cancel</button>
@@ -58,7 +58,7 @@
         </c:when>
         <c:otherwise>
     <h1>New user story</h1>
-    <form class="user-story-form" method="post" style="display: initial;">
+    <form class="skroom-form user-story-form" method="post" style="display: initial;">
         <div class="management-bar">
             <input type="submit" class="btn" value="Save" />
         </div>
@@ -67,11 +67,11 @@
 
         <input name="name" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />  
         <div class="input-group">
-          <span class="input-group-addon" id="basic-addon1">As A</span>
+          <span class="input-group-addon">As A</span>
           <input name="as-a-story" type="text" class="form-control" placeholder="user" value="${userStory.asA}" />
-          <span class="input-group-addon" id="basic-addon1">I want to</span>
+          <span class="input-group-addon">I want to</span>
           <input name="i-want-to-story" type="text" class="form-control" placeholder="some goal" value="${userStory.iWantTo}" />
-          <span class="input-group-addon" id="basic-addon1">so that</span>
+          <span class="input-group-addon">so that</span>
           <input name="so-that-story" type="text" class="form-control" placeholder="some reason" value="${userStory.soThat}" />
         </div>
         <textarea name="description" class="form-control" placeholder="Description">${userStory.description}</textarea> 

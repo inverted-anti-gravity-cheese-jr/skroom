@@ -6,7 +6,7 @@
     <ul class="project-list">
         <c:forEach var="projectContainer" items="${menuAvailableProjects}">
             <li>
-                <a>${projectContainer.project.name}</a>
+                <a href="javascript:selectProject(${projectContainer.project.id})">${projectContainer.project.name}</a>
                 <c:if test="${projectContainer.editable}">
                 <a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${projectContainer.project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </c:if>

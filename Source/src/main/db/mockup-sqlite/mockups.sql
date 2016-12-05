@@ -1,7 +1,8 @@
 INSERT INTO PROJECTS VALUES (
 	NULL, /* autoincremented value */
 	"Empty project",
-	"Lorem ipsum dolor sit amet,<br />consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat<br />volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed."
+	"Lorem ipsum dolor sit amet,<br />consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat<br />volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.",
+	1
 );
 
 INSERT INTO USERS_PROJECTS VALUES(
@@ -9,6 +10,14 @@ INSERT INTO USERS_PROJECTS VALUES(
     1,
     1,
     1
+);
+
+INSERT INTO SPRINTS VALUES(
+	NULL,
+	"Sprint 1",
+	datetime('now'),
+	datetime('now', '+7 day'),
+	1
 );
 
 UPDATE USERS_SETTINGS SET RECENT_PROJECT_ID=1 WHERE USER_ID=1;

@@ -17,7 +17,11 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.pg.eti.kio.skroom.model.dba.Tables.PROJECTS;
+
 /**
+ * Class to access model's Project from database.
+ *
  * @author Wojciech Stanisławski, Krzysztof Świeczkowski
  * @since 03.11.16
  */
@@ -34,32 +38,36 @@ public class ProjectDao {
 	public Project fetchProjectById(Connection connection, int id) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		ProjectsRecord projectRecord = query.selectFrom(Tables.PROJECTS).where(Tables.PROJECTS.ID.eq(id)).fetchOne();
+		ProjectsRecord projectRecord = query.selectFrom(PROJECTS).where(PROJECTS.ID.eq(id)).fetchOne();
 
 		return Project.fromDba(projectRecord);
 	}
 
-	public void addProject(Connection connection, Project project) {
+	public boolean addProject(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Integer projectId = (Integer) query.fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + Tables.PROJECTS.getName() +"'").get(0);
+		Integer projectId = (Integer) query.fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + PROJECTS.getName() +"'").get(0);
 
-		query.insertInto(Tables.PROJECTS).values(null, project.getName(), project.getDescription()).execute();
+		int inserted = query.insertInto(PROJECTS).values(null, project.getName(), project.getDescription(), project.getDefaultSprintLength()).execute();
+
+		project.setId(projectId + 1);
+		return inserted == 1;
 	}
 
 	public void updateProject(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		query.update(Tables.PROJECTS)
-				.set(Tables.PROJECTS.NAME, project.getName())
-				.set(Tables.PROJECTS.DESCRIPTION, project.getDescription())
-				.where(Tables.PROJECTS.ID.equal(project.getId())).execute();
+		query.update(PROJECTS)
+				.set(PROJECTS.NAME, project.getName())
+				.set(PROJECTS.DESCRIPTION, project.getDescription())
+				.set(PROJECTS.DEFAULT_SPRINT_LENGTH, project.getDefaultSprintLength())
+				.where(PROJECTS.ID.equal(project.getId())).execute();
 	}
 
 	public void removeProject(Connection connection, Integer projectId) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		query.delete(Tables.PROJECTS).where(Tables.PROJECTS.ID.equal(projectId)).execute();
+		query.delete(PROJECTS).where(PROJECTS.ID.equal(projectId)).execute();
 	}
 
 	/**
@@ -141,9 +149,9 @@ public class ProjectDao {
 
 		Result<Record3<Integer, String, String>> result;
 
-		result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
-				.from(Tables.PROJECTS)
-				.where(Tables.PROJECTS.ID.eq(projectId))
+		result = query.select(PROJECTS.ID, PROJECTS.NAME, PROJECTS.DESCRIPTION)
+				.from(PROJECTS)
+				.where(PROJECTS.ID.eq(projectId))
 				.limit(1).fetch();
 		if(result.isEmpty()) {
 			return null;
@@ -172,14 +180,14 @@ public class ProjectDao {
 		Result<Record3<Integer, String, String>> result;
 
 		if(UserRole.ADMIN.equals(user.getRole())) {
-			result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
-					.from(Tables.PROJECTS).fetch();
+			result = query.select(PROJECTS.ID, PROJECTS.NAME, PROJECTS.DESCRIPTION)
+					.from(PROJECTS).fetch();
 		}
 		else {
-			result = query.select(Tables.PROJECTS.ID, Tables.PROJECTS.NAME, Tables.PROJECTS.DESCRIPTION)
-					.from(Tables.PROJECTS, Tables.USERS_PROJECTS)
+			result = query.select(PROJECTS.ID, PROJECTS.NAME, PROJECTS.DESCRIPTION)
+					.from(PROJECTS, Tables.USERS_PROJECTS)
 					.where(Tables.USERS_PROJECTS.USER_ID.eq(user.getId())
-							.and(Tables.PROJECTS.ID.eq(Tables.USERS_PROJECTS.PROJECT_ID))).fetch();
+							.and(PROJECTS.ID.eq(Tables.USERS_PROJECTS.PROJECT_ID))).fetch();
 		}
 
 		for(Record3<Integer, String, String> record : result) {

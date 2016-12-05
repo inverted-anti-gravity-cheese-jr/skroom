@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.*;
-import pl.pg.eti.kio.skroom.model.dao.TaskDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserRolesInProjectDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
 import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
@@ -34,6 +31,7 @@ public class MainController {
 
 	@Autowired private TaskDao taskDao;
 	@Autowired private UserDao userDao;
+	@Autowired private SprintDao sprintDao;
 	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
@@ -98,9 +96,13 @@ public class MainController {
 		if(!userStoriesFit) {
 			userStories = userStories.subList(Math.min(userStories.size() - 1, page * userStoriesPerPage), Math.min(userStories.size(), (page + 1) * userStoriesPerPage));
 		}
+
+		List<Sprint> sprints = sprintDao.fetchSprintsForProject(dbConnection, userSettings.getRecentProject());
+
 		model.addObject("userStories", userStories);
 		model.addObject("userStoriesFit", userStoriesFit);
 		model.addObject("pages", pages);
+		model.addObject("sprints", sprints);
 
 		return model;
 	}

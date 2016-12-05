@@ -1,3 +1,9 @@
+/**
+ * Method for selecting element in <select> list by supplied value.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 05.12.16
+ */
 function searchForOptionInSelectAndCheckIfEquals(children, value) {
     var i;
     for(i = 0; i < children.length; i++) {
@@ -9,6 +15,12 @@ function searchForOptionInSelectAndCheckIfEquals(children, value) {
     }
 }
 
+/**
+ * Selects current values in user story form <select> elements.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 05.12.16
+ */
 function reloadUserStoryForm(storyPoints, storyStatus) {
     if(storyPoints != undefined) {
         var select = document.getElementById("story-points-select");
@@ -21,11 +33,34 @@ function reloadUserStoryForm(storyPoints, storyStatus) {
     }
 }
 
+/**
+ * Saves in database how many user stories user wants to display.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 05.12.16
+ */
 function saveUserStoriesPerPage(value) {
     $.ajax({
         type : "POST",
         data : { 'perPage': value },
         url : "rest/userSettings/userStoriesPerPage",
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}
+
+/**
+ * Saves in database which project is selected.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 05.12.16
+ */
+function selectProject(value) {
+    $.ajax({
+        type : "POST",
+        url : "rest/userSettings/selectProject",
+        data: {"projectId": value},
         complete : function(response) {
             location.reload();
         }

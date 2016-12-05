@@ -15,6 +15,7 @@ import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
+import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
@@ -39,7 +40,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1687352458;
+    private static final long serialVersionUID = 402145103;
 
     /**
      * The reference instance of <code></code>
@@ -50,6 +51,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>PROJECTS</code>.
      */
     public final Projects PROJECTS = pl.pg.eti.kio.skroom.model.dba.tables.Projects.PROJECTS;
+
+    /**
+     * The table <code>SPRINTS</code>.
+     */
+    public final Sprints SPRINTS = pl.pg.eti.kio.skroom.model.dba.tables.Sprints.SPRINTS;
 
     /**
      * The table <code>TASKS</code>.
@@ -122,6 +128,7 @@ public class DefaultSchema extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Projects.PROJECTS,
+            Sprints.SPRINTS,
             Tasks.TASKS,
             Users.USERS,
             UsersProjects.USERS_PROJECTS,

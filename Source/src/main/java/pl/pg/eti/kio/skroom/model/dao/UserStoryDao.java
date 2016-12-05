@@ -69,14 +69,6 @@ public class UserStoryDao {
 	public boolean updateUserStory(Connection connection, UserStory userStory) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		/*
-		int updatedRows = query.update(USER_STORIES)
-				.set(row(USER_STORIES.NAME, USER_STORIES.DESCRIPTION, USER_STORIES.PRIORITY,
-						USER_STORIES.STORY_POINTS, USER_STORIES.STATUS_ID),
-						row(userStory.getName(), userStory.getDescription(), userStory.getPriority(),
-								userStory.getStoryPoints().getValue(), userStory.getStatus().getId()))
-				.where(USER_STORIES.ID.eq(userStory.getId())).execute();
-				*/
 		int updatedRows = query.update(USER_STORIES)
 				.set(USER_STORIES.NAME, userStory.getName())
 				.set(USER_STORIES.DESCRIPTION, userStory.getDescription())
@@ -124,5 +116,20 @@ public class UserStoryDao {
 
 		UserStoriesRecord userStoryRecord = query.selectFrom(USER_STORIES).where(USER_STORIES.ID.eq(id)).fetchOne();
 		return UserStory.fromDba(userStoryRecord, query);
+	}
+
+	/**
+	 * Removes all user stories for project.
+	 *
+	 * @param connection	Connection to a database.
+	 * @param project		Project from which all user stories will be deleted.
+	 * @return				Returns true if deleted any rows.
+	 */
+	public boolean removeUserStoriesForProject(Connection connection, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int deletedRows = query.deleteFrom(USER_STORIES).where(USER_STORIES.PROJECT_ID.eq(project.getId())).execute();
+
+		return deletedRows > 0;
 	}
 }
