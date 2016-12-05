@@ -1,3 +1,7 @@
 .admin-panel {
     font-size: 10pt;
 }
+
+.user-row-not-accepted {
+    text-decoration: underline;
+}

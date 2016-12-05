@@ -48,7 +48,11 @@
         <thead><tr><td>Name</td><td>Email</td><td>Global privileges</td></tr></thead>
         <tbody>
             <c:forEach var="user" items="${globalUsers}">
-                <tr><td>${user.name}</td><td>${user.email}</td><td>${user.role}</td></tr>
+                <tr class="${user.accepted ? '' : 'user-row-not-accepted'}">
+                    <td>${user.user.name}</td>
+                    <td>${user.user.email}</td>
+                    <td>${user.user.role}</td>
+                </tr>
             </c:forEach>
         </tbody>
     </table>

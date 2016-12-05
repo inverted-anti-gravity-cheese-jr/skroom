@@ -176,7 +176,7 @@ public class MainController {
 
 		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
-		List<User> allUsers = userDao.listAllUsers(dbConnection);
+		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
 
 		List<UserRolesInProject> allUserRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);

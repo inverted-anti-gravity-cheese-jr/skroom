@@ -1,6 +1,7 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
@@ -53,20 +54,26 @@ public class UserDao {
 	 * @param connection Connection to a database
 	 * @return List of all users
 	 */
-	public List<User> listAllUsers(Connection connection) {
+	public List<UserContainer> listAllUsers(Connection connection) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		List<User> users = new ArrayList<User>();
+		List<UserContainer> users = new ArrayList<>();
 
-		Result<UsersRecord> usersRecords = query.selectFrom(Tables.USERS).fetch();
+		Result<Record> records = query.select(Tables.USERS.fields()).select(Tables.USERS_SECURITY.ACCEPTED)
+				.from(Tables.USERS)
+				.join(Tables.USERS_SECURITY).onKey()
+				.orderBy(Tables.USERS_SECURITY.ACCEPTED)
+				.fetch();
+
 		try {
-			for (UsersRecord record : usersRecords) {
-				users.add(User.fromDba(record));
+			for (Record record : records) {
+				UsersRecord userRecord = record.into(Tables.USERS);
+				Record1<Integer> accepted = record.into(Tables.USERS_SECURITY.ACCEPTED);
+				users.add(new UserContainer(User.fromDba(userRecord), accepted.value1() == 1));
 			}
 		} catch (NoSuchUserRoleException e) {
 			users.clear();
 		}
-
 		return users;
 	}
 
@@ -205,6 +212,24 @@ public class UserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UserAccountCreationErrorException();
+		}
+	}
+
+	public class UserContainer {
+		private User user;
+		private boolean accepted;
+
+		UserContainer(User user, boolean accepted) {
+			this.user = user;
+			this.accepted = accepted;
+		}
+
+		public User getUser() {
+			return user;
+		}
+
+		public boolean isAccepted() {
+			return accepted;
 		}
 	}
 
