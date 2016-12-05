@@ -16,6 +16,9 @@ UPDATE USERS_SETTINGS SET RECENT_PROJECT_ID=1 WHERE USER_ID=1;
 INSERT INTO USER_STORIES VALUES (
 	NULL, /* autoincremented value */
 	"Test User Story",
+	"<user>",
+	"<some goal>",
+	"<some reason>",
     "Some text",
 	1,
 	20,

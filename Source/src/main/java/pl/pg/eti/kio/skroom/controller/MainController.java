@@ -73,17 +73,14 @@ public class MainController {
 
 	@RequestMapping(value = "/productbacklog", method = RequestMethod.GET)
 	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-										   @RequestParam(value = "upp", required = false) String userStoriesPerPageString, @RequestParam(value = "p", required = false) String pageString) {
+										   @RequestParam(value = "p", required = false) String pageString) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		int userStoriesPerPage = 20, page=0;
+		int userStoriesPerPage = userSettings.getUserStoriesPerPage(), page=0;
 		try {
-			if(userStoriesPerPageString != null && !userStoriesPerPageString.isEmpty()) {
-					userStoriesPerPage = Integer.parseInt(userStoriesPerPageString);
-			}
 			if(pageString != null && !pageString.isEmpty()) {
 				page = Integer.parseInt(pageString);
 			}
@@ -96,13 +93,14 @@ public class MainController {
 		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", userSettings.getRecentProject(), user, request);
 
 		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
+		int pages = userStories.size() / userStoriesPerPage;
 		boolean userStoriesFit = userStoriesPerPage > userStories.size();
 		if(!userStoriesFit) {
 			userStories = userStories.subList(Math.min(userStories.size() - 1, page * userStoriesPerPage), Math.min(userStories.size(), (page + 1) * userStoriesPerPage));
 		}
 		model.addObject("userStories", userStories);
 		model.addObject("userStoriesFit", userStoriesFit);
-		model.addObject("pages", userStories.size() / userStoriesPerPage);
+		model.addObject("pages", pages);
 
 		return model;
 	}

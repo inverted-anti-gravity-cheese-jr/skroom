@@ -15,6 +15,7 @@
 		<s:bundle name="jquery-ui" />
 		<s:bundle name="bootstrap" />
 		<s:bundle name="font-awesome" />
+		<s:bundle name="full-calendar" />
 		<s:bundle name="main" />
 
 	    <s:pagetitle />

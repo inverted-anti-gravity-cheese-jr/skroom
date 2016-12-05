@@ -25,11 +25,11 @@ public class DatabaseSettings {
 		return SQLDialect.MYSQL;
 	}
 
-	public static Connection getDatabaseConnection() {
+	public static synchronized Connection getDatabaseConnection() {
 		return dbConnection;
 	}
 
-	public static void initConnection(String connectionString) {
+	public static synchronized void initConnection(String connectionString) {
 		try {
 			dbConnection = DriverManager.getConnection(connectionString);
 		} catch (SQLException e) {
@@ -37,7 +37,7 @@ public class DatabaseSettings {
 		}
 	}
 
-	public static void initConnection(String connectionString, String user, String password) {
+	public static synchronized void initConnection(String connectionString, String user, String password) {
 		try {
 			dbConnection = DriverManager.getConnection(connectionString, user, password);
 		} catch (SQLException e) {

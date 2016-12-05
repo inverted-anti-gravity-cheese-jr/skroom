@@ -22,6 +22,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS_SETTINGS;
+
 /**
  * Class to access model's User from database.
  *
@@ -32,6 +34,18 @@ import java.util.List;
 public class UserDao {
 
 	private static final int USER_PRIVILAGE_TO_EDIT_PROJECT = 1;
+
+
+	public boolean saveUserSettings(Connection connection, UserSettings userSettings) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int updatedRows = query.update(USERS_SETTINGS)
+				.set(USERS_SETTINGS.RECENT_PROJECT_ID, userSettings.getRecentProject().getId())
+				.set(USERS_SETTINGS.USER_STORIES_PER_PAGE, userSettings.getUserStoriesPerPage())
+				.execute();
+
+		return updatedRows > 0;
+	}
 
 	/**
 	 * Lists all users in database, proceed with caution
@@ -138,7 +152,7 @@ public class UserDao {
 	public UserSettings fetchUserSettingsData(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		UsersSettingsRecord usersSettingsRecord = query.selectFrom(Tables.USERS_SETTINGS).where(Tables.USERS_SETTINGS.USER_ID.eq(user.getId())).fetchOne();
+		UsersSettingsRecord usersSettingsRecord = query.selectFrom(USERS_SETTINGS).where(USERS_SETTINGS.USER_ID.eq(user.getId())).fetchOne();
 
 		return UserSettings.fromDba(usersSettingsRecord, query);
 	}
@@ -179,7 +193,7 @@ public class UserDao {
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
 						userSecurity.getSecureAnswer(), 0).execute();
 
-				int usersSettingsCreateRows = query.insertInto(Tables.USERS_SETTINGS).values(null, -1).execute();
+				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, -1, 10).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1 || usersSettingsCreateRows != 1) {
 					// rollback

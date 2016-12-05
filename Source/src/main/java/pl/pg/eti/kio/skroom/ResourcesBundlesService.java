@@ -25,6 +25,7 @@ public class ResourcesBundlesService {
 		bundles.put("main", getMainBundle());
 		bundles.put("bootstrap", getBootstrapBundle());
 		bundles.put("font-awesome", getFontAwesomeBundle());
+		bundles.put("full-calendar", getFullCalendarBundle());
 	}
 
 	public List<String> getBundle(String bundleName) {
@@ -43,6 +44,13 @@ public class ResourcesBundlesService {
 
 	private List<String> getJqueryBundle() {
 		return Arrays.asList("resources/js/jquery/jquery-1.8.2.min.js");
+	}
+
+	private List<String> getFullCalendarBundle() {
+		return Arrays.asList("resources/js/moment.min.js",
+				"resources/js/fullcalendar.min.js",
+				"resources/js/full-calendar-locale-all.js",
+				"resources/css/fullcalendar.min.css");
 	}
 	
 	private List<String> getJqueryUiBundle() {

@@ -28,7 +28,7 @@
             <required>false</required>
         </attribute>
         <attribute>
-            <name>imgSrc</name>
+            <name>fa</name>
             <required>false</required>
         </attribute>
         <attribute>

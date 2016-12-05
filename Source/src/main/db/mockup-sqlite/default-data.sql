@@ -19,7 +19,8 @@ INSERT INTO USERS_SECURITY VALUES (
 INSERT INTO USERS_SETTINGS VALUES (
     NULL, /* autoincremented value */
     1,
-    -1
+    -1,
+    10
 );
 
 /* USER ROLES IN PROJECT */

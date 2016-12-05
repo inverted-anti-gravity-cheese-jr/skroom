@@ -10,6 +10,9 @@
     padding: 3px 10px;
 }
 
+.user-story-form {
+    display: none;
+}
 .user-story-form .form-control,
 .user-story-form .input-group {
     margin-bottom: 5px;
@@ -17,4 +20,18 @@
 
 .user-story-form .input-group .form-control {
     margin: 0;
+}
+
+.user-story-body .management-bar,
+.user-story-form .management-bar {
+    margin-bottom: 10px;
+}
+
+.user-story-body .big-text-no-margin {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.sprints-calendar-container {
+    width: 60%;
 }

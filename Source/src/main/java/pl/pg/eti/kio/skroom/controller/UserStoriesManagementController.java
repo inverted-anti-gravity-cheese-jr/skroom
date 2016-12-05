@@ -2,7 +2,6 @@ package pl.pg.eti.kio.skroom.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -89,15 +88,17 @@ public class UserStoriesManagementController {
 	@RequestMapping(value = "addUserStory", method = RequestMethod.POST)
 	public ModelAndView addUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 									  @RequestParam String name, @RequestParam String description, @RequestParam("priority") String priorityString,
-									  @RequestParam String storyPoints, @RequestParam String status) {
-		return addOrEditUserStory(user, userSettings, null, name, description, priorityString, storyPoints, status);
+									  @RequestParam String storyPoints, @RequestParam String status,
+									 @RequestParam("as-a-story") String asA, @RequestParam("i-want-to-story") String iWantTo, @RequestParam("so-that-story") String soThat) {
+		return addOrEditUserStory(user, userSettings, null, name, description, priorityString, storyPoints, status, asA, iWantTo, soThat);
 	}
 
 	@RequestMapping(value = "editUserStory/{userStoryId}/", method = RequestMethod.POST)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 									  @PathVariable Integer userStoryId, @RequestParam String name, @RequestParam String description,
-									  @RequestParam("priority") String priorityString, @RequestParam String storyPoints, @RequestParam String status) {
-		return addOrEditUserStory(user, userSettings, userStoryId, name, description, priorityString, storyPoints, status);
+									  @RequestParam("priority") String priorityString, @RequestParam String storyPoints, @RequestParam String status,
+									  @RequestParam("as-a-story") String asA, @RequestParam("i-want-to-story") String iWantTo, @RequestParam("so-that-story") String soThat) {
+		return addOrEditUserStory(user, userSettings, userStoryId, name, description, priorityString, storyPoints, status, asA, iWantTo, soThat);
 	}
 
 	@RequestMapping(value = "removeUserStory/{userStoryId}/", method = RequestMethod.GET)
@@ -109,12 +110,13 @@ public class UserStoriesManagementController {
 		return new ModelAndView("redirect:/productbacklog");
 	}
 
-	private ModelAndView addOrEditUserStory(User user, UserSettings userSettings, Integer userStoryId, String name, String description, String priorityString, String storyPoints, String status) {
+	private ModelAndView addOrEditUserStory(User user, UserSettings userSettings, Integer userStoryId, String name, String description, String priorityString, String storyPoints, String status, String asA, String iWantTo, String soThat) {
 		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
 		if (userSettings.getRecentProject() == null) {
 			return new ModelAndView("redirect:/");
 		}
 		String errorMessage = null;
+		description = description.replace("\r", "").replace("\n", "<br />");
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
@@ -123,6 +125,9 @@ public class UserStoriesManagementController {
 			userStory.setId(userStoryId.intValue());
 		}
 		userStory.setName(name);
+		userStory.setAsA(asA);
+		userStory.setiWantTo(iWantTo);
+		userStory.setSoThat(soThat);
 		userStory.setDescription(description);
 		userStory.setStatus(userStoryStatusDao.getUserStoryStatusForName(dbConnection, status));
 		userStory.setStoryPoints(StoryPoints.fromDisplayName(storyPoints));

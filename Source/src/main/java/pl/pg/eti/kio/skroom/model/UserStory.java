@@ -14,6 +14,9 @@ public class UserStory {
 
 	private int id;
 	private String name;
+	private String asA;
+	private String iWantTo;
+	private String soThat;
 	private String description;
 	private int priority;
 	private StoryPoints storyPoints;
@@ -34,6 +37,9 @@ public class UserStory {
 		UserStory userStory = new UserStory();
 		userStory.setId(record.getId());
 		userStory.setName(record.getName());
+		userStory.setAsA(record.getAsAStory());
+		userStory.setiWantTo(record.getIWantToStory());
+		userStory.setSoThat(record.getSoThatStory());
 		userStory.setDescription(record.getDescription());
 		userStory.setPriority(record.getPriority());
 		userStory.setStoryPoints(StoryPoints.fromValue(record.getStoryPoints()));
@@ -79,6 +85,30 @@ public class UserStory {
 
 	public StoryPoints getStoryPoints() {
 		return storyPoints;
+	}
+
+	public String getAsA() {
+		return asA;
+	}
+
+	public void setAsA(String asA) {
+		this.asA = asA;
+	}
+
+	public String getiWantTo() {
+		return iWantTo;
+	}
+
+	public void setiWantTo(String iWantTo) {
+		this.iWantTo = iWantTo;
+	}
+
+	public String getSoThat() {
+		return soThat;
+	}
+
+	public void setSoThat(String soThat) {
+		this.soThat = soThat;
 	}
 
 	public void setStoryPoints(StoryPoints storyPoints) {

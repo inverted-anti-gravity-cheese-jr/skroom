@@ -1,12 +1,11 @@
 package pl.pg.eti.kio.skroom.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pg.eti.kio.skroom.model.Task;
+import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
+import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.enumeration.TaskStatus;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
@@ -22,10 +21,14 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping(value = "/rest")
+@SessionAttributes({"userSettings"})
 public class MainRestController {
 
 	@Autowired
 	private TaskDao taskDao;
+
+	@Autowired
+	private UserDao userDao;
 
 	@RequestMapping(value = "/task/update", method = RequestMethod.POST)
 	public void reloadTask(@RequestParam("taskId") String taskId, @RequestParam("status") String status) {
@@ -61,6 +64,20 @@ public class MainRestController {
 		if (task.isPresent()) {
 			task.get().setStatus(newStatusEnum);
 			taskDao.updateTaskStatus(dbConnection, task.get());
+		}
+	}
+
+	@RequestMapping(value="userSettings/userStoriesPerPage", method = RequestMethod.POST)
+	public void changeUserStoriesPerPage(@RequestParam String perPage, @ModelAttribute("userSettings") UserSettings userSettings) {
+		Connection connection = DatabaseSettings.getDatabaseConnection();
+		try {
+			int perPageInt = Integer.parseInt(perPage);
+			userSettings.setUserStoriesPerPage(perPageInt);
+
+			userDao.saveUserSettings(connection, userSettings);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

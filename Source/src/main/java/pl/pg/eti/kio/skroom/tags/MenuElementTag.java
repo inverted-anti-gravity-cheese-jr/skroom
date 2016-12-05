@@ -18,7 +18,7 @@ public class MenuElementTag extends SimpleTagSupport {
 
 	private String href;
 	private String siteName;
-	private String imgSrc;
+	private String fa;
 	private boolean disabled;
 
 	public String getHref() {
@@ -29,20 +29,21 @@ public class MenuElementTag extends SimpleTagSupport {
 		this.href = href;
 	}
 
+
+	public String getFa() {
+		return fa;
+	}
+
+	public void setFa(String fa) {
+		this.fa = fa;
+	}
+
 	public String getSiteName() {
 		return siteName;
 	}
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
-	}
-
-	public String getImgSrc() {
-		return imgSrc;
-	}
-
-	public void setImgSrc(String imgSrc) {
-		this.imgSrc = imgSrc;
 	}
 
 	public boolean isDisabled() {
@@ -74,8 +75,8 @@ public class MenuElementTag extends SimpleTagSupport {
 		}
 
 		out.print("<a href=\"" + ROOT_PATH + href + "\">");
-		if(imgSrc != null && !imgSrc.isEmpty()) {
-			out.print("<img src=\"" + ROOT_PATH + imgSrc + "\" />");
+		if(fa != null && !fa.isEmpty()) {
+			out.print("<i class=\"" + fa + "\" aria-hidden=\"true\"></i>");
 		}
 
 		StringWriter stringWriter = new StringWriter();

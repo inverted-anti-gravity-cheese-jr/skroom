@@ -52,6 +52,7 @@ public class UserStoryDao {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		int insertedRows = query.insertInto(USER_STORIES).values(null, userStory.getName(),
+				userStory.getAsA(), userStory.getiWantTo(), userStory.getSoThat(),
 				userStory.getDescription(), userStory.getPriority(),
 				userStory.getStoryPoints().getValue(), userStory.getStatus().getId(), project.getId()).execute();
 
@@ -82,6 +83,9 @@ public class UserStoryDao {
 				.set(USER_STORIES.PRIORITY, userStory.getPriority())
 				.set(USER_STORIES.STORY_POINTS, userStory.getStoryPoints().getValue())
 				.set(USER_STORIES.STATUS_ID, userStory.getStatus().getId())
+				.set(USER_STORIES.AS_A_STORY, userStory.getAsA())
+				.set(USER_STORIES.I_WANT_TO_STORY, userStory.getiWantTo())
+				.set(USER_STORIES.SO_THAT_STORY, userStory.getSoThat())
 				.where(USER_STORIES.ID.eq(userStory.getId())).execute();
 
 		return updatedRows > 0;

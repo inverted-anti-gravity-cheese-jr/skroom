@@ -43,13 +43,16 @@
 	background-color: #566683;
 }
 
-#main-menu .nav-sidebar li img {
-	height: 20px;
-	margin-right: 12px;
+#main-menu .nav-sidebar li .fa {
+	margin-right: 12px !important;
 }
 
-#main-menu .project-list {
-    
+#main-menu .menu-list {
+	padding: 0;
+}
+
+#main-menu .menu-list .fa {
+    margin-right: 12px !important;
 }
 
 .menu-list {

@@ -120,7 +120,18 @@ textarea {
     height: 35px;
 }
 
-.management-bar .btn{
+.management-bar .bar-text {
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: -1px;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.management-bar .btn {
     background-color: rgba(0,0,0,0);
     height: 100%;
     margin-bottom: -1px !important;
@@ -138,4 +149,17 @@ textarea {
 .management-bar .btn.green:hover {
     background-color: #8bc34a;
     color: black;
+}
+
+.management-bar .btn.red {
+	background-color: #ff8566;
+}
+
+.management-bar .btn.red:hover {
+    background-color: #ff3300;
+    color: black;
+}
+
+.management-bar a.btn {
+	color: black;
 }

@@ -20,3 +20,14 @@ function reloadUserStoryForm(storyPoints, storyStatus) {
         searchForOptionInSelectAndCheckIfEquals(select.children, storyStatus);
     }
 }
+
+function saveUserStoriesPerPage(value) {
+    $.ajax({
+        type : "POST",
+        data : { 'perPage': value },
+        url : "rest/userSettings/userStoriesPerPage",
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}
