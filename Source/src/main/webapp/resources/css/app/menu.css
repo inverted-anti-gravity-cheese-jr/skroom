@@ -17,51 +17,64 @@
 	color: #CA6144;
 }
 
-#main-menu .nav-sidebar {
+#main-menu .nav-sidebar,
+#main-menu .project-list-container {
 	font-size: 11pt;
 	text-align: left;
 	margin: 0;
 }
 
-#main-menu .nav-sidebar a {
+#main-menu .project-list-container {
+    max-height: 40px;
+    overflow: hidden;
+    -webkit-transition: max-height 0.25s ease-out;
+    transition: max-height 0.25s ease-out;
+}
+
+#main-menu .project-list-container.active {
+    max-height: 300px;
+    -webkit-transition: max-height 0.25s ease-in;
+    transition: max-height 0.25s ease-in;
+}
+
+#main-menu .project-list-container .project-list {
+    padding-left: 25px;
+}
+
+#main-menu .project-list .project-link {
+    display: inline-block;
+    width: calc(100% - 43px);
+}
+
+#main-menu .project-list .edit-link {
+    display: inline-block;
+    float:right;
+}
+
+#main-menu .nav-sidebar a,
+#main-menu .project-list-container a {
 	padding-left: 15px;
 	color: inherit;
 }
 
-#main-menu .menu-list .active a,
-#main-menu .nav-sidebar .active a {
-	padding-left: 10px;
-}
-
-#main-menu .menu-list .active,
 #main-menu .nav-sidebar .active {
 	border-left: 5px solid #CA6144;
 }
 
-#main-menu .menu-list a:hover,
+#main-menu .nav-sidebar .active a {
+	padding-left: 10px;
+}
+
+#main-menu .project-list-container a:hover,
 #main-menu .nav-sidebar a:hover {
 	background-color: #566683;
 }
 
+#main-menu .project-list-container li .fa,
 #main-menu .nav-sidebar li .fa {
-	margin-right: 12px !important;
+	margin-right: 12px;
 }
 
-#main-menu .menu-list {
-	padding: 0;
-}
-
-#main-menu .menu-list .fa {
-    margin-right: 12px !important;
-}
-
-.menu-list {
-	padding: 0;
-	font-size: 14pt;
-	color: #DDD;
-	list-style-type: none;
-}
-
-.menu-list li {
-	padding-bottom: 10px;
+#main-menu .project-list .edit-link .fa {
+    margin-right: 0px;
 }

@@ -1,21 +1,26 @@
 <div id="main-menu" class="col-xs-12 col-sm-3 sidebar">
 	<h1>Skroom</h1>
-	<ul class="menu-list">
-		<li><a><i class="fa fa-ellipsis-v" aria-hidden="true"></i>Select project</a></li>
+	<ul class="nav project-list-container">
+		<li><a><i class="fa fa-ellipsis-h" aria-hidden="true"/></i>Project list</a></li>
+		<ul class="nav project-list">
+            <c:forEach var="projectContainer" items="${menuAvailableProjects}">
+                <li>
+                    <a class="project-link"href="javascript:selectProject(${projectContainer.project.id})"><i class="fa fa-sticky-note-o" aria-hidden="true"/></i>${projectContainer.project.name}</a>
+                    <c:if test="${projectContainer.editable}">
+                    <a class="edit-link" href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${projectContainer.project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    </c:if>
+                </li>
+            </c:forEach>
+            <c:if test="${canCreateProjects}">
+            <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject"><i class="fa fa-plus" aria-hidden="true"/></i>Add project</a></li>
+            </c:if>
+        </ul>
 	</ul>
-    <ul class="project-list">
-        <c:forEach var="projectContainer" items="${menuAvailableProjects}">
-            <li>
-                <a href="javascript:selectProject(${projectContainer.project.id})">${projectContainer.project.name}</a>
-                <c:if test="${projectContainer.editable}">
-                <a href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${projectContainer.project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                </c:if>
-            </li>
-        </c:forEach>
-        <c:if test="${canCreateProjects}">
-        <li><a href="<c:out value='${pageContext.request.contextPath}'/>/addProject">Add project</a></li>
-        </c:if>
-    </ul>
+	<script>
+        $('.project-list-container li a').on('click', function(e){
+            $('.project-list-container').toggleClass('active');
+        });
+    </script>
 	<hr>
 	<ul class="nav nav-sidebar">
         
@@ -28,8 +33,7 @@
 	</ul>
 	<hr>
 	<ul class="nav nav-sidebar">
-        <%  %>
-        
+
 		<s:menuitem href="userSettings" fa="fa fa-sliders">User settings</s:menuitem>
         <s:menuitem href="userAdmin" fa="fa fa-users" disabled="${not isAdmin}">User privilages settings</s:menuitem>
 		<s:menuitem href="logout" fa="fa fa-sign-out">Sign out</s:menuitem>
