@@ -10,6 +10,7 @@ import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.SprintDao;
+import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
@@ -28,6 +29,7 @@ public class ProjectManagementController {
 
 	@Autowired private ProjectDao projectDao;
 	@Autowired private SprintDao sprintDao;
+	@Autowired private UserDao userDao;
 	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
@@ -126,7 +128,7 @@ public class ProjectManagementController {
 	}
 
 	@RequestMapping(value = "/removeProject/{projectId}")
-	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId) {
+	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer projectId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
@@ -137,6 +139,10 @@ public class ProjectManagementController {
 		userStoryDao.removeUserStoriesForProject(dbConnection, project);
 		sprintDao.removeSprintsForProject(dbConnection, project);
 		projectDao.removeProject(dbConnection, projectId);
+
+		userSettings.setRecentProject(null);
+		userDao.saveUserSettings(dbConnection, userSettings);
+
 		return new ModelAndView("redirect:/");
 	}
 }

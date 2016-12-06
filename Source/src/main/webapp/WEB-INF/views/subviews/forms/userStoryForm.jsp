@@ -7,12 +7,15 @@
 <script type="text/javascript">
     function switchViews(showEdit) {
         if(showEdit) {
-            $(".user-story-body").hide();
-            $(".user-story-form").show();
+            $(".user-story-body").slideUp(function () {
+                $(".user-story-form").slideDown();
+            });
+            
         }
         else {
-            $(".user-story-form").hide();
-            $(".user-story-body").show();
+            $(".user-story-form").slideUp(function () {
+                $(".user-story-body").slideDown();
+            });
         }
     }
 

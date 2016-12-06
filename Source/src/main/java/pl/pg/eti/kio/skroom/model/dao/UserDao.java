@@ -40,8 +40,13 @@ public class UserDao {
 	public boolean saveUserSettings(Connection connection, UserSettings userSettings) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
+		Integer projectId = null;
+		if(userSettings.getRecentProject() != null) {
+			projectId = userSettings.getRecentProject().getId();
+		}
+
 		int updatedRows = query.update(USERS_SETTINGS)
-				.set(USERS_SETTINGS.RECENT_PROJECT_ID, userSettings.getRecentProject().getId())
+				.set(USERS_SETTINGS.RECENT_PROJECT_ID, projectId)
 				.set(USERS_SETTINGS.USER_STORIES_PER_PAGE, userSettings.getUserStoriesPerPage())
 				.execute();
 

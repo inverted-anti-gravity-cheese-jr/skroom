@@ -7,6 +7,41 @@
     pageEncoding="UTF-8"%>
 
 <t:index>
+    
+    <script type="text/javascript">
+        function reloadUpp() {
+            var us = document.getElementById("productBacklogUserStoriesUpp");
+            searchForOptionInSelectAndCheckIfEquals(us.children, ${userSettings.userStoriesPerPage});
+        }
+
+        function createCalendar() {
+            var evs = [
+            <c:forEach var="sprint" items="${sprints}">
+                {
+                    id: ${sprint.id},
+                    title: "${sprint.name}",
+                    start: "${sprint.startDate}",
+                    end: "${sprint.endDate}"
+                },
+            </c:forEach>
+                {}
+            ];
+            evs.pop();
+            
+            $("#sprints-calendar").fullCalendar({
+                locale: "${pageContext.response.locale}",
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events: evs
+            });
+            
+        }
+        
+        function showSprintNameForm() {
+            $("#sprint-create-form").slideDown();
+        }
+    </script>
+    
     <h1>Product backlog</h1>
     <div class="management-bar"> <!-- "management-bar" -->
         <a href="addUserStory" class="btn green">Add user story</a>
@@ -48,51 +83,23 @@
 
     <h1>Sprints</h1>
 
-    <form action="" method="post">
-        <div class="management-bar">
-            <button class="btn green">Create new sprint</button>
-            <span class="bar-text">Creating a new sprint will close current one.</span>
-        </div>
-    </form>
+    
+    <div class="management-bar">
+        <button onclick="showSprintNameForm();" class="btn green">Create new sprint</a>
+        <button onclick="closeCurrentSprint();" type="button" class="btn">Close current sprint</button>
+    </div>
+    <div id="sprint-create-form" style="display: none;">
+        <input class="form-control" id="sprint-name" placeholder="Sprint name" value="Sprint ${sprintCount + 1}" />
+        <button class="btn green" onclick="createNewSprint('sprint-name');">Submit</button>
+    </div>
     <div id="sprints-calendar-container">
         <div id="sprints-calendar"></div>
     </div>
 
 
     <script type="text/javascript">
-        function reloadUpp() {
-            var us = document.getElementById("productBacklogUserStoriesUpp");
-            searchForOptionInSelectAndCheckIfEquals(us.children, ${userSettings.userStoriesPerPage});
-        }
-
         reloadUpp();
-
-
-        function createCalendar() {
-            var evs = [
-            <c:forEach var="sprint" items="${sprints}">
-                {
-                    id: ${sprint.id},
-                    title: "${sprint.name}",
-                    start: "${sprint.startDate}",
-                    end: "${sprint.endDate}"
-                },
-            </c:forEach>
-                {}
-            ];
-            evs.pop();
-            
-            $("#sprints-calendar").fullCalendar({
-                locale: "${pageContext.response.locale}",
-                editable: true,
-                eventLimit: true, // allow "more" link when too many events
-                events: evs
-            });
-            
-        }
-
         createCalendar();
-
     </script>
     
 </t:index>

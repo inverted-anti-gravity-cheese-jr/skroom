@@ -103,6 +103,7 @@ public class MainController {
 		model.addObject("userStoriesFit", userStoriesFit);
 		model.addObject("pages", pages);
 		model.addObject("sprints", sprints);
+		model.addObject("sprintCount", sprintDao.getSprintCountForProject(dbConnection, userSettings.getRecentProject()));
 
 		return model;
 	}

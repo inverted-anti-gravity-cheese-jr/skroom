@@ -66,3 +66,38 @@ function selectProject(value) {
         }
     });
 }
+
+/**
+ * Closes ongoing sprint.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 06.12.16
+ */
+function closeCurrentSprint() {
+    $.ajax({
+        type : "POST",
+        url : "rest/sprints/close",
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}
+
+/**
+ * Closes ongoing sprint.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 06.12.16
+ */
+function createNewSprint(elementId) {
+    var name = $("#" + elementId).val();
+    
+    $.ajax({
+        type : "POST",
+        url : "rest/sprints/create",
+        data: {"name": name},
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}

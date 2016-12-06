@@ -58,6 +58,10 @@ public class Sprint {
 	}
 
 	public static Sprint fromDba(SprintsRecord record, Project project) {
+		if(record == null) {
+			return null;
+		}
+
 		Sprint sprint = new Sprint();
 
 		sprint.setId(record.getId());
