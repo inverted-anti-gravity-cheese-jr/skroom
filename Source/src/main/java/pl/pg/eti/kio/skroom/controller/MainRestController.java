@@ -7,7 +7,6 @@ import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.enumeration.TaskStatus;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
@@ -31,6 +30,7 @@ public class MainRestController {
 
 	@RequestMapping(value = "/task/update", method = RequestMethod.POST)
 	public void reloadTask(@RequestParam("taskId") String taskId, @RequestParam("status") String status) {
+		/*
 		TaskStatus newStatusEnum = TaskStatus.NOT_STARTED;
 		switch (status) {
 		case "inProgress":
@@ -64,6 +64,7 @@ public class MainRestController {
 			task.get().setStatus(newStatusEnum);
 			taskDao.updateTaskStatus(dbConnection, task.get());
 		}
+		*/
 	}
 
 	@RequestMapping(value="userSettings/userStoriesPerPage", method = RequestMethod.POST)

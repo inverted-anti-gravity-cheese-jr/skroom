@@ -35,7 +35,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tasks extends TableImpl<TasksRecord> {
 
-    private static final long serialVersionUID = -782447396;
+    private static final long serialVersionUID = 737022563;
 
     /**
      * The reference instance of <code>TASKS</code>
@@ -61,19 +61,29 @@ public class Tasks extends TableImpl<TasksRecord> {
     public final TableField<TasksRecord, String> NAME = createField("NAME", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>TASKS.DESCRIPTION</code>.
+     */
+    public final TableField<TasksRecord, String> DESCRIPTION = createField("DESCRIPTION", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>TASKS.COLOR</code>.
+     */
+    public final TableField<TasksRecord, String> COLOR = createField("COLOR", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
      * The column <code>TASKS.ASSIGNEE</code>.
      */
     public final TableField<TasksRecord, Integer> ASSIGNEE = createField("ASSIGNEE", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>TASKS.TASK_STATUS</code>.
+     * The column <code>TASKS.TASK_STATUS_ID</code>.
      */
-    public final TableField<TasksRecord, Integer> TASK_STATUS = createField("TASK_STATUS", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<TasksRecord, Integer> TASK_STATUS_ID = createField("TASK_STATUS_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>TASKS.STORY_POINTS</code>.
+     * The column <code>TASKS.ESTIMATED_TIME</code>.
      */
-    public final TableField<TasksRecord, Integer> STORY_POINTS = createField("STORY_POINTS", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<TasksRecord, Integer> ESTIMATED_TIME = createField("ESTIMATED_TIME", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>TASKS.PROJECT_ID</code>.
@@ -131,7 +141,7 @@ public class Tasks extends TableImpl<TasksRecord> {
      */
     @Override
     public List<ForeignKey<TasksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TasksRecord, ?>>asList(Keys.FK_TASKS_USERS_1, Keys.FK_TASKS_PROJECTS_1);
+        return Arrays.<ForeignKey<TasksRecord, ?>>asList(Keys.FK_TASKS_USERS_1, Keys.FK_TASKS_TASK_STATUSES_1, Keys.FK_TASKS_PROJECTS_1);
     }
 
     /**

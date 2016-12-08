@@ -8,10 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
-import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +27,7 @@ public class ProjectManagementController {
 	@Autowired private ProjectDao projectDao;
 	@Autowired private SprintDao sprintDao;
 	@Autowired private UserDao userDao;
+	@Autowired private TaskStatusDao taskStatusDao;
 	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
@@ -58,6 +56,9 @@ public class ProjectManagementController {
 	public ModelAndView addProject(@ModelAttribute("loggedUser") User user, @RequestParam String name,
 								   @RequestParam String description, @RequestParam("sprint-length") String sprintLengthString,
 								   @RequestParam("first-sprint-name") String firstSprintName) {
+		if(user.getId() < 0) {
+			return new ModelAndView("redirect:/");
+		}
 		int sprintLength = 1;
 		try {
 			sprintLength = Integer.parseInt(sprintLengthString);
@@ -74,7 +75,7 @@ public class ProjectManagementController {
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-		projectDao.addProject(dbConnection, project);
+		projectDao.addProject(dbConnection, project, taskStatusDao);
 		sprintDao.createFirstSprint(dbConnection, project, firstSprintName);
 
 		return new ModelAndView("redirect:/");
@@ -138,6 +139,7 @@ public class ProjectManagementController {
 
 		userStoryDao.removeUserStoriesForProject(dbConnection, project);
 		sprintDao.removeSprintsForProject(dbConnection, project);
+		taskStatusDao.removeForProject(dbConnection, project);
 		projectDao.removeProject(dbConnection, projectId);
 
 		userSettings.setRecentProject(null);

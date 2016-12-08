@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UserRolesInProjectRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserRolesInProject extends TableImpl<UserRolesInProjectRecord> {
 
-    private static final long serialVersionUID = -570465385;
+    private static final long serialVersionUID = -82821341;
 
     /**
      * The reference instance of <code>USER_ROLES_IN_PROJECT</code>
@@ -97,6 +98,14 @@ public class UserRolesInProject extends TableImpl<UserRolesInProjectRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<UserRolesInProjectRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USER_ROLES_IN_PROJECT;
     }
 
     /**

@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
+import pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
@@ -46,6 +47,11 @@ public class Tables {
      * The table <code>TASKS</code>.
      */
     public static final Tasks TASKS = pl.pg.eti.kio.skroom.model.dba.tables.Tasks.TASKS;
+
+    /**
+     * The table <code>TASK_STATUSES</code>.
+     */
+    public static final TaskStatuses TASK_STATUSES = pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses.TASK_STATUSES;
 
     /**
      * The table <code>USERS</code>.

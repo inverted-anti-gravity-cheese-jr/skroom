@@ -43,7 +43,7 @@ public class ProjectDao {
 		return Project.fromDba(projectRecord);
 	}
 
-	public boolean addProject(Connection connection, Project project) {
+	public boolean addProject(Connection connection, Project project, TaskStatusDao dao) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		Integer projectId = (Integer) query.fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + PROJECTS.getName() +"'").get(0);
@@ -51,6 +51,8 @@ public class ProjectDao {
 		int inserted = query.insertInto(PROJECTS).values(null, project.getName(), project.getDescription(), project.getDefaultSprintLength()).execute();
 
 		project.setId(projectId + 1);
+		dao.generateDefaultStatusesForProject(connection, project);
+
 		return inserted == 1;
 	}
 

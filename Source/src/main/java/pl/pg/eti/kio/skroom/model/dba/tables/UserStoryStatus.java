@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoryStatusRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserStoryStatus extends TableImpl<UserStoryStatusRecord> {
 
-    private static final long serialVersionUID = 2123566086;
+    private static final long serialVersionUID = 912228733;
 
     /**
      * The reference instance of <code>USER_STORY_STATUS</code>
@@ -97,6 +98,14 @@ public class UserStoryStatus extends TableImpl<UserStoryStatusRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<UserStoryStatusRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USER_STORY_STATUS;
     }
 
     /**

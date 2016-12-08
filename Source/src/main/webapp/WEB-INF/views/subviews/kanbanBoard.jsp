@@ -1,74 +1,28 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="s" uri="/WEB-INF/skroom-tags.tld"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <t:index>
 
 <div id="taskBoard" class="onerow">
-	<div id="notStarted" class="col5thsr dragDrop">
+	<c:forEach var="taskColumn" items="${taskStatuses}">
+		<div id="column${taskColumn.id}" class="col5thsr dragDrop">
 		<h2>
-			Not Started <span class="kanban-group-badge"></span>
+			${taskColumn.name} <span class="kanban-group-badge"></span>
 		</h2>
-		<c:if test="${not empty list}">
-			<c:forEach var="task" items="${list}">
-				<c:if test="${ task.status ==  'NOT_STARTED'}">
+		<c:if test="${not empty tasks}">
+			<c:forEach var="task" items="${tasks}">
+				<c:if test="${ task.status.id ==  taskColumn.id}">
 					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
 				</c:if>
 			</c:forEach>
 		</c:if>
 	</div>
-
-	<div id="inProgress" class="col5thsr dragDrop">
-		<h2>
-			In Progress <span class="kanban-group-badge"></span>
-		</h2>
-		<c:if test="${not empty list}">
-			<c:forEach var="task" items="${list}">
-				<c:if test="${ task.status ==  'IN_PROGRESS'}">
-					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</div>
-
-	<div id="blocked" class="col5thsr dragDrop">
-		<h2>
-			Blocked <span class="kanban-group-badge"></span>
-		</h2>
-		<c:if test="${not empty list}">
-			<c:forEach var="task" items="${list}">
-				<c:if test="${ task.status ==  'BLOCKED'}">
-					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</div>
-
-	<div id="awaitingReview" class="col5thsr dragDrop last">
-		<h2>
-			Awaiting Review <span class="kanban-group-badge"></span>
-		</h2>
-		<c:if test="${not empty list}">
-			<c:forEach var="task" items="${list}">
-				<c:if test="${ task.status ==  'AWAITING_REVIEW'}">
-					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</div>
-
-	<div id="completed" class="col5ths dragDrop last">
-		<h2>
-			Completed <span class="kanban-group-badge"></span>
-		</h2>
-		<c:if test="${not empty list}">
-			<c:forEach var="task" items="${list}">
-				<c:if test="${ task.status ==  'COMPLETED'}">
-					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</div>
+	</c:forEach>
 </div>
 
 <script>

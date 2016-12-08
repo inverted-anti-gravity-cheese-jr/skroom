@@ -17,6 +17,7 @@ import org.jooq.impl.SchemaImpl;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
+import pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses;
 import pl.pg.eti.kio.skroom.model.dba.tables.Tasks;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
@@ -40,7 +41,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 402145103;
+    private static final long serialVersionUID = -1126035416;
 
     /**
      * The reference instance of <code></code>
@@ -61,6 +62,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>TASKS</code>.
      */
     public final Tasks TASKS = pl.pg.eti.kio.skroom.model.dba.tables.Tasks.TASKS;
+
+    /**
+     * The table <code>TASK_STATUSES</code>.
+     */
+    public final TaskStatuses TASK_STATUSES = pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses.TASK_STATUSES;
 
     /**
      * The table <code>USERS</code>.
@@ -130,6 +136,7 @@ public class DefaultSchema extends SchemaImpl {
             Projects.PROJECTS,
             Sprints.SPRINTS,
             Tasks.TASKS,
+            TaskStatuses.TASK_STATUSES,
             Users.USERS,
             UsersProjects.USERS_PROJECTS,
             UsersSecurity.USERS_SECURITY,

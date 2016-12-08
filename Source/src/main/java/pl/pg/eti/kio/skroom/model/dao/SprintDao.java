@@ -6,6 +6,7 @@ import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.jooq.types.DayToSecond;
 import org.jooq.types.Interval;
+import org.jooq.util.derby.sys.Sys;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Sprint;
@@ -38,6 +39,24 @@ public class SprintDao {
 
 		for(SprintsRecord record : sprintsRecords) {
 			sprints.add(Sprint.fromDba(record, project));
+		}
+
+		return sprints;
+	}
+
+	public List<Sprint> fetchAvailableSprintsForProject(Connection connection, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		List<Sprint> sprints = new ArrayList<Sprint>();
+
+		Result<SprintsRecord> sprintsRecords = query.selectFrom(SPRINTS)
+				.where(SPRINTS.PROJECT_ID.eq(project.getId()))
+				.and(SPRINTS.START_DAY.le(DSL.currentDate().add(new DayToSecond(1)))).fetch();
+
+		for(SprintsRecord record : sprintsRecords) {
+			if(record.getStartDay().toLocalDate().isBefore(LocalDate.now())) {
+				sprints.add(Sprint.fromDba(record, project));
+			}
 		}
 
 		return sprints;

@@ -6,7 +6,9 @@ import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
+import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Task;
+import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
@@ -35,7 +37,7 @@ public class TaskDao {
 	public void updateTaskStatus(Connection connection, Task task) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		query.update(Tables.TASKS).set(Tables.TASKS.TASK_STATUS, task.getStatus().getCode())
+		query.update(Tables.TASKS).set(Tables.TASKS.TASK_STATUS_ID, task.getStatus().getId())
 				.where(Tables.TASKS.ID.eq(task.getId())).execute();
 	}
 
@@ -45,17 +47,7 @@ public class TaskDao {
 	 * @param connection Connection to a database
 	 * @return All tasks from the database
 	 */
-	public List<Task> fetchTasks(Connection connection) {
-		return fetchTasksAndUsers(connection).tasksRecordList;
-	}
-
-	/**
-	 * Method used to fetch list of tasks and list of users who are assigned to at least one task.
-	 *
-	 * @param connection Connection to a database
-	 * @return Tuple containing lists of tasks and users
-	 */
-	public TasksAndUsers fetchTasksAndUsers(Connection connection) {
+	public List<Task> fetchTasks(Connection connection, Project project, List<TaskStatus> taskStatuses) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		// fetch all task records
@@ -78,7 +70,7 @@ public class TaskDao {
 			for (TasksRecord taskRecord : tasksRecords) {
 				// find user in the list with supplied ID
 				User user = records.usersRecordsList.stream().findAny().filter(x -> x.getId() == taskRecord.getAssignee()).get();
-				Task task = Task.fromDba(taskRecord, user);
+				Task task = Task.fromDba(taskRecord, user, project, taskStatuses);
 				records.tasksRecordList.add(task);
 			}
 		}
@@ -88,13 +80,13 @@ public class TaskDao {
 			nsure.printStackTrace();
 		}
 
-		return records;
+		return records.tasksRecordList;
 	}
 
 	/**
 	 * Tuple containing tasks and users
 	 */
-	public class TasksAndUsers {
+	private class TasksAndUsers {
 		public List<Task> tasksRecordList = new ArrayList<>();
 		public List<User> usersRecordsList = new ArrayList<>();
 	}

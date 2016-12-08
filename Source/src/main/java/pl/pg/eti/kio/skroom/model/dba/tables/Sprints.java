@@ -12,6 +12,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Sprints extends TableImpl<SprintsRecord> {
 
-    private static final long serialVersionUID = -18027573;
+    private static final long serialVersionUID = 2102090264;
 
     /**
      * The reference instance of <code>SPRINTS</code>
@@ -104,6 +105,14 @@ public class Sprints extends TableImpl<SprintsRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<SprintsRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_SPRINTS;
     }
 
     /**

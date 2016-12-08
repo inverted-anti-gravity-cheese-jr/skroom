@@ -11,6 +11,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSecurity extends TableImpl<UsersSecurityRecord> {
 
-    private static final long serialVersionUID = 1443176765;
+    private static final long serialVersionUID = 1743668329;
 
     /**
      * The reference instance of <code>USERS_SECURITY</code>
@@ -113,6 +114,14 @@ public class UsersSecurity extends TableImpl<UsersSecurityRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<UsersSecurityRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USERS_SECURITY;
     }
 
     /**

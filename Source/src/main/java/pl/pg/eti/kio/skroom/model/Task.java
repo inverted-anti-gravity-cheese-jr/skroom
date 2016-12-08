@@ -1,8 +1,14 @@
 package pl.pg.eti.kio.skroom.model;
 
 import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
+import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
+import pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
-import pl.pg.eti.kio.skroom.model.enumeration.TaskStatus;
+
+import java.sql.Connection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Task model class to manage in app.
@@ -16,7 +22,10 @@ public class Task {
 	private String name;
 	private User assignee;
 	private TaskStatus status;
-	private int storyPoints;
+	private Project project;
+	private String color;
+	private String description;
+	private int estimatedTime;
 
 	public int getId() {
 		return id;
@@ -50,8 +59,36 @@ public class Task {
 		this.status = status;
 	}
 
-	public int getStoryPoints() {
-		return storyPoints;
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getEstimatedTime() {
+		return estimatedTime;
+	}
+
+	public void setEstimatedTime(int estimatedTime) {
+		this.estimatedTime = estimatedTime;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	@Override
@@ -61,12 +98,11 @@ public class Task {
 				", name='" + name + '\'' +
 				", assignee=" + assignee +
 				", status=" + status +
-				", storyPoints=" + storyPoints +
+				", project=" + project +
+				", color='" + color + '\'' +
+				", description='" + description + '\'' +
+				", estimatedTime=" + estimatedTime +
 				'}';
-	}
-
-	public void setStoryPoints(int storyPoints) {
-		this.storyPoints = storyPoints;
 	}
 
 	/**
@@ -77,14 +113,22 @@ public class Task {
 	 * @return Converted task
 	 * @throws NoSuchTaskStatusException Thrown if wrong task status supplied (check your database)
 	 */
-	public static Task fromDba(TasksRecord record, User user) throws NoSuchTaskStatusException {
+	public static Task fromDba(TasksRecord record, User user, Project project, List<TaskStatus> taskStatusesList) throws NoSuchTaskStatusException {
 		Task task = new Task();
 
 		task.setId(record.getId());
 		task.setAssignee(user);
 		task.setName(record.getName());
-		task.setStatus(TaskStatus.getByCode(record.getTaskStatus()));
-		task.setStoryPoints(record.getStoryPoints());
+		task.setProject(project);
+		Optional<TaskStatus> taskStatus = taskStatusesList.stream()
+				.filter(status -> status.getId() == record.getId())
+				.findFirst();
+		if(taskStatus.isPresent()) {
+			task.setStatus(taskStatus.get());
+		}
+		task.setEstimatedTime(record.getEstimatedTime());
+		task.setDescription(record.getDescription());
+		task.setColor(record.getColor());
 
 		return task;
 	}

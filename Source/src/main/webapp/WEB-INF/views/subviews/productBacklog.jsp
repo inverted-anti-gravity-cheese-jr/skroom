@@ -73,6 +73,9 @@
             </c:forEach>
         </tbody>
     </table>
+    <c:if test="${fn:length(userStories) == 0}">
+        <h4>No existing user stories, <a href="addUserStory">add one!</a></h4>
+    </c:if>
     <c:if test="${pages > 0}">
     <div class="btn-group" role="group">
     <c:forEach var="page" begin="0" end="${pages}">

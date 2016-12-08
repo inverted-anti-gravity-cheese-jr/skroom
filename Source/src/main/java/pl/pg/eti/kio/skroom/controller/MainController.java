@@ -30,6 +30,7 @@ import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
 public class MainController {
 
 	@Autowired private TaskDao taskDao;
+	@Autowired private TaskStatusDao taskStatusDao;
 	@Autowired private UserDao userDao;
 	@Autowired private SprintDao sprintDao;
 	@Autowired private UserStoryDao userStoryDao;
@@ -61,7 +62,8 @@ public class MainController {
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-		List<Task> taskList = taskDao.fetchTasks(dbConnection);
+		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
 
 		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", userSettings.getRecentProject(), user, request);
 		model.addObject("list", taskList);
@@ -115,7 +117,11 @@ public class MainController {
 			return check;
 		}
 
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
+
+		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		model.addObject("sprints", sprints);
 		return model;
 	}
 
@@ -127,10 +133,12 @@ public class MainController {
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-		List<Task> taskList = taskDao.fetchTasks(dbConnection);
+		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
 
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
-		model.addObject("list", taskList);
+		model.addObject("tasks", taskList);
+		model.addObject("taskStatuses", taskStatuses);
 		return model;
 	}
 
