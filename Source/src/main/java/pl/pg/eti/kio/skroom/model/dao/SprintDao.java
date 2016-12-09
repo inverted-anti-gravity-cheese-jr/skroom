@@ -16,7 +16,9 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 
 import static pl.pg.eti.kio.skroom.model.dba.Tables.SPRINTS;
@@ -54,7 +56,9 @@ public class SprintDao {
 				.and(SPRINTS.START_DAY.le(DSL.currentDate().add(new DayToSecond(1)))).fetch();
 
 		for(SprintsRecord record : sprintsRecords) {
-			if(record.getStartDay().toLocalDate().isBefore(LocalDate.now())) {
+			LocalDateTime start = record.getStartDay().toLocalDate().atStartOfDay();
+			LocalDateTime today = LocalDate.now().atStartOfDay();
+			if(start.isBefore(today) || start.isEqual(today)) {
 				sprints.add(Sprint.fromDba(record, project));
 			}
 		}
@@ -68,18 +72,20 @@ public class SprintDao {
 		if(firstSprintName == null || firstSprintName.isEmpty()) {
 			firstSprintName = "Sprint 1";
 		}
-		LocalDate date = LocalDate.now();
 
-		/*
+		LocalDateTime date = LocalDate.now().atStartOfDay();
+		Date start = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+		Date end = Date.from(date.plusWeeks(project.getDefaultSprintLength()).atZone(ZoneId.systemDefault()).toInstant());
+
 		int insertedRows = query.insertInto(SPRINTS).values(null, firstSprintName,
-				Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-				Date.from(date.plusWeeks(project.getDefaultSprintLength()).atStartOfDay(ZoneId.systemDefault()).toInstant()),
+				start, end,
 				project.getId()).execute();
-				*/
+		/*
 		int insertedRows = query.insertInto(SPRINTS).values(null, firstSprintName,
 				DSL.currentDate(),
 				DSL.currentDate().add(new DayToSecond(7 * project.getDefaultSprintLength())),
 				project.getId()).execute();
+				*/
 
 		return insertedRows == 1;
 	}

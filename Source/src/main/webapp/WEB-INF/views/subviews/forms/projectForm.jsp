@@ -21,8 +21,8 @@
         </c:if>
     </div>
     
-    <input name="name" placeholder="Project name" value="${project.name}" class="form-control" />
-    <textarea name="description" placeholder="Project description" class="form-control">${project.description}</textarea>
+    <input name="projectName" placeholder="Project name" value="${project.name}" class="form-control" />
+    <textarea name="projectDescription" placeholder="Project description" class="form-control">${project.description}</textarea>
     <div class="input-group">
         <span class="input-group-addon">Sprint length</span>
         <input name="sprint-length" placeholder="Sprint length" class="form-control" value="${project.defaultSprintLength}" />

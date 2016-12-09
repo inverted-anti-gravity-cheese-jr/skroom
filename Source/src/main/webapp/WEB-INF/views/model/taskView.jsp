@@ -4,13 +4,13 @@
 
 <c:choose>
     <c:when test="${rand % 3 == 0}">
-<ul class="taskItem data-canDrag" style="background-color: #d9ff00;">
+<ul class="taskItem canDrag" style="background-color: #d9ff00;">
     </c:when>
     <c:when test="${rand % 3 == 1}">
-<ul class="taskItem data-canDrag" style="background-color: #008cff;">
+<ul class="taskItem canDrag" style="background-color: #008cff;">
     </c:when>
     <c:otherwise>
-<ul class="taskItem data-canDrag" style="background-color: #ff2f00;">
+<ul class="taskItem canDrag" style="background-color: #ff2f00;">
     </c:otherwise>
 </c:choose>
 

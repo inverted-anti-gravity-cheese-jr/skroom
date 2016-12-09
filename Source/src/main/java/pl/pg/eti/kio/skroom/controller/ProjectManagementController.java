@@ -53,9 +53,10 @@ public class ProjectManagementController {
 	}
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.POST)
-	public ModelAndView addProject(@ModelAttribute("loggedUser") User user, @RequestParam String name,
-								   @RequestParam String description, @RequestParam("sprint-length") String sprintLengthString,
+	public ModelAndView addProject(@ModelAttribute("loggedUser") User user, @RequestParam String projectName,
+								   @RequestParam String projectDescription, @RequestParam("sprint-length") String sprintLengthString,
 								   @RequestParam("first-sprint-name") String firstSprintName) {
+
 		if(user.getId() < 0) {
 			return new ModelAndView("redirect:/");
 		}
@@ -69,8 +70,8 @@ public class ProjectManagementController {
 
 		Project project = new Project();
 
-		project.setName(name);
-		project.setDescription(description);
+		project.setName(projectName);
+		project.setDescription(projectDescription);
 		project.setDefaultSprintLength(sprintLength);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();

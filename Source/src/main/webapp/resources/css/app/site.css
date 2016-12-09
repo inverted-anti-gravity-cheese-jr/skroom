@@ -7,6 +7,8 @@
 
 /* --------- GLACIAL INDIFFERENCE FONT --------- */
 /* ---------- by Alfredo Marco Pradil ---------- */
+/* ---------- License: SIL Open Font License ---------- */
+/* ---------- License URL: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL ---------- */
 
 @font-face {
 	font-family: 'Glacial';
@@ -25,8 +27,20 @@
 	font-style: italic;
 }
 
+/* --------- ARCHITECTS DAUGHTER FONT --------- */
+/* ---------- by ArchitectsDaughter ---------- */
+/* ---------- License: SIL Open Font License ---------- */
+/* ---------- License URL: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL ---------- */
+
+@font-face {
+	font-family: 'ArchitectsDaughter';
+	src: url('../../font/ArchitectsDaughter.ttf') format('truetype');
+}
+
 /* ---------------- ORKNEY FONT ---------------- */
 /* -- by Samuel Oakes and Alfredo Marco Pradil - */
+/* ---------- License: SIL Open Font License ---------- */
+/* ---------- License URL: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL ---------- */
 
 @font-face {
 	font-family: 'Orkney';
@@ -111,6 +125,7 @@ textarea {
 
 #page-content {
     font-size: 11pt;
+	/* overflow: scroll; */
 }
 
 .management-bar {

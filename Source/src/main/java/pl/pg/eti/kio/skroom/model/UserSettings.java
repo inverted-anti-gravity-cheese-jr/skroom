@@ -59,7 +59,7 @@ public class UserSettings {
 		settings.setId(record.getId());
 		settings.setUserStoriesPerPage(record.getUserStoriesPerPage());
 
-		if(record.getRecentProjectId().intValue() != -1) {
+		if(record.getRecentProjectId() != null && record.getRecentProjectId().intValue() != -1) {
 			ProjectsRecord projectRecord = query.selectFrom(Tables.PROJECTS).where(Tables.PROJECTS.ID.eq(record.getRecentProjectId().intValue())).fetchOne();
 			Project project = Project.fromDba(projectRecord);
 			settings.setRecentProject(project);
