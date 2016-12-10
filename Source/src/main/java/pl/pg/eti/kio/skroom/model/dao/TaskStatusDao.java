@@ -28,9 +28,12 @@ public class TaskStatusDao {
 	public List<TaskStatus> fetchByProject(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Result<TaskStatusesRecord> taskStatusesRecords = query.selectFrom(TASK_STATUSES).where(TASK_STATUSES.PROJECT_ID.eq(project.getId())).fetch();
-
 		ArrayList<TaskStatus> statuses = new ArrayList<TaskStatus>();
+		if(project == null) {
+			return statuses;
+		}
+
+		Result<TaskStatusesRecord> taskStatusesRecords = query.selectFrom(TASK_STATUSES).where(TASK_STATUSES.PROJECT_ID.eq(project.getId())).fetch();
 
 		for(TaskStatusesRecord record : taskStatusesRecords) {
 			statuses.add(TaskStatus.fromDba(record, project));

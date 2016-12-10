@@ -60,11 +60,11 @@
     <table class="table">
         <thead>
             <tr>
-                <td>No</td>
-                <td>User story</td>
-                <td>Priority</td>
-                <td>Story points</td>
-                <td>Status</td>
+                <th>No</th>
+                <th>User story</th>
+                <th>Priority</th>
+                <th>Story points</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>

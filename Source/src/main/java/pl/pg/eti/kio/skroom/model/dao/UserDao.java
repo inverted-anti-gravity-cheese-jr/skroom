@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS_PROJECTS;
 import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS_SETTINGS;
 
 /**
@@ -64,21 +66,50 @@ public class UserDao {
 
 		List<UserContainer> users = new ArrayList<>();
 
-		Result<Record> records = query.select(Tables.USERS.fields()).select(Tables.USERS_SECURITY.ACCEPTED)
-				.from(Tables.USERS)
+		Result<Record> records = query.select(USERS.fields()).select(Tables.USERS_SECURITY.ACCEPTED)
+				.from(USERS)
 				.join(Tables.USERS_SECURITY).onKey()
 				.orderBy(Tables.USERS_SECURITY.ACCEPTED)
 				.fetch();
 
 		try {
 			for (Record record : records) {
-				UsersRecord userRecord = record.into(Tables.USERS);
+				UsersRecord userRecord = record.into(USERS);
 				Record1<Integer> accepted = record.into(Tables.USERS_SECURITY.ACCEPTED);
 				users.add(new UserContainer(User.fromDba(userRecord), accepted.value1() == 1));
 			}
 		} catch (NoSuchUserRoleException e) {
 			users.clear();
 		}
+		return users;
+	}
+
+	/**
+	 * Lists all users assigned to current project
+	 *
+	 * @param connection Connection to a database
+	 * @param project	Current project
+	 * @return List of all users assigned to current project
+	 */
+	public List<User> listAllUsersForProject(Connection connection, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		List<User> users = new ArrayList<User>();
+
+		Result<Record> records = query.selectDistinct(USERS.fields()).from(USERS)
+				.join(USERS_PROJECTS).on(USERS.ID.eq(USERS_PROJECTS.PROJECT_ID))
+				.where(USERS_PROJECTS.PROJECT_ID.eq(project.getId())).fetch();
+
+		try {
+			for (Record record : records) {
+				UsersRecord userRecord = record.into(USERS);
+				users.add(User.fromDba(userRecord));
+			}
+		}
+		catch (NoSuchUserRoleException e) {
+			users.clear();
+		}
+
 		return users;
 	}
 
@@ -121,7 +152,7 @@ public class UserDao {
 	public User fetchByName(Connection connection, String name) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Result<UsersRecord> usersRecordResult = query.selectFrom(Tables.USERS).where(Tables.USERS.NAME.eq(name)).fetch();
+		Result<UsersRecord> usersRecordResult = query.selectFrom(USERS).where(USERS.NAME.eq(name)).fetch();
 
 		if (usersRecordResult.isEmpty()) {
 			return null;
@@ -181,9 +212,9 @@ public class UserDao {
 	public void registerUser(Connection connection, User user, UserSecurity userSecurity) throws UserAlreadyExistsException, UserAccountCreationErrorException {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		int usersWithTheSameNameOrEmailCount = query.selectCount().from(Tables.USERS)
-				.where(Tables.USERS.NAME.eq(user.getName())
-						.or(Tables.USERS.EMAIL.eq(user.getEmail()))).fetchOne(0, int.class);
+		int usersWithTheSameNameOrEmailCount = query.selectCount().from(USERS)
+				.where(USERS.NAME.eq(user.getName())
+						.or(USERS.EMAIL.eq(user.getEmail()))).fetchOne(0, int.class);
 
 		if (usersWithTheSameNameOrEmailCount > 0) {
 			throw new UserAlreadyExistsException();
@@ -191,21 +222,21 @@ public class UserDao {
 
 		try {
 			query.transaction(configuration -> {
-				Integer userId = (Integer) DSL.using(configuration).fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + Tables.USERS.getName() + "'").get(0);
+				Integer userId = (Integer) DSL.using(configuration).fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + USERS.getName() + "'").get(0);
 
 				if (userId == null) {
 					// rollback
 					throw new Exception();
 				}
 
-				int usersCreatedRows = DSL.using(configuration).insertInto(Tables.USERS)
+				int usersCreatedRows = DSL.using(configuration).insertInto(USERS)
 						.values(null, user.getName(), user.getEmail(), user.getAvatar(), user.getRole().getCode()).execute();
 
 				int usersSecurityCreatedRows = query.insertInto(Tables.USERS_SECURITY).values(null, userId.intValue() + 1,
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
 						userSecurity.getSecureAnswer(), 0).execute();
 
-				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, -1, 10).execute();
+				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, userId.intValue() + 1, -1, 10).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1 || usersSettingsCreateRows != 1) {
 					// rollback

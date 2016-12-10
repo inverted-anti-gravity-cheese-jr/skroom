@@ -16,6 +16,8 @@ import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
 
@@ -81,6 +83,9 @@ public class MainController {
 
 		int userStoriesPerPage = userSettings.getUserStoriesPerPage(), page=0;
 		try {
+			if(userStoriesPerPage < 1) {
+				userStoriesPerPage = 10;
+			}
 			if(pageString != null && !pageString.isEmpty()) {
 				page = Integer.parseInt(pageString);
 			}
@@ -120,8 +125,15 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
 
+		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
-		model.addObject("sprints", sprints);
+		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		sprints.remove(lastSprint);
+
+		model.addObject("sprintsWithoutLast", sprints);
+		model.addObject("lastSprint", lastSprint);
+		model.addObject("tasks", taskList);
 		return model;
 	}
 

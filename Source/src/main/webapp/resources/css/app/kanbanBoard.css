@@ -1,3 +1,33 @@
+/*
+ * SPRINT BACKLOG
+ */
+.task-row {
+	background-color: white;
+    border-left: 3px solid black;
+}
+
+.task-form .form-control {
+	margin-bottom: 5px;
+}
+
+.task-form textarea {
+	min-height: 100px;
+}
+
+.task-form .ui-autocomplete {
+	background-color: white;
+	list-style: none;
+	padding: 0;
+}
+
+.task-form .ui-autocomplete a {
+	color: black;
+	text-decoration: none;
+}
+
+/*
+ * KANBAN BOARD
+ */
 .onerow {
 	clear: both;
 	overflow-x: scroll;

@@ -31,7 +31,7 @@
 	<thead>
 		<tr>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
-				<th id="column${taskColumn.id}">${taskColumn.name}</td>
+				<th id="column${taskColumn.id}">${taskColumn.name}</th>
 			</c:forEach>
 		</tr>
 	</thead>

@@ -21,4 +21,5 @@ class Views {
 	static final String PRODUCT_BACKLOG_FORM_JSP_LOCATION = "subviews/productBacklog";
 
 	static final String USER_STORY_FORM_JSP_LOCATION = "subviews/forms/userStoryForm";
+	static final String TASK_FORM_JSP_LOCATION = "subviews/forms/taskForm";
 }

@@ -44,6 +44,10 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.GET)
 	public ModelAndView addProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		if(userSettings.getRecentProject() == null) {
+			return new ModelAndView("redirect:/");
+		}
+
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "Add Project", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("submitButtonText", "Add Project");
