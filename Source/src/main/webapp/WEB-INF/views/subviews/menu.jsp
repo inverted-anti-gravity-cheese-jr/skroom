@@ -3,12 +3,9 @@
 	<ul class="nav project-list-container">
 		<li><a><i class="fa fa-ellipsis-h" aria-hidden="true"/></i>Project list</a></li>
 		<ul class="nav project-list">
-            <c:forEach var="projectContainer" items="${menuAvailableProjects}">
+            <c:forEach var="project" items="${menuAvailableProjects}">
                 <li>
-                    <a class="project-link"href="javascript:selectProject(${projectContainer.project.id})"><i class="fa fa-sticky-note-o" aria-hidden="true"/></i>${projectContainer.project.name}</a>
-                    <c:if test="${projectContainer.editable}">
-                    <a class="edit-link" href="<c:out value='${pageContext.request.contextPath}'/>/editProject/${projectContainer.project.id}"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    </c:if>
+                    <a class="project-link" href="javascript:selectProject(${project.id})"><i class="fa fa-sticky-note-o" aria-hidden="true"/></i>${project.name}</a>
                 </li>
             </c:forEach>
             <c:if test="${canCreateProjects}">

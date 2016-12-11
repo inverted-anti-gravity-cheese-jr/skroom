@@ -48,10 +48,10 @@ public class ProjectManagementController {
 			return new ModelAndView("redirect:/");
 		}
 
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "Add Project", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Add Project", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("submitButtonText", "Add Project");
-		modelAndView.addObject("displayDeleteButton", "false");
+		modelAndView.addObject("createProject", "true");
 
 		return modelAndView;
 	}
@@ -86,52 +86,46 @@ public class ProjectManagementController {
 		return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(value = "/editProject", method = RequestMethod.GET)
-	public ModelAndView editProjectRedirect() {
-		return new ModelAndView("redirect:/");
-	}
-
-	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
-	public ModelAndView editProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer projectId) {
+	@RequestMapping(value = "/settings", method = RequestMethod.GET)
+	public ModelAndView showProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+        if (userSettings.getRecentProject() == null) {
+            return new ModelAndView("redirect:/userSettings");
+        }
 
-		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(!projectDao.checkUserEditPermissionsForProject(dbConnection, project, user)) {
-			return new ModelAndView("redirect:/");
-		}
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_FORM_JSP_LOCATION, "Edit Project", userSettings.getRecentProject(), user, request);
-		modelAndView.addObject("project", project);
-		modelAndView.addObject("submitButtonText", "Update Project");
-		modelAndView.addObject("displayDeleteButton", "true");
-
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Project Settings", userSettings.getRecentProject(), user, request);
+        modelAndView.addObject("projectIsEditable", projectDao.checkUserEditPermissionsForProject(dbConnection, userSettings.getRecentProject(), user));
+        modelAndView.addObject("project", userSettings.getRecentProject());
+        modelAndView.addObject("submitButtonText", "Update Project");
+        modelAndView.addObject("createProject", "false");
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.POST)
-	public ModelAndView editProject(@ModelAttribute("loggedUser") User user, @PathVariable Integer projectId, @RequestParam String name, @RequestParam String description, @RequestParam("sprint-length") String sprintLengthString) {
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+    @RequestMapping(value = "/settings", method = RequestMethod.POST)
+    public ModelAndView saveProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam("projectName") String name, @RequestParam("projectDescription") String description, @RequestParam("sprint-length") String sprintLengthString) {
+        Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-		Project project = projectDao.getProjectForUser(dbConnection,projectId,user);
-		if(!projectDao.checkUserEditPermissionsForProject(dbConnection, project, user)) {
-			return new ModelAndView("redirect:/");
-		}
+        Project project = userSettings.getRecentProject();
+        if(!projectDao.checkUserEditPermissionsForProject(dbConnection, project, user)) {
+            return new ModelAndView("redirect:/");
+        }
 
-		int sprintLength = 1;
-		try {
-			sprintLength = Integer.parseInt(sprintLengthString);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+        int sprintLength = 1;
+        try {
+            sprintLength = Integer.parseInt(sprintLengthString);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		project.setName(name);
-		project.setDescription(description);
-		project.setDefaultSprintLength(sprintLength);
+        project.setName(name);
+        project.setDescription(description);
+        project.setDefaultSprintLength(sprintLength);
 
-		projectDao.updateProject(dbConnection, project);
+        projectDao.updateProject(dbConnection, project);
 
-		return new ModelAndView("redirect:/");
-	}
+        return new ModelAndView("redirect:/");
+    }
 
 	@RequestMapping(value = "/removeProject/{projectId}")
 	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer projectId) {

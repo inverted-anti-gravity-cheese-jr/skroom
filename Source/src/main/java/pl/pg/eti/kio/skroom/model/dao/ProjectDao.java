@@ -174,10 +174,10 @@ public class ProjectDao {
 	 * @param user User class for model
 	 * @return ProjectContainer class containing project and editable flag
 	 */
-	public List<ProjectContainer> getProjectsForUser(Connection connection, User user) {
+	public List<Project> getProjectsForUser(Connection connection, User user) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		List<ProjectContainer> projects = new ArrayList<>();
+		List<Project> projects = new ArrayList<>();
 
 		Result<Record3<Integer, String, String>> result;
 
@@ -197,31 +197,9 @@ public class ProjectDao {
 			project.setId(record.value1());
 			project.setName(record.value2());
 			project.setDescription(record.value3());
-			projects.add(new ProjectContainer(project, checkUserEditPermissionsForProject(connection, project, user)));
+			projects.add(project);
 		}
 
 		return projects;
 	}
-
-	/**
-	 * ProjectContainer class containing project and editable flag
-	 */
-	public class ProjectContainer {
-		public Project project;
-		public Boolean editable;
-
-		public Project getProject() {
-			return project;
-		}
-
-		public Boolean getEditable() {
-			return editable;
-		}
-
-		ProjectContainer(Project project, Boolean editable) {
-			this.project = project;
-			this.editable = editable;
-		}
-	}
-
 }
