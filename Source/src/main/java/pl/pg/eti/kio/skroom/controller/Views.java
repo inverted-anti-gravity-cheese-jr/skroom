@@ -10,7 +10,6 @@ class Views {
 	static final String LOGIN_JSP_LOCATION = "standalone/login";
 	static final String SIGNUP_JSP_LOCATION = "standalone/signup";
 
-	static final String PROJECT_FORM_JSP_LOCATION = "subviews/forms/projectForm";
 	static final String DASHBOARD_JSP_LOCATION = "subviews/dashboard";
 	static final String KANBAN_BOARD_FORM_JSP_LOCATION = "subviews/kanbanBoard";
 	static final String USER_ADMIN_FORM_JSP_LOCATION = "subviews/userAdmin";

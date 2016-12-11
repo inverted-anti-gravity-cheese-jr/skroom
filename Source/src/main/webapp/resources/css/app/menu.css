@@ -41,11 +41,6 @@
     padding-left: 25px;
 }
 
-#main-menu .project-list .project-link {
-    display: inline-block;
-    width: calc(100% - 43px);
-}
-
 #main-menu .project-list .edit-link {
     display: inline-block;
     float:right;

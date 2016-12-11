@@ -165,17 +165,6 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = "/settings", method = RequestMethod.GET)
-	public ModelAndView showProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView check = checkSessionAttributes(user, userSettings);
-		if(check != null) {
-			return check;
-		}
-
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Settings", userSettings.getRecentProject(), user, request);
-		return model;
-	}
-
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) String usersPerPageString) {
@@ -213,9 +202,9 @@ public class MainController {
 		return model;
 	}
 
-	private ModelAndView checkSessionAttributes(User user, UserSettings usersSettings) {
-		if (usersSettings.getRecentProject() == null) {
-			return showUserSettings(user, usersSettings);
+	private ModelAndView checkSessionAttributes(User user, UserSettings userSettings) {
+		if (userSettings.getRecentProject() == null) {
+			return showUserSettings(user, userSettings);
 		}
 		return null;
 	}
