@@ -55,6 +55,17 @@ public class UserDao {
 		return updatedRows > 0;
 	}
 
+	public boolean editUserRole(Connection connection, User user) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int updatedRows = query.update(USERS)
+				.set(USERS.ROLE, user.getRole().ordinal())
+				.where(USERS.NAME.eq(user.getName()))
+				.execute();
+
+		return updatedRows > 0;
+	}
+
 	/**
 	 * Lists all users in database, proceed with caution
 	 *

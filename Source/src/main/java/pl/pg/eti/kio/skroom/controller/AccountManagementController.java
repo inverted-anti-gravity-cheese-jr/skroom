@@ -7,6 +7,7 @@ import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
@@ -22,6 +23,7 @@ import java.sql.Connection;
 
 import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
 import static pl.pg.eti.kio.skroom.controller.Views.SIGNUP_JSP_LOCATION;
+import static pl.pg.eti.kio.skroom.controller.Views.USER_FORM_JSP_LOCATION;
 
 /**
  * @author Wojciech Stanisławski
@@ -43,6 +45,8 @@ public class AccountManagementController {
 	private static final String WRONG_EMAIL_FORMAT = "Wrong email format.";
 
 	@Autowired private UserDao userDao;
+	@Autowired private DefaultTemplateDataInjector injector;
+	@Autowired private WebRequest webRequest;
 
 	@ModelAttribute("loggedUser")
 	public User defaultNullUser() {
@@ -57,6 +61,41 @@ public class AccountManagementController {
 	@ModelAttribute("userSettings")
 	public UserSettings defaultNullUserSettings() {
 		return new UserSettings();
+	}
+
+	@RequestMapping(value = "/editUser/", method = RequestMethod.GET)
+	public ModelAndView editUser() {
+		return new ModelAndView("redirect:/");
+	}
+
+	@RequestMapping(value = "/editUser/{editUserName}/", method = RequestMethod.GET)
+	public ModelAndView editUser(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable String editUserName) {
+		ModelAndView model = injector.getIndexForSiteName(USER_FORM_JSP_LOCATION, "Edit user", userSettings.getRecentProject(), user, webRequest);
+
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		User editUser = userDao.fetchByName(dbConnection, editUserName);
+
+		model.addObject("editUser", editUser);
+		model.addObject("availableUserRoles", UserRole.getAvailableDisplayNames());
+
+		return model;
+	}
+
+	@RequestMapping(value = "/editUser/{editUserName}/", method = RequestMethod.POST)
+	public ModelAndView editUser(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable String editUserName, @RequestParam String editUserRole) {
+		if(user == null || user.getId() < 0)
+			return new ModelAndView("redirect:/");
+
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		User editUser = new User();
+		editUser.setName(editUserName);
+		editUser.setRole(UserRole.getByDisplayName(editUserRole));
+
+		userDao.editUserRole(dbConnection, editUser);
+
+		return new ModelAndView("redirect:/userAdmin");
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

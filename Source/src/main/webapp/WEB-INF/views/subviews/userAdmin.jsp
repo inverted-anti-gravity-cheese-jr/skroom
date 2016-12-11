@@ -49,7 +49,7 @@
         <tbody>
             <c:forEach var="user" items="${globalUsers}">
                 <tr class="${user.accepted ? '' : 'user-row-not-accepted'}">
-                    <td>${user.user.name}</td>
+                    <td><a href="editUser/${user.user.name}/">${user.user.name}</a></td>
                     <td>${user.user.email}</td>
                     <td>${user.user.role}</td>
                 </tr>

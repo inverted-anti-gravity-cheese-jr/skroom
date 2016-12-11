@@ -33,6 +33,13 @@ function reloadUserStoryForm(storyPoints, storyStatus) {
     }
 }
 
+function reloadEditUserForm(role) {
+    if (role != undefined) {
+        var select = document.getElementById("select-edit-user-role");
+        searchForOptionInSelectAndCheckIfEquals(select.children, role);
+    }
+}
+
 /**
  * Saves in database how many user stories user wants to display.
  * 
