@@ -44,10 +44,6 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.GET)
 	public ModelAndView addProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		if(userSettings.getRecentProject() == null) {
-			return new ModelAndView("redirect:/");
-		}
-
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Add Project", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("submitButtonText", "Add Project");
@@ -57,9 +53,9 @@ public class ProjectManagementController {
 	}
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.POST)
-	public ModelAndView addProject(@ModelAttribute("loggedUser") User user, @RequestParam String projectName,
-								   @RequestParam String projectDescription, @RequestParam("sprint-length") String sprintLengthString,
-								   @RequestParam("first-sprint-name") String firstSprintName) {
+	public ModelAndView addProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
+                                   @RequestParam String projectName, @RequestParam String projectDescription,
+                                   @RequestParam("sprint-length") String sprintLengthString, @RequestParam("first-sprint-name") String firstSprintName) {
 
 		if(user.getId() < 0) {
 			return new ModelAndView("redirect:/");
@@ -82,6 +78,9 @@ public class ProjectManagementController {
 
 		projectDao.addProject(dbConnection, project, taskStatusDao);
 		sprintDao.createFirstSprint(dbConnection, project, firstSprintName);
+
+        userSettings.setRecentProject(project);
+        userDao.saveUserSettings(dbConnection, userSettings);
 
 		return new ModelAndView("redirect:/");
 	}

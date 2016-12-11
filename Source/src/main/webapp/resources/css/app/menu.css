@@ -52,10 +52,12 @@
 	color: inherit;
 }
 
+#main-menu .project-list-container .active,
 #main-menu .nav-sidebar .active {
 	border-left: 5px solid #CA6144;
 }
 
+#main-menu .project-list-container .active a,
 #main-menu .nav-sidebar .active a {
 	padding-left: 10px;
 }
@@ -72,4 +74,8 @@
 
 #main-menu .project-list .edit-link .fa {
     margin-right: 0px;
+}
+
+#main-menu .project-name {
+    font-size: 22px;
 }

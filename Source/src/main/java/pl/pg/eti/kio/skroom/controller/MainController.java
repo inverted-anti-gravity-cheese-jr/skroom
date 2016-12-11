@@ -57,6 +57,9 @@ public class MainController {
 
 	@RequestMapping(value = { "/", "/dashboard" }, method = RequestMethod.GET)
 	public ModelAndView showDashboard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		if(userSettings.getRecentProject() == null) {
+			return new ModelAndView("redirect:/addProject");
+		}
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
