@@ -11,6 +11,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.TaskStatusesRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TaskStatuses extends TableImpl<TaskStatusesRecord> {
 
-    private static final long serialVersionUID = 1156793276;
+    private static final long serialVersionUID = -491223246;
 
     /**
      * The reference instance of <code>TASK_STATUSES</code>
@@ -98,6 +99,14 @@ public class TaskStatuses extends TableImpl<TaskStatusesRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<TaskStatusesRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_TASK_STATUSES;
     }
 
     /**

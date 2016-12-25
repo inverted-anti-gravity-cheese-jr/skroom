@@ -7,6 +7,17 @@
     pageEncoding="UTF-8"%>
 
 <t:index>
+    
+    <div class="management-bar" style="margin-top: 10px; margin-bottom: 10px;">
+        <span class="bar-text">Choose sprint
+            <select>
+            <c:forEach var="sprint" items="${sprintsWithoutLast}">
+                <option>${sprint.name}</option>    
+            </c:forEach>
+                <option selected="selected">${lastSprint.name}</option>
+            </select>
+        </span>
+    </div>
 
 <!--
 <div id="taskBoard" class="onerow">

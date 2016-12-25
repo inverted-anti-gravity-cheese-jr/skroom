@@ -108,3 +108,17 @@ function createNewSprint(elementId) {
         }
     });
 }
+
+/**
+ * Selects current values in task form <select> elements.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 05.12.16
+ */
+function reloadTaskForm(taskStatus) {
+    if(taskStatus != undefined) {
+        var select = document.getElementById("task-status-select");
+        searchForOptionInSelectAndCheckIfEquals(select.children, taskStatus);
+        
+    }
+}

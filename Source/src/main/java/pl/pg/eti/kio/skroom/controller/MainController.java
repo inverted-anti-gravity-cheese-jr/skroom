@@ -150,8 +150,13 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
+		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		sprints.remove(lastSprint);
 
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
+		model.addObject("sprintsWithoutLast", sprints);
+		model.addObject("lastSprint", lastSprint);
 		model.addObject("tasks", taskList);
 		model.addObject("taskStatuses", taskStatuses);
 		return model;

@@ -61,7 +61,9 @@ public class ResourcesBundlesService {
 	private List<String> getBootstrapBundle() {
 		return Arrays.asList("resources/js/bootstrap/bootstrap.min.js",
 				"resources/css/bootstrap/bootstrap.min.css",
-				"resources/css/bootstrap/bootstrap-theme.min.css");
+				"resources/css/bootstrap/bootstrap-theme.min.css",
+				"resources/css/bootstrap-colorpicker.min.css",
+				"resources/js/bootstrap-colorpicker.min.js");
 	}
 
 	private List<String> getFontAwesomeBundle() {
