@@ -1,4 +1,3 @@
-<%@ page import="pl.pg.eti.kio.skroom.model.Task" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -7,11 +6,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<script type="text/javascript">
-    <% if(request.getAttribute("task") != null) { out.print("var task_taskStatus = \"" + ((Task)request.getAttribute("task")).getStatus().getName() +"\";"); } %>
-</script>
     
 <t:index>
+    <c:if test="${not empty task}">
+    <script type="text/javascript">
+        var task_taskStatus = ${task.status.name};
+    </script>
+    </c:if>
     
     <h1>Create task</h1>
 	<form class="task-form">

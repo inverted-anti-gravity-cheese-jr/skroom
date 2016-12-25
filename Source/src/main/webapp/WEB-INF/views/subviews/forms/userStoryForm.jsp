@@ -1,29 +1,31 @@
-<%@ page import="pl.pg.eti.kio.skroom.model.UserStory" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<script type="text/javascript">
-    function switchViews(showEdit) {
-        if(showEdit) {
-            $(".user-story-body").slideUp(function () {
-                $(".user-story-form").slideDown();
-            });
-            
-        }
-        else {
-            $(".user-story-form").slideUp(function () {
-                $(".user-story-body").slideDown();
-            });
-        }
-    }
-
-    <% if(request.getAttribute("userStory") != null) { out.print("var userStory_storyPoints = \"" + ((UserStory)request.getAttribute("userStory")).getStoryPoints().getDisplayName() +"\";"); } %>
-    <% if(request.getAttribute("userStory") != null) { out.print("var userStory_status = \"" + ((UserStory)request.getAttribute("userStory")).getStatus().getName() +"\";"); } %>
-</script>
-    
 <t:index>
+    
+    <script type="text/javascript">
+        function switchViews(showEdit) {
+            if(showEdit) {
+                $(".user-story-body").slideUp(function () {
+                    $(".user-story-form").slideDown();
+                });
+
+            }
+            else {
+                $(".user-story-form").slideUp(function () {
+                    $(".user-story-body").slideDown();
+                });
+            }
+        }
+
+        <c:if test="${not empty userStory}">
+            var userStory_storyPoints = "${userStory.storyPoints.displayName}";
+            var userStory_status = "${userStory.status.name}"
+        </c:if>
+    </script>
+    
     <c:choose>
         <c:when test="${ not empty userStory }">
     <h1>${userStory.name}</h1>
