@@ -14,7 +14,7 @@
 	<h1>Welcome to ${userSettings.recentProject.name}.</h1>
 	<p class="project-description">${userSettings.recentProject.description}</p>
 	<h2>What do you want to do?</h2>
-	<button class="btn btn-sm btn-accent">Create task</button>
+	<a href="addTask" class="btn btn-sm btn-accent">Create task</a>
 	<button class="btn btn-sm btn-accent">Create issue</button>
 	<button class="btn btn-sm btn-accent">View tasks</button>
 	<h2>Tasks assigned to you</h2>

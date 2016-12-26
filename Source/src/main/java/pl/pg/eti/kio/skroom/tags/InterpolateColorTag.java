@@ -58,7 +58,8 @@ public class InterpolateColorTag extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		float val = (float)(min + value) / (float)max;
+		value = Math.min(max, Math.max(value, min));
+		float val = (float)(value - min) / (float)(max - min);
 		
 		JspWriter out = getJspContext().getOut();
 		try {

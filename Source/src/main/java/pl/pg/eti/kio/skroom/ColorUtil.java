@@ -19,7 +19,7 @@ public class ColorUtil {
 	public String colorToHex(Color color) {
 		String hex = Integer.toHexString(color.getRGB());
 		if(hex.length() > 6) {
-			hex = hex.substring(0, hex.length() - 2);
+			hex = hex.substring(2, hex.length());
 		}
 		return "#" + hex;
 	}
@@ -29,20 +29,15 @@ public class ColorUtil {
 	}
 	
 	public Color interpolateColors(float value, Color c1, Color c2) {
-		value = Math.min(1, Math.max(value, 0));
+		value = (float)Math.min(1.0, Math.max((double)value, 0.0));
 		
-		int maxR = Math.max(c1.getRed(), c2.getRed());
-		int minR = Math.min(c1.getRed(), c2.getRed());
-
-		int maxB = Math.max(c1.getBlue(), c2.getBlue());
-		int minB = Math.min(c1.getBlue(), c2.getBlue());
+		int diffR = c2.getRed() - c1.getRed();
+		int diffG = c2.getGreen() - c1.getGreen();
+		int diffB = c2.getBlue() - c1.getBlue();
 		
-		int maxG = Math.max(c1.getGreen(), c2.getGreen());
-		int minG = Math.min(c1.getGreen(), c2.getGreen());
-		
-		return new Color( minR + (int)(value * (maxR - minR)), 
-				minG + (int)(value * (maxG - minG)),
-				minB + (int)(value * (maxB - minB)));
+		return new Color(c1.getRed() + (int)(value * diffR),
+				c1.getGreen() + (int)(value * diffG),
+				c1.getBlue() + (int)(value * diffB));
 	}
 	
 }

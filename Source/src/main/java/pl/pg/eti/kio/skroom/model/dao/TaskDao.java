@@ -1,9 +1,17 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
+import static pl.pg.eti.kio.skroom.model.dba.Tables.TASKS;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
+
 import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.model.Project;
@@ -13,13 +21,6 @@ import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-
-import static pl.pg.eti.kio.skroom.model.dba.Tables.TASKS;
-import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS;
 
 /**
  * Class to access model's Task from database.
@@ -71,7 +72,10 @@ public class TaskDao {
 			// convert all tasks to model used by the system
 			for (TasksRecord taskRecord : tasksRecords) {
 				// find user in the list with supplied ID
-				User user = records.usersRecordsList.stream().findAny().filter(x -> x.getId() == taskRecord.getAssignee()).get();
+				User user = null;
+				if(taskRecord.getAssignee() != null) {
+					user = records.usersRecordsList.stream().findAny().filter(x -> x.getId() == taskRecord.getAssignee()).get();
+				}
 				Task task = Task.fromDba(taskRecord, user, project, taskStatuses);
 				records.tasksRecordList.add(task);
 			}
@@ -83,6 +87,22 @@ public class TaskDao {
 		}
 
 		return records.tasksRecordList;
+	}
+	
+	public boolean changeTaskAssignee(Connection connection, int id, User user) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+		
+		int changedRows = query.update(TASKS).set(TASKS.ASSIGNEE, user.getId()).where(TASKS.ID.eq(id)).execute();
+		
+		return changedRows == 1;
+	}
+	
+	public Task fetchTaskById(Connection connection, int id, User user, Project project, List<TaskStatus> taskStatusesList) throws NoSuchTaskStatusException {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+		
+		TasksRecord tasksRecord = query.selectFrom(TASKS).where(TASKS.ID.eq(id)).fetchOne();
+		
+		return Task.fromDba(tasksRecord, user, project, taskStatusesList);
 	}
 
 	/**

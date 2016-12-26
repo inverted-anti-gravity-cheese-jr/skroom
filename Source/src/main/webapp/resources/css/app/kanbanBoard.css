@@ -83,13 +83,13 @@
 }
 
 .taskItem:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-width: 0 16px 16px 0;
-  border-style: solid;
-  border-color: #00000033 #E9E6C9;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-width: 17px 17px 0 0;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.3) #E9E6C9;
 }
 
 .taskName {

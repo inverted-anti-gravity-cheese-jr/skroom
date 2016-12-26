@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,10 +80,6 @@ public class TaskManagementController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		String userEmail = taskAssignee.substring(taskAssignee.indexOf('[') + 1);
-		userEmail = userEmail.substring(0, userEmail.length() - 1);
-		System.out.println(userEmail);
 				
 		Task task = new Task();
 		task.setName(taskName);
@@ -90,11 +87,31 @@ public class TaskManagementController {
 		task.setDescription(taskDescription);
 		task.setEstimatedTime(estimatedTime);
 		task.setProject(userSettings.getRecentProject());
-		task.setAssignee(userDao.fetchByEmail(dbConnection, userEmail));
+		if(taskAssignee != null && !taskAssignee.trim().isEmpty()) {
+			try {
+				String userEmail = taskAssignee.substring(taskAssignee.indexOf('[') + 1);
+				userEmail = userEmail.substring(0, userEmail.length() - 1);
+				task.setAssignee(userDao.fetchByEmail(dbConnection, userEmail));
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		task.setStatus(taskStatusDao.fetchByName(dbConnection, taskStatus, userSettings.getRecentProject()));
 		
 		taskDao.createTask(dbConnection, task);
 			
+		return new ModelAndView("redirect:/sprintbacklog");
+	}
+	
+	@RequestMapping(value = "assignTaskToMe/{taskId}")
+	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @PathVariable Integer taskId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		if(taskId != null) {
+			taskDao.changeTaskAssignee(dbConnection, taskId, user);
+		}
+		
 		return new ModelAndView("redirect:/sprintbacklog");
 	}
 }
