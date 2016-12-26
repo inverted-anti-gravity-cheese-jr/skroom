@@ -179,6 +179,33 @@ public class UserDao {
 
 		return user;
 	}
+	
+	/**
+	 * Finds in database user by email and convers it to app model.
+	 *
+	 * @param connection Connection to a database
+	 * @param email      Name of a user
+	 * @return Model representation of a user
+	 */
+	public User fetchByEmail(Connection connection, String email) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		Result<UsersRecord> usersRecordResult = query.selectFrom(USERS).where(USERS.EMAIL.eq(email)).fetch();
+
+		if (usersRecordResult.isEmpty()) {
+			return null;
+		}
+
+		User user = null;
+		try {
+			user = User.fromDba(usersRecordResult.get(0));
+		} catch (NoSuchUserRoleException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return user;
+	}
 
 	/**
 	 * Fetches from database security data about a user.

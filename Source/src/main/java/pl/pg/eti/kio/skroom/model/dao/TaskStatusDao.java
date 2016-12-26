@@ -25,6 +25,14 @@ import static pl.pg.eti.kio.skroom.model.dba.Tables.TASK_STATUSES;
 @Service
 public class TaskStatusDao {
 
+	public TaskStatus fetchByName(Connection connection, String name, Project project) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		return TaskStatus.fromDba(query.selectFrom(TASK_STATUSES)
+				.where(TASK_STATUSES.NAME.eq(name))
+				.and(TASK_STATUSES.PROJECT_ID.eq(project.getId())).fetchAny(), project);
+	}
+	
 	public List<TaskStatus> fetchByProject(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 

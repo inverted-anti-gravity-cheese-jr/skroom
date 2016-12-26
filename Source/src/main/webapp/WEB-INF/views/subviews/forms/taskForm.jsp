@@ -15,7 +15,7 @@
     </c:if>
     
     <h1>Create task</h1>
-	<form class="task-form">
+	<form class="task-form" method="post">
         <div class="management-bar">
             <input type="submit" class="btn" value="Save" />
         </div>
@@ -29,7 +29,7 @@
             <span class="input-group-addon"><i></i></span>
         </div>
 		<input name="taskEstimated" type="text" class="form-control" placeholder="Estimated time" vaxlue="${task.estimatedTime}" />  
-		<select id="task-status-select" name="storyPoints" class="form-control">
+		<select id="task-status-select" name="taskStatus" class="form-control">
 			<c:forEach var="taskStatus" items="${taskStatuses}">
 				<option>${taskStatus.name}</option>
 			</c:forEach>

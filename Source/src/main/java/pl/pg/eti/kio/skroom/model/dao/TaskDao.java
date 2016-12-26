@@ -10,7 +10,6 @@ import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
@@ -18,6 +17,9 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+
+import static pl.pg.eti.kio.skroom.model.dba.Tables.TASKS;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS;
 
 /**
  * Class to access model's Task from database.
@@ -37,8 +39,8 @@ public class TaskDao {
 	public void updateTaskStatus(Connection connection, Task task) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		query.update(Tables.TASKS).set(Tables.TASKS.TASK_STATUS_ID, task.getStatus().getId())
-				.where(Tables.TASKS.ID.eq(task.getId())).execute();
+		query.update(TASKS).set(TASKS.TASK_STATUS_ID, task.getStatus().getId())
+				.where(TASKS.ID.eq(task.getId())).execute();
 	}
 
 	/**
@@ -51,11 +53,11 @@ public class TaskDao {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		// fetch all task records
-		Result<TasksRecord> tasksRecords = query.selectFrom(Tables.TASKS).fetch();
+		Result<TasksRecord> tasksRecords = query.selectFrom(TASKS).fetch();
 
 		// fetch all those users which are assigned to any task
-		Result<UsersRecord> usersRecords = query.selectFrom(Tables.USERS).where(
-				Tables.USERS.ID.in(tasksRecords.getValues(Tables.TASKS.ASSIGNEE))).fetch();
+		Result<UsersRecord> usersRecords = query.selectFrom(USERS).where(
+				USERS.ID.in(tasksRecords.getValues(TASKS.ASSIGNEE))).fetch();
 
 		TasksAndUsers records = new TasksAndUsers();
 
@@ -83,6 +85,25 @@ public class TaskDao {
 		return records.tasksRecordList;
 	}
 
+	/**
+	 * Inserts a task into database.
+	 * 
+	 * @param connection	Connection to database.
+	 * @param task			Task to insert into database.
+	 * @return				Returns true if successfully inserted task.
+	 */
+	public boolean createTask(Connection connection, Task task) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+		
+		Integer assigneeId = (task.getAssignee() != null ? task.getAssignee().getId() : null);
+		
+		int insertedRows = query.insertInto(TASKS).values(null, task.getName(), task.getDescription(),
+				task.getColor(), assigneeId, task.getStatus().getId(), task.getEstimatedTime(),
+				task.getProject().getId()).execute();
+		
+		return insertedRows == 1;
+	}
+	
 	/**
 	 * Tuple containing tasks and users
 	 */
