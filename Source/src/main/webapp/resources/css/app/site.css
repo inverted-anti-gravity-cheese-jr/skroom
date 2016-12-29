@@ -187,3 +187,10 @@ textarea {
 .skroom-form .input-group .form-control {
     margin: 0;
 }
+
+.round-table-label {
+    color: white;
+    background-color: dimgray;
+    border-radius: 20px;
+    padding: 3px 10px;
+}

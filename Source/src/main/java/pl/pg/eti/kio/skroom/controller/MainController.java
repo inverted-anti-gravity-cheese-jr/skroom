@@ -67,8 +67,10 @@ public class MainController {
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
-		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
+		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 
 		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", userSettings.getRecentProject(), user, request);
 		model.addObject("list", taskList);
@@ -119,7 +121,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/sprintbacklog", method = RequestMethod.GET)
-	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "sprint", required = false) Integer sprintId) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
@@ -128,12 +130,16 @@ public class MainController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
 
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
-		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
 		sprints.remove(lastSprint);
 
+		if(!userStories.isEmpty() && (sprintId == null || sprintId == lastSprint.getId())) {
+			model.addObject("showNewButton", true);
+		}
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
 		model.addObject("tasks", taskList);
@@ -148,9 +154,10 @@ public class MainController {
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
-		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses);
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
 		sprints.remove(lastSprint);
 

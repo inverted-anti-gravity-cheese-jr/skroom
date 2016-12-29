@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.model.Project;
+import pl.pg.eti.kio.skroom.model.Sprint;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.User;
+import pl.pg.eti.kio.skroom.model.UserStory;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
@@ -50,7 +52,7 @@ public class TaskDao {
 	 * @param connection Connection to a database
 	 * @return All tasks from the database
 	 */
-	public List<Task> fetchTasks(Connection connection, Project project, List<TaskStatus> taskStatuses) {
+	public List<Task> fetchTasks(Connection connection, Project project, List<TaskStatus> taskStatuses, List<UserStory> userStories, List<Sprint> sprints) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		// fetch all task records
@@ -76,7 +78,7 @@ public class TaskDao {
 				if(taskRecord.getAssignee() != null) {
 					user = records.usersRecordsList.stream().findAny().filter(x -> x.getId() == taskRecord.getAssignee()).get();
 				}
-				Task task = Task.fromDba(taskRecord, user, project, taskStatuses);
+				Task task = Task.fromDba(taskRecord, user, project, taskStatuses, userStories, sprints);
 				records.tasksRecordList.add(task);
 			}
 		}
@@ -97,12 +99,12 @@ public class TaskDao {
 		return changedRows == 1;
 	}
 	
-	public Task fetchTaskById(Connection connection, int id, User user, Project project, List<TaskStatus> taskStatusesList) throws NoSuchTaskStatusException {
+	public Task fetchTaskById(Connection connection, int id, User user, Project project, List<TaskStatus> taskStatusesList, List<UserStory> userStories, List<Sprint> sprints) throws NoSuchTaskStatusException {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 		
 		TasksRecord tasksRecord = query.selectFrom(TASKS).where(TASKS.ID.eq(id)).fetchOne();
 		
-		return Task.fromDba(tasksRecord, user, project, taskStatusesList);
+		return Task.fromDba(tasksRecord, user, project, taskStatusesList, userStories, sprints);
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class TaskDao {
 		
 		int insertedRows = query.insertInto(TASKS).values(null, task.getName(), task.getDescription(),
 				task.getColor(), assigneeId, task.getStatus().getId(), task.getEstimatedTime(),
-				task.getProject().getId()).execute();
+				task.getProject().getId(), task.getUserStory().getId(), task.getSprint().getId()).execute();
 		
 		return insertedRows == 1;
 	}

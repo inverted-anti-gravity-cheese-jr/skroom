@@ -114,13 +114,21 @@ public class SprintDao {
 	 */
 	public Sprint findCurrentSprint(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
-
-		SprintsRecord record = query.selectFrom(SPRINTS)
-				.where(SPRINTS.START_DAY.le(DSL.currentDate())
-					.and(SPRINTS.END_DAY.gt(DSL.currentDate()))
-					.and(SPRINTS.PROJECT_ID.eq(project.getId()))).fetchOne();
-
-		return Sprint.fromDba(record, project);
+		
+		Result<SprintsRecord> sprintsRecords = query.selectFrom(SPRINTS)
+				.where(SPRINTS.PROJECT_ID.eq(project.getId()))
+				.and(SPRINTS.START_DAY.le(DSL.currentDate().add(new DayToSecond(1)))).fetch();
+		
+		for(SprintsRecord record : sprintsRecords) {
+			LocalDateTime start = record.getStartDay().toLocalDate().atStartOfDay();
+			LocalDateTime end = record.getEndDay().toLocalDate().atStartOfDay();
+			LocalDateTime today = LocalDate.now().atStartOfDay();
+			if( (start.isBefore(today) || start.isEqual(today)) && end.isAfter(today)) {
+				return Sprint.fromDba(record, project);
+			}
+		}
+		
+		return null;
 	}
 
 	public boolean updateSprint(Connection connection, Sprint sprint) {
@@ -172,7 +180,7 @@ public class SprintDao {
 
 	public Sprint getNextSprint(Connection connection, Sprint sprint) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
-
+		
 		SprintsRecord nextRecord = query.selectFrom(SPRINTS)
 				.where(SPRINTS.PROJECT_ID.eq(sprint.getProject().getId()))
 				.and(SPRINTS.START_DAY.eq(DSL.date(sprint.getEndDate())))

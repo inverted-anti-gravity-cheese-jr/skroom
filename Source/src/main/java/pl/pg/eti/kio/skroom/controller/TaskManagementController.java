@@ -4,6 +4,7 @@ import static pl.pg.eti.kio.skroom.controller.Views.TASK_FORM_JSP_LOCATION;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.pg.eti.kio.skroom.SprintGeneratorService;
+import pl.pg.eti.kio.skroom.model.Sprint;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
+import pl.pg.eti.kio.skroom.model.UserStory;
+import pl.pg.eti.kio.skroom.model.dao.SprintDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
@@ -37,7 +43,10 @@ public class TaskManagementController {
 
 	@Autowired private UserDao userDao;
 	@Autowired private TaskDao taskDao;
+	@Autowired private SprintDao sprintDao;
+	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private TaskStatusDao taskStatusDao;
+	@Autowired private SprintGeneratorService generatorService;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
 
@@ -58,9 +67,10 @@ public class TaskManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
 		List<User> users = userDao.listAllUsersForProject(dbConnection, userSettings.getRecentProject());
-
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 
 		modelAndView.addObject("taskStatuses", taskStatuses);
+		modelAndView.addObject("userStories", userStories);
 		modelAndView.addObject("users", users);
 		modelAndView.addObject("taskColor", "#008CFF");
 		return modelAndView;
@@ -68,7 +78,7 @@ public class TaskManagementController {
 	
 	@RequestMapping(value = "addTask", method = RequestMethod.POST)
 	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus,
+			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus, @RequestParam Integer userStoryId,
 			@RequestParam String taskAssignee, @RequestParam String taskColor, @RequestParam String taskEstimated) {
 		
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -80,7 +90,7 @@ public class TaskManagementController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-				
+		
 		Task task = new Task();
 		task.setName(taskName);
 		task.setColor(taskColor);
@@ -97,14 +107,24 @@ public class TaskManagementController {
 				e.printStackTrace();
 			}
 		}
+		
+		if(userStoryId != null) {
+			task.setUserStory(userStoryDao.fetchUserStoryById(dbConnection, userStoryId));
+		}
 		task.setStatus(taskStatusDao.fetchByName(dbConnection, taskStatus, userSettings.getRecentProject()));
+		Sprint sprint = sprintDao.findCurrentSprint(dbConnection, userSettings.getRecentProject());
+		if(sprint == null) {
+			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
+			sprint = sprintDao.findCurrentSprint(dbConnection, userSettings.getRecentProject());
+		}
+		task.setSprint(sprint);
 		
 		taskDao.createTask(dbConnection, task);
 			
 		return new ModelAndView("redirect:/sprintbacklog");
 	}
 	
-	@RequestMapping(value = "assignTaskToMe/{taskId}")
+	@RequestMapping(value = "assignToMe/{taskId}")
 	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @PathVariable Integer taskId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		

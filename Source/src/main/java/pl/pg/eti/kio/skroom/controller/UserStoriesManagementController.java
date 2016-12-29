@@ -63,12 +63,12 @@ public class UserStoriesManagementController {
 		return model;
 	}
 
-	@RequestMapping(value = "editUserStory/", method = RequestMethod.GET)
+	@RequestMapping(value = "viewUserStory/", method = RequestMethod.GET)
 	public ModelAndView editUserStory() {
 		return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(value = "editUserStory/{userStoryId}/", method = RequestMethod.GET)
+	@RequestMapping(value = "viewUserStory/{userStoryId}/", method = RequestMethod.GET)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer userStoryId) {
 		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
 

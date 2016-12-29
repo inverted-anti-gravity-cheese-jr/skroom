@@ -34,6 +34,12 @@
 				<option>${taskStatus.name}</option>
 			</c:forEach>
 		</select>
+        
+        <select id="user-story-select" name="userStoryId" class="form-control">
+			<c:forEach var="userStory" items="${userStories}">
+				<option value="${userStory.id}">${userStory.name}</option>
+			</c:forEach>
+		</select>
 	</form>
 	
 	<script type="text/javascript">

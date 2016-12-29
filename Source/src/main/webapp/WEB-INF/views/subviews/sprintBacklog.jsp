@@ -7,16 +7,25 @@
     pageEncoding="UTF-8"%>
 
 <t:index>
+    <script type="text/javascript">
+        function chooseSprint(select) {
+            window.href = document.URL + "?sprint=" + select.options[select.selectedIndex].value;
+        }
+    </script>
+    
     <h1>Tasks</h1>
     <div class="management-bar">
         <span class="bar-text">Choose sprint
-            <select>
+            <select onselect="chooseSprint(this)">
             <c:forEach var="sprint" items="${sprintsWithoutLast}">
-                <option>${sprint.name}</option>    
+                <option value="${sprint.id}">${sprint.name}</option>    
             </c:forEach>
-                <option selected="selected">${lastSprint.name}</option>
+                <option value="${lastSprint.id}" selected="selected">${lastSprint.name}</option>
             </select>
         </span>
+        <c:if test="${not empty showNewButton}">
+        <a href="addTask" class="btn green">Add task</a>
+        </c:if>
     </div>
     
     <table class="table">
