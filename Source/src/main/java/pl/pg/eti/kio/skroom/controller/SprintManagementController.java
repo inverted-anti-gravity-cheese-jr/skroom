@@ -1,19 +1,22 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import pl.pg.eti.kio.skroom.SprintGeneratorService;
 import pl.pg.eti.kio.skroom.model.Sprint;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.SprintDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
-import java.sql.Connection;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 /**
  * Class for managing sprints in selected project.

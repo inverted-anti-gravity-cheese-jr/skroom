@@ -1,17 +1,20 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import java.sql.Connection;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import pl.pg.eti.kio.skroom.model.Task;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
-import java.sql.Connection;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Main controller for rest API.

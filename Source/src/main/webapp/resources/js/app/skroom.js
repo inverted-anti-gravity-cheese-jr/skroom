@@ -14,7 +14,6 @@ function searchForOptionInSelectAndCheckIfEquals(children, value) {
         }
     }
 }
-
 /**
  * Selects current values in user story form <select> elements.
  * 

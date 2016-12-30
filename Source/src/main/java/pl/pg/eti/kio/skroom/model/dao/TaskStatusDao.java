@@ -1,20 +1,20 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
+import static pl.pg.eti.kio.skroom.model.dba.Tables.TASK_STATUSES;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
+
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.TaskStatusesRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static pl.pg.eti.kio.skroom.model.dba.Tables.TASK_STATUSES;
 
 /**
  * Class to access model's Task Status from database.
@@ -51,8 +51,6 @@ public class TaskStatusDao {
 	}
 
 	public boolean generateDefaultStatusesForProject(Connection connection, Project project) {
-		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
-
 		boolean success = true;
 
 		TaskStatus todo = new TaskStatus();

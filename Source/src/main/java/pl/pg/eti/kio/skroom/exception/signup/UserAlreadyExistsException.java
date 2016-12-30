@@ -6,8 +6,8 @@ package pl.pg.eti.kio.skroom.exception.signup;
  * @author Wojciech Stanisławski
  * @since 26.08.16
  */
+@SuppressWarnings("serial")
 public class UserAlreadyExistsException extends Exception {
-
 	public UserAlreadyExistsException() {
 		super("User with that name or email already exists!");
 	}

@@ -6,6 +6,7 @@ package pl.pg.eti.kio.skroom.exception.signup;
  * @author Wojciech Stanisławski
  * @since 26.08.16
  */
+@SuppressWarnings("serial")
 public class UserAccountCreationErrorException extends Exception {
 	public UserAccountCreationErrorException() {
 		super("User account creation error occured.");

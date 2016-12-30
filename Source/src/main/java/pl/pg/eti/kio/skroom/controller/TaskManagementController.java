@@ -4,7 +4,6 @@ import static pl.pg.eti.kio.skroom.controller.Views.TASK_FORM_JSP_LOCATION;
 
 import java.sql.Connection;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +77,7 @@ public class TaskManagementController {
 	}
 	
 	
-	@RequestMapping(value = "assignToMe/{taskId}")
+	@RequestMapping(value = "assignTaskToMe/{taskId}")
 	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @PathVariable Integer taskId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		
@@ -100,7 +99,7 @@ public class TaskManagementController {
 		List<Sprint> sprints = sprintDao.fetchSprintsForProject(dbConnection, userSettings.getRecentProject());
 		
 		try {
-			Task task = taskDao.fetchTaskById(dbConnection, taskId, user, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
+			Task task = taskDao.fetchTaskById(dbConnection, taskId, users, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 			modelAndView.addObject("task", task);
 			modelAndView.addObject("taskStatuses", taskStatuses);
 			modelAndView.addObject("userStories", userStories);
@@ -113,8 +112,17 @@ public class TaskManagementController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "editTask/${taskId}", method = RequestMethod.POST)
-	public ModelAndView editTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId,
+	@RequestMapping(value = "removeTask/{taskId}")
+	public ModelAndView removeTask(@PathVariable Integer taskId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		taskDao.removeTaskById(dbConnection, taskId);
+		
+		return new ModelAndView("redirect:/sprintbacklog");
+	}
+	
+	@RequestMapping(value = "editTask/{taskId}", method = RequestMethod.POST)
+	public ModelAndView editTask(@ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId,
 			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus, @RequestParam Integer userStoryId,
 			@RequestParam String taskAssignee, @RequestParam String taskColor, @RequestParam String taskEstimated) {
 		
@@ -124,7 +132,7 @@ public class TaskManagementController {
 	}
 	
 	@RequestMapping(value = "addTask", method = RequestMethod.POST)
-	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
+	public ModelAndView addTask(@ModelAttribute("userSettings") UserSettings userSettings,
 			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus, @RequestParam Integer userStoryId,
 			@RequestParam String taskAssignee, @RequestParam String taskColor, @RequestParam String taskEstimated) {
 		
@@ -177,6 +185,7 @@ public class TaskManagementController {
 			return new ModelAndView("redirect:/sprintbacklog");
 		}
 		else {
+			task.setId(taskId);
 			taskDao.updateTask(dbConnection, task);
 			return new ModelAndView("redirect:/viewTask/" + taskId.toString());
 		}

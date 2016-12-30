@@ -1,20 +1,19 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import org.jooq.DSLContext;
-import org.jooq.Result;
-import org.jooq.impl.DSL;
-import org.springframework.stereotype.Service;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.UserStory;
-import pl.pg.eti.kio.skroom.model.dba.Tables;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USER_STORIES;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 
-import static org.jooq.impl.DSL.row;
-import static pl.pg.eti.kio.skroom.model.dba.Tables.USER_STORIES;
+import org.jooq.DSLContext;
+import org.jooq.Result;
+import org.jooq.impl.DSL;
+import org.springframework.stereotype.Service;
+
+import pl.pg.eti.kio.skroom.model.Project;
+import pl.pg.eti.kio.skroom.model.UserStory;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
  * Class for accessing user stories in the database.

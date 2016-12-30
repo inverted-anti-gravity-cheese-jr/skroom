@@ -1,11 +1,10 @@
 package pl.pg.eti.kio.skroom.model;
 
 import org.jooq.DSLContext;
+
 import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
-
-import java.sql.Connection;
 
 /**
  * User settings model for use in the application. Stored in session.

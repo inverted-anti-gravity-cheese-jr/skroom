@@ -1,14 +1,10 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
-
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+
+import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 
 /**
  * Task model class to manage in app.
@@ -132,13 +128,14 @@ public class Task {
 		task.setAssignee(user);
 		task.setName(record.getName());
 		task.setProject(project);
-		
-		Optional<TaskStatus> taskStatus = taskStatusesList.stream()
-				.filter(status -> status.getId() == record.getId())
-				.findAny();
-		
-		if(taskStatus.isPresent()) {
-			task.setStatus(taskStatus.get());
+		if(record.getTaskStatusId() != null) {
+			Optional<TaskStatus> taskStatus = taskStatusesList.stream()
+					.filter(status -> status.getId() == record.getTaskStatusId())
+					.findAny();
+			
+			if(taskStatus.isPresent()) {
+				task.setStatus(taskStatus.get());
+			}
 		}
 		
 		task.setEstimatedTime(record.getEstimatedTime());

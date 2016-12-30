@@ -6,8 +6,8 @@ package pl.pg.eti.kio.skroom.exception;
  * @author Wojciech Stanisławski
  * @since 18.08.16
  */
+@SuppressWarnings("serial")
 public class NoSuchUserRoleException extends Exception {
-
 	public NoSuchUserRoleException() {
 		super("No such user role exception");
 	}

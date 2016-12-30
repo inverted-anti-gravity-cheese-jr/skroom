@@ -1,25 +1,36 @@
 package pl.pg.eti.kio.skroom.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-import pl.pg.eti.kio.skroom.model.*;
-import pl.pg.eti.kio.skroom.model.dao.*;
-import pl.pg.eti.kio.skroom.model.dba.tables.UserStories;
-import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
-import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import java.sql.Connection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import static pl.pg.eti.kio.skroom.controller.Views.LOGIN_JSP_LOCATION;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import pl.pg.eti.kio.skroom.model.Sprint;
+import pl.pg.eti.kio.skroom.model.Task;
+import pl.pg.eti.kio.skroom.model.TaskStatus;
+import pl.pg.eti.kio.skroom.model.User;
+import pl.pg.eti.kio.skroom.model.UserRolesInProject;
+import pl.pg.eti.kio.skroom.model.UserSettings;
+import pl.pg.eti.kio.skroom.model.UserStory;
+import pl.pg.eti.kio.skroom.model.dao.SprintDao;
+import pl.pg.eti.kio.skroom.model.dao.TaskDao;
+import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
+import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dao.UserRolesInProjectDao;
+import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
  * Main model and view controller.
@@ -121,50 +132,78 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/sprintbacklog", method = RequestMethod.GET)
-	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "sprint", required = false) Integer sprintId) {
+	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) String sprintId) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
-
+		
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
 
+		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		
+		taskDao.moveTasksToCurrentSprint(dbConnection, lastSprint);
+		
 		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
-		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
-		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		
 		sprints.remove(lastSprint);
+		
+		int spr = lastSprint.getId();
+		try {
+			spr = Integer.parseInt(sprintId);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		if(!userStories.isEmpty() && (sprintId == null || sprintId == lastSprint.getId())) {
+		if(!userStories.isEmpty() && (sprintId == null || spr == lastSprint.getId())) {
 			model.addObject("showNewButton", true);
 		}
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
-		model.addObject("tasks", taskList);
+		final int sprFin = spr;
+		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
+		model.addObject("tasks", tasksFiltered);
 		return model;
 	}
 
 	@RequestMapping(value = "/kanban", method = RequestMethod.GET)
-	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) String sprintId) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
+		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		
+		taskDao.moveTasksToCurrentSprint(dbConnection, lastSprint);
+		
 		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection,userSettings.getRecentProject());
-		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
-		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
+		
 		sprints.remove(lastSprint);
+		
+		int spr = lastSprint.getId();
+		try {
+			spr = Integer.parseInt(sprintId);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
-		model.addObject("tasks", taskList);
+		final int sprFin = spr;
+		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
+		model.addObject("tasks", tasksFiltered);
 		model.addObject("taskStatuses", taskStatuses);
 		return model;
 	}
@@ -222,15 +261,5 @@ public class MainController {
 			return showUserSettings(user, userSettings);
 		}
 		return null;
-	}
-
-	private ModelAndView getLoginModel() {
-		return getLoginModel(null);
-	}
-
-	private ModelAndView getLoginModel(String error) {
-		ModelAndView model = new ModelAndView(LOGIN_JSP_LOCATION);
-		model.addObject("loginError", error);
-		return model;
 	}
 }

@@ -1,18 +1,27 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import java.sql.Connection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.dao.*;
+import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
+import pl.pg.eti.kio.skroom.model.dao.SprintDao;
+import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
+import pl.pg.eti.kio.skroom.model.dao.UserDao;
+import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
-
-import javax.annotation.PostConstruct;
-import java.sql.Connection;
 
 /**
  * Main controller for managing projects.

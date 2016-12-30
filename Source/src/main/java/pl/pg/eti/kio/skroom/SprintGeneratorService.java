@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.Sprint;
 import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 @Service
 public class SprintGeneratorService {

@@ -38,3 +38,12 @@
 	font-size: 12pt;
 	font-weight: bold;
 }
+
+.dashboard-task-list a {
+    color: #DDD;
+    text-decoration: none;
+}
+
+.dashboard-task-list a:hover {
+    color: #888;
+}

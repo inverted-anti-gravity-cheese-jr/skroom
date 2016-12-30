@@ -1,27 +1,26 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.Result;
-import org.jooq.impl.DSL;
-import org.jooq.types.DayToSecond;
-import org.jooq.types.Interval;
-import org.jooq.util.derby.sys.Sys;
-import org.springframework.stereotype.Service;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.Sprint;
-import pl.pg.eti.kio.skroom.model.dba.Tables;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.SPRINTS;
 
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static pl.pg.eti.kio.skroom.model.dba.Tables.SPRINTS;
+import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.Result;
+import org.jooq.impl.DSL;
+import org.jooq.types.DayToSecond;
+import org.springframework.stereotype.Service;
+
+import pl.pg.eti.kio.skroom.model.Project;
+import pl.pg.eti.kio.skroom.model.Sprint;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
  * Class to access sprint data.
