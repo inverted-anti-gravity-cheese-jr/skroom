@@ -1,6 +1,6 @@
 <tr class="task-row" style="border-color: ${task.color};">
-    <td><a href="editTask/${task.id}/">#${task.id}</a></td>
-    <td><a href="editTask/${task.id}/">${task.name}</a></td>
+    <td><a href="viewTask/${task.id}">#${task.id}</a></td>
+    <td><a href="viewTask/${task.id}">${task.name}</a></td>
     <td>
         <c:if test="${not empty task.assignee}"><span class="round-table-label">${task.assignee.name}</span></c:if>
         <c:if test="${empty task.assignee}"><span class="round-table-label" style="background-color: #ff9d00;">

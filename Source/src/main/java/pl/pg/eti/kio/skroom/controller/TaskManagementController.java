@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.pg.eti.kio.skroom.SprintGeneratorService;
+import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
 import pl.pg.eti.kio.skroom.model.Sprint;
 import pl.pg.eti.kio.skroom.model.Task;
 import pl.pg.eti.kio.skroom.model.TaskStatus;
@@ -76,6 +77,52 @@ public class TaskManagementController {
 		return modelAndView;
 	}
 	
+	
+	@RequestMapping(value = "assignToMe/{taskId}")
+	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @PathVariable Integer taskId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		if(taskId != null) {
+			taskDao.changeTaskAssignee(dbConnection, taskId, user);
+		}
+		
+		return new ModelAndView("redirect:/sprintbacklog");
+	}
+	
+	@RequestMapping("viewTask/{taskId}")
+	public ModelAndView viewTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId) {
+		ModelAndView modelAndView = injector.getIndexForSiteName(TASK_FORM_JSP_LOCATION, "viewTask", userSettings.getRecentProject(), user, request);
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
+		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
+		List<User> users = userDao.listAllUsersForProject(dbConnection, userSettings.getRecentProject());
+		List<Sprint> sprints = sprintDao.fetchSprintsForProject(dbConnection, userSettings.getRecentProject());
+		
+		try {
+			Task task = taskDao.fetchTaskById(dbConnection, taskId, user, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
+			modelAndView.addObject("task", task);
+			modelAndView.addObject("taskStatuses", taskStatuses);
+			modelAndView.addObject("userStories", userStories);
+			modelAndView.addObject("users", users);
+			modelAndView.addObject("taskColor", task.getColor());
+		} catch (NoSuchTaskStatusException e) {
+			e.printStackTrace();
+		}
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "editTask/${taskId}", method = RequestMethod.POST)
+	public ModelAndView editTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId,
+			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus, @RequestParam Integer userStoryId,
+			@RequestParam String taskAssignee, @RequestParam String taskColor, @RequestParam String taskEstimated) {
+		
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		return addOrEditTask(userSettings, taskId, taskName, taskDescription, taskStatus, userStoryId, taskAssignee, taskColor,
+				taskEstimated, dbConnection);
+	}
+	
 	@RequestMapping(value = "addTask", method = RequestMethod.POST)
 	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 			@RequestParam String taskName, @RequestParam String taskDescription, @RequestParam String taskStatus, @RequestParam Integer userStoryId,
@@ -83,6 +130,12 @@ public class TaskManagementController {
 		
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		
+		return addOrEditTask(userSettings, null, taskName, taskDescription, taskStatus, userStoryId, taskAssignee, taskColor,
+				taskEstimated, dbConnection);
+	}
+
+	private ModelAndView addOrEditTask(UserSettings userSettings, Integer taskId, String taskName, String taskDescription, String taskStatus,
+			Integer userStoryId, String taskAssignee, String taskColor, String taskEstimated, Connection dbConnection) {
 		int estimatedTime = 0;
 		try {
 			estimatedTime = Integer.parseInt(taskEstimated);
@@ -119,19 +172,14 @@ public class TaskManagementController {
 		}
 		task.setSprint(sprint);
 		
-		taskDao.createTask(dbConnection, task);
-			
-		return new ModelAndView("redirect:/sprintbacklog");
+		if(taskId == null) {
+			taskDao.createTask(dbConnection, task);
+			return new ModelAndView("redirect:/sprintbacklog");
+		}
+		else {
+			taskDao.updateTask(dbConnection, task);
+			return new ModelAndView("redirect:/viewTask/" + taskId.toString());
+		}
 	}
 	
-	@RequestMapping(value = "assignToMe/{taskId}")
-	public ModelAndView addTask(@ModelAttribute("loggedUser") User user, @PathVariable Integer taskId) {
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-		
-		if(taskId != null) {
-			taskDao.changeTaskAssignee(dbConnection, taskId, user);
-		}
-		
-		return new ModelAndView("redirect:/sprintbacklog");
-	}
 }

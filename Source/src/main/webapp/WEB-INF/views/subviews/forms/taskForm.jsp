@@ -10,15 +10,62 @@
 <t:index>
     <c:if test="${not empty task}">
     <script type="text/javascript">
-        var task_taskStatus = ${task.status.name};
+        var task_taskStatus = "${task.status.name}";
+        
+        function switchViews(showEdit) {
+            if(showEdit) {
+                $(".task-body").slideUp(function () {
+                    $(".task-form").slideDown();
+                });
+
+            }
+            else {
+                $(".task-form").slideUp(function () {
+                    $(".task-body").slideDown();
+                });
+            }
+        }
     </script>
+    <h1>${task.name}</h1>
+    <div class="task-body">
+        <div class="management-bar">
+            <button type="button" class="btn" onclick="switchViews(true)">Edit</button>
+        </div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">Details</div>
+            <div class="panel-body">
+                <b>Assignee</b> ${task.assignee.name} <br />
+                <b>Status</b> ${task.status.name} <br />
+                <b>Estimated time</b><span class="round-table-label" style="color: black; background-color: <s:interpolate-color from="#ffff07" to="#f44336" value="${task.estimatedTime}" min="1" max="24" />">${task.estimatedTime}</span><br />
+                <b>Color</b> ${task.color} <i style="background-color: ${task.color};"></i> <br />
+                <b>User Story</b> <span class="round-table-label" style="background-color: ${task.userStory.storyPoints.color};"> <a href="viewUserStory/${task.userStory.id}/" style="color: ${task.userStory.storyPoints.textColor};">${task.userStory.name}</a> </span> <br />
+                <b>Sprint</b> ${task.sprint.name}
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">Description</div>
+            <div class="panel-body">
+                ${task.description}
+            </div>
+        </div>
+    </div>
+        
+    <form class="task-form" action="../editTask/${task.id}" method="post" style="display: none;">
+        <div class="management-bar">
+            <input type="submit" class="btn" value="Save changes" />
+            <button type="button" class="btn" onclick="switchViews(false)">Cancel</button>
+            <a href="../removeTask/${task.id}" class="btn red pull-right">Delete</a>
+        </div>
     </c:if>
     
+    <c:if test="${empty task}">
     <h1>Create task</h1>
 	<form class="task-form" method="post">
         <div class="management-bar">
             <input type="submit" class="btn" value="Save" />
         </div>
+    </c:if>
         
         
 		<input name="taskName" type="text" class="form-control" placeholder="Task name" value="${task.name}" />  

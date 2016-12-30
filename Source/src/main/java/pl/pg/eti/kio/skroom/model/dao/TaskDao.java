@@ -45,6 +45,23 @@ public class TaskDao {
 		query.update(TASKS).set(TASKS.TASK_STATUS_ID, task.getStatus().getId())
 				.where(TASKS.ID.eq(task.getId())).execute();
 	}
+	
+	public boolean updateTask(Connection connection, Task task) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int updatedRows = query.update(TASKS)
+				.set(TASKS.NAME, task.getName())
+				.set(TASKS.DESCRIPTION, task.getDescription())
+				.set(TASKS.ASSIGNEE, task.getAssignee().getId())
+				.set(TASKS.COLOR, task.getColor())
+				.set(TASKS.ESTIMATED_TIME, task.getEstimatedTime())
+				.set(TASKS.SPRINT_ID, task.getSprint().getId())
+				.set(TASKS.USER_STORY_ID, task.getUserStory().getId())
+				.set(TASKS.TASK_STATUS_ID, task.getStatus().getId())
+				.where(TASKS.ID.eq(task.getId())).execute();
+		
+		return updatedRows == 1;
+	}
 
 	/**
 	 * Method used to fetch list of tasks
