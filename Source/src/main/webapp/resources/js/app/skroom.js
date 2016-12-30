@@ -1,4 +1,43 @@
 /**
+ * Adds or updates GET parameter, and reloads page.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 31.12.16
+ */
+function addOrChangeGetParameterAndReload(param, value) {
+    if(document.URL.search(param+"=") < 0) {
+        var separator = (document.URL.indexOf('?') > -1) ? '&' : '?';
+        window.location.href = document.URL + separator + param + "=" + value;
+    }
+    else {
+        window.location.href = document.URL.replace(new RegExp(param + "[=]\\d*"), param + "=" + value);
+    }
+}
+
+/**
+ * Reads value of a GET parameter.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 31.12.16
+ */
+function takeGETParamValue(param) {
+    var loc = document.URL.search(new RegExp(param + "[=]\\d*"));
+    if (loc > 0) {
+        var shortUrl = document.URL.substr(loc);
+        var endLoc = shortUrl.indexOf("&");
+        if(endLoc < 0) {
+            return parseInt(shortUrl.substr(shortUrl.indexOf("=") + 1));
+        }
+        else {
+            return parseInt(shortUrl.substr(shortUrl.indexOf("=") + 1, shortUrl.indexOf("&") - shortUrl.indexOf("=")));
+        }
+    }
+    else {
+        return undefined;
+    }
+}
+
+/**
  * Method for selecting element in <select> list by supplied value.
  * 
  * @author Wojciech Stanisławski
@@ -119,5 +158,29 @@ function reloadTaskForm(taskStatus) {
         var select = document.getElementById("task-status-select");
         searchForOptionInSelectAndCheckIfEquals(select.children, taskStatus);
         
+    }
+}
+
+/**
+ * Selects sprint using menu in management bar.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 31.12.16
+ */
+function selectSprintInMenu(select) {
+    var value = select.options[select.selectedIndex].value;
+    var param = "spr";
+    addOrChangeGetParameterAndReload(param, value);
+}
+
+/**
+ * Selects sprint in <select> tag based on URL.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 31.12.16
+ */
+function reloadSprintForm(selectId) {
+    if(takeGETParamValue("spr") != undefined) {
+        searchForOptionInSelectAndCheckIfEquals(document.getElementById(selectId).children, takeGETParamValue("spr"));
     }
 }
