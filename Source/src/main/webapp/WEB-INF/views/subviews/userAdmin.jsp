@@ -57,14 +57,18 @@
         </tbody>
     </table>
 
-    <h1>Projects</h1>
+    <h1>Projects roles</h1>
+
+    <div class="management-bar">
+        <a href="userRoleInProject/" class="btn green" >Add new</a>
+    </div>
 
     <table class="table">
         <thead><tr><td>Role</td><td>Color</td><td>Privileges</td></tr></thead>
         <tbody>
             <c:forEach var="userRoleInProject" items="${globalUserRolesInProjects}">
                 <tr>
-                    <td>${userRoleInProject.role}</td>
+                    <td><a href="userRoleInProject/${userRoleInProject.id}/">${userRoleInProject.role}</a></td>
                     <td>${userRoleInProject.color}</td>
                     <td>${userRoleInProject.privileges}</td>
                 </tr>

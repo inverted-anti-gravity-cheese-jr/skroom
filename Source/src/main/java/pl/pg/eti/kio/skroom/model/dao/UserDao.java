@@ -1,10 +1,8 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Record1;
-import org.jooq.Result;
+import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
@@ -23,9 +21,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS;
-import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS_PROJECTS;
-import static pl.pg.eti.kio.skroom.model.dba.Tables.USERS_SETTINGS;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.*;
 
 /**
  * Class to access model's User from database.
@@ -66,20 +62,40 @@ public class UserDao {
 		return updatedRows > 0;
 	}
 
+	public boolean acceptUser(Connection connection, User user) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		User fullUser = fetchByName(connection, user.getName());
+
+		int updatedRows = query.update(USERS_SECURITY)
+				.set(USERS_SECURITY.ACCEPTED, 1)
+				.where(USERS_SECURITY.USER_ID.eq(fullUser.getId()))
+				.execute();
+
+		return updatedRows > 0;
+	}
+
 	/**
 	 * Lists all users in database, proceed with caution
 	 *
 	 * @param connection Connection to a database
 	 * @return List of all users
 	 */
-	public List<UserContainer> listAllUsers(Connection connection) {
+	public List<UserContainer> listAllUsers(Connection connection, String userNameFilter) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		List<UserContainer> users = new ArrayList<>();
 
-		Result<Record> records = query.select(USERS.fields()).select(Tables.USERS_SECURITY.ACCEPTED)
+		SelectConditionStep<Record> whereStep = query.select(USERS.fields()).select(Tables.USERS_SECURITY.ACCEPTED)
 				.from(USERS)
 				.join(Tables.USERS_SECURITY).onKey()
+				.where(DSL.trueCondition());
+
+		if (!StringUtils.isEmpty(userNameFilter)) {
+			whereStep = whereStep.and(USERS.NAME.like(userNameFilter));
+		}
+
+		Result<Record> records = whereStep
 				.orderBy(Tables.USERS_SECURITY.ACCEPTED)
 				.fetch();
 
@@ -178,6 +194,15 @@ public class UserDao {
 		}
 
 		return user;
+	}
+
+	public UserContainer fetchUserContainerByName(Connection connection, String name) {
+		User user = fetchByName(connection, name);
+
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+		Record1<Integer> accepted = query.select(USERS_SECURITY.ACCEPTED).from(USERS_SECURITY).where(USERS_SECURITY.USER_ID.eq(user.getId())).fetchOne();
+
+		return new UserContainer(user, accepted.value1() == 1);
 	}
 	
 	/**

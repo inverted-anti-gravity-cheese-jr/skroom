@@ -5,3 +5,7 @@
 .user-row-not-accepted {
     text-decoration: underline;
 }
+
+.user-role-in-project-edit {
+    display: none;
+}

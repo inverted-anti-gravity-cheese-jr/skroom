@@ -5,13 +5,16 @@
 
 <t:index>
 <form method="post" class="skroom-form">
-    <h1>${editUser.name}</h1>
+    <h1>${editUser.user.name}</h1>
 
     <div class="management-bar">
         <input value="Save" type="submit" class="btn"/>
+        <c:if test="${not editUser.accepted}">
+            <input value="Save and accept" name="user-accept-button" type="submit" class="btn"/>
+        </c:if>
     </div>
 
-    <select id="select-edit-user-role" name="editUserRole" value="${editUser.role}" class="form-control" >
+    <select id="select-edit-user-role" name="editUserRole" value="${editUser.user.role}" class="form-control" >
         <c:forEach var="role" items="${availableUserRoles}">
             <option>${role.displayName}</option>
         </c:forEach>
@@ -20,7 +23,7 @@
 </form>
 
     <script type="text/javascript">
-        var role = "${editUser.role.displayName}";
+        var role = "${editUser.user.role.displayName}";
         reloadEditUserForm(role);
     </script>
 

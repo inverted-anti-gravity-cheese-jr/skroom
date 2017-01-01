@@ -74,7 +74,7 @@ public class AccountManagementController {
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
-		User editUser = userDao.fetchByName(dbConnection, editUserName);
+		UserDao.UserContainer editUser = userDao.fetchUserContainerByName(dbConnection, editUserName);
 
 		model.addObject("editUser", editUser);
 		model.addObject("availableUserRoles", UserRole.getAvailableDisplayNames());
@@ -87,6 +87,8 @@ public class AccountManagementController {
 		if(user == null || user.getId() < 0)
 			return new ModelAndView("redirect:/");
 
+		String acceptUser = webRequest.getParameter("user-accept-button");
+
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		User editUser = new User();
@@ -94,6 +96,10 @@ public class AccountManagementController {
 		editUser.setRole(UserRole.getByDisplayName(editUserRole));
 
 		userDao.editUserRole(dbConnection, editUser);
+
+		if (acceptUser != null) {
+			userDao.acceptUser(dbConnection, editUser);
+		}
 
 		return new ModelAndView("redirect:/userAdmin");
 	}

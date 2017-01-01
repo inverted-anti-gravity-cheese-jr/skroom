@@ -175,7 +175,7 @@ public class MainController {
 
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-												   @RequestParam(value = "upp", required = false) String usersPerPageString) {
+												   @RequestParam(value = "upp", required = false) String usersPerPageString, @RequestParam(value = "un", required = false) String userNameFilter) {
 		int usersPerPage = 5;
 		if(usersPerPageString != null) {
 			try {
@@ -196,7 +196,7 @@ public class MainController {
 
 		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
-		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection);
+		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection, userNameFilter);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
 
 		List<UserRolesInProject> allUserRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
