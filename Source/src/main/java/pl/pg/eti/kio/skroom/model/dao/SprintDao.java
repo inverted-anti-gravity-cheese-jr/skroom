@@ -1,27 +1,26 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.Result;
-import org.jooq.impl.DSL;
-import org.jooq.types.DayToSecond;
-import org.jooq.types.Interval;
-import org.jooq.util.derby.sys.Sys;
-import org.springframework.stereotype.Service;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.Sprint;
-import pl.pg.eti.kio.skroom.model.dba.Tables;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.SPRINTS;
 
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static pl.pg.eti.kio.skroom.model.dba.Tables.SPRINTS;
+import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.Result;
+import org.jooq.impl.DSL;
+import org.jooq.types.DayToSecond;
+import org.springframework.stereotype.Service;
+
+import pl.pg.eti.kio.skroom.model.Project;
+import pl.pg.eti.kio.skroom.model.Sprint;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
  * Class to access sprint data.
@@ -114,13 +113,21 @@ public class SprintDao {
 	 */
 	public Sprint findCurrentSprint(Connection connection, Project project) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
-
-		SprintsRecord record = query.selectFrom(SPRINTS)
-				.where(SPRINTS.START_DAY.le(DSL.currentDate())
-					.and(SPRINTS.END_DAY.gt(DSL.currentDate()))
-					.and(SPRINTS.PROJECT_ID.eq(project.getId()))).fetchOne();
-
-		return Sprint.fromDba(record, project);
+		
+		Result<SprintsRecord> sprintsRecords = query.selectFrom(SPRINTS)
+				.where(SPRINTS.PROJECT_ID.eq(project.getId()))
+				.and(SPRINTS.START_DAY.le(DSL.currentDate().add(new DayToSecond(1)))).fetch();
+		
+		for(SprintsRecord record : sprintsRecords) {
+			LocalDateTime start = record.getStartDay().toLocalDate().atStartOfDay();
+			LocalDateTime end = record.getEndDay().toLocalDate().atStartOfDay();
+			LocalDateTime today = LocalDate.now().atStartOfDay();
+			if( (start.isBefore(today) || start.isEqual(today)) && end.isAfter(today)) {
+				return Sprint.fromDba(record, project);
+			}
+		}
+		
+		return null;
 	}
 
 	public boolean updateSprint(Connection connection, Sprint sprint) {
@@ -172,7 +179,7 @@ public class SprintDao {
 
 	public Sprint getNextSprint(Connection connection, Sprint sprint) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
-
+		
 		SprintsRecord nextRecord = query.selectFrom(SPRINTS)
 				.where(SPRINTS.PROJECT_ID.eq(sprint.getProject().getId()))
 				.and(SPRINTS.START_DAY.eq(DSL.date(sprint.getEndDate())))

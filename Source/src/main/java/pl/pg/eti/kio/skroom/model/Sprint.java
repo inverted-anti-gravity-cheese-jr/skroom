@@ -75,12 +75,9 @@ public class Sprint {
 
 	@Override
 	public String toString() {
-		return "Sprint{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", startDate=" + startDate +
-				", endDate=" + endDate +
-				", project=" + project +
-				'}';
+		return "Sprint [id=" + id + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", project=" + project + "]";
 	}
+
+	
 }

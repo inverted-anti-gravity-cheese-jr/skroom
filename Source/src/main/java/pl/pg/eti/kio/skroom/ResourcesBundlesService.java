@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Bundles resources for bundle JSP tag.
@@ -43,7 +42,7 @@ public class ResourcesBundlesService {
 	}
 
 	private List<String> getJqueryBundle() {
-		return Arrays.asList("resources/js/jquery/jquery-1.8.2.min.js");
+		return Arrays.asList("resources/js/jquery/jquery-1.9.1.min.js");
 	}
 
 	private List<String> getFullCalendarBundle() {
@@ -54,7 +53,7 @@ public class ResourcesBundlesService {
 	}
 	
 	private List<String> getJqueryUiBundle() {
-		return Arrays.asList("resources/js/jqueryui/jquery-ui-1.8.24.min.js",
+		return Arrays.asList("resources/js/jqueryui/jquery-ui-1.9.1.min.js",
 				"resources/css/jqueryui/jquery.ui.core.css");
 	}
 

@@ -88,6 +88,8 @@ public class Keys {
     public static final ForeignKey<TasksRecord, UsersRecord> FK_TASKS_USERS_1 = ForeignKeys0.FK_TASKS_USERS_1;
     public static final ForeignKey<TasksRecord, TaskStatusesRecord> FK_TASKS_TASK_STATUSES_1 = ForeignKeys0.FK_TASKS_TASK_STATUSES_1;
     public static final ForeignKey<TasksRecord, ProjectsRecord> FK_TASKS_PROJECTS_1 = ForeignKeys0.FK_TASKS_PROJECTS_1;
+    public static final ForeignKey<TasksRecord, UserStoriesRecord> FK_TASKS_USER_STORIES_1 = ForeignKeys0.FK_TASKS_USER_STORIES_1;
+    public static final ForeignKey<TasksRecord, SprintsRecord> FK_TASKS_SPRINTS_1 = ForeignKeys0.FK_TASKS_SPRINTS_1;
     public static final ForeignKey<TaskStatusesRecord, ProjectsRecord> FK_TASK_STATUSES_PROJECTS_1 = ForeignKeys0.FK_TASK_STATUSES_PROJECTS_1;
     public static final ForeignKey<UsersProjectsRecord, UsersRecord> FK_USERS_PROJECTS_USERS_1 = ForeignKeys0.FK_USERS_PROJECTS_USERS_1;
     public static final ForeignKey<UsersProjectsRecord, ProjectsRecord> FK_USERS_PROJECTS_PROJECTS_1 = ForeignKeys0.FK_USERS_PROJECTS_PROJECTS_1;
@@ -134,6 +136,8 @@ public class Keys {
         public static final ForeignKey<TasksRecord, UsersRecord> FK_TASKS_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, Tasks.TASKS, "fk_TASKS_USERS_1", Tasks.TASKS.ASSIGNEE);
         public static final ForeignKey<TasksRecord, TaskStatusesRecord> FK_TASKS_TASK_STATUSES_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_TASK_STATUSES, Tasks.TASKS, "fk_TASKS_TASK_STATUSES_1", Tasks.TASKS.TASK_STATUS_ID);
         public static final ForeignKey<TasksRecord, ProjectsRecord> FK_TASKS_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, Tasks.TASKS, "fk_TASKS_PROJECTS_1", Tasks.TASKS.PROJECT_ID);
+        public static final ForeignKey<TasksRecord, UserStoriesRecord> FK_TASKS_USER_STORIES_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USER_STORIES, Tasks.TASKS, "fk_TASKS_USER_STORIES_1", Tasks.TASKS.USER_STORY_ID);
+        public static final ForeignKey<TasksRecord, SprintsRecord> FK_TASKS_SPRINTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_SPRINTS, Tasks.TASKS, "fk_TASKS_SPRINTS_1", Tasks.TASKS.SPRINT_ID);
         public static final ForeignKey<TaskStatusesRecord, ProjectsRecord> FK_TASK_STATUSES_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, TaskStatuses.TASK_STATUSES, "fk_TASK_STATUSES_PROJECTS_1", TaskStatuses.TASK_STATUSES.PROJECT_ID);
         public static final ForeignKey<UsersProjectsRecord, UsersRecord> FK_USERS_PROJECTS_USERS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_USERS, UsersProjects.USERS_PROJECTS, "fk_USERS_PROJECTS_USERS_1", UsersProjects.USERS_PROJECTS.USER_ID);
         public static final ForeignKey<UsersProjectsRecord, ProjectsRecord> FK_USERS_PROJECTS_PROJECTS_1 = createForeignKey(pl.pg.eti.kio.skroom.model.dba.Keys.PK_PROJECTS, UsersProjects.USERS_PROJECTS, "fk_USERS_PROJECTS_PROJECTS_1", UsersProjects.USERS_PROJECTS.PROJECT_ID);

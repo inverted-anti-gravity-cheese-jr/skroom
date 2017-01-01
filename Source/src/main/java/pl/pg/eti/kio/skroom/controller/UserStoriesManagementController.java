@@ -63,12 +63,12 @@ public class UserStoriesManagementController {
 		return model;
 	}
 
-	@RequestMapping(value = "editUserStory/", method = RequestMethod.GET)
+	@RequestMapping(value = "viewUserStory/", method = RequestMethod.GET)
 	public ModelAndView editUserStory() {
 		return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(value = "editUserStory/{userStoryId}/", method = RequestMethod.GET)
+	@RequestMapping(value = "viewUserStory/{userStoryId}", method = RequestMethod.GET)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer userStoryId) {
 		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
 
@@ -93,15 +93,15 @@ public class UserStoriesManagementController {
 		return addOrEditUserStory(user, userSettings, null, name, description, priorityString, storyPoints, status, asA, iWantTo, soThat);
 	}
 
-	@RequestMapping(value = "editUserStory/{userStoryId}/", method = RequestMethod.POST)
+	@RequestMapping(value = "editUserStory/{userStoryId}", method = RequestMethod.POST)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-									  @PathVariable Integer userStoryId, @RequestParam String name, @RequestParam String description,
-									  @RequestParam("priority") String priorityString, @RequestParam String storyPoints, @RequestParam String status,
+									  @PathVariable Integer userStoryId, @RequestParam("userStoryName") String name, @RequestParam("userStoryDescription") String description,
+									  @RequestParam("priority") String priorityString, @RequestParam("userStoryPoints") String storyPoints, @RequestParam("userStoryStatus") String status,
 									  @RequestParam("as-a-story") String asA, @RequestParam("i-want-to-story") String iWantTo, @RequestParam("so-that-story") String soThat) {
 		return addOrEditUserStory(user, userSettings, userStoryId, name, description, priorityString, storyPoints, status, asA, iWantTo, soThat);
 	}
 
-	@RequestMapping(value = "removeUserStory/{userStoryId}/", method = RequestMethod.GET)
+	@RequestMapping(value = "removeUserStory/{userStoryId}", method = RequestMethod.GET)
 	public ModelAndView removeUserStory(@ModelAttribute("loggedUser") User user, @PathVariable Integer userStoryId) {
 		if(user == null || user.getId() < 0)
 			return new ModelAndView("redirect:/");
@@ -156,11 +156,13 @@ public class UserStoriesManagementController {
 		else {
 			if(userStoryId == null) {
 				userStoryDao.insertNewUserStory(dbConnection, userStory, userSettings.getRecentProject());
+				return new ModelAndView("redirect:/productbacklog");
 			}
 			else {
 				userStoryDao.updateUserStory(dbConnection, userStory);
+				return new ModelAndView("redirect:/viewUserStory/" + userStoryId);
 			}
-			return new ModelAndView("redirect:/productbacklog");
+			
 		}
 
 		ArrayList<String> availableStoryPoints = StoryPoints.getAvailableDisplayNames();

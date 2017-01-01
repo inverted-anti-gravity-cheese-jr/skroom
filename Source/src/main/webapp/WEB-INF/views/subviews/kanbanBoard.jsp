@@ -10,12 +10,15 @@
     
     <div class="management-bar" style="margin-top: 10px; margin-bottom: 10px;">
         <span class="bar-text">Choose sprint
-            <select>
+            <select id="sprintSelect" onchange="selectSprintInMenu(this);">
             <c:forEach var="sprint" items="${sprintsWithoutLast}">
-                <option>${sprint.name}</option>    
+                <option value="${sprint.id}">${sprint.name}</option>    
             </c:forEach>
-                <option selected="selected">${lastSprint.name}</option>
+                <option value="${lastSprint.id}" selected="selected">${lastSprint.name}</option>
             </select>
+            <script type="text/javascript">
+                reloadSprintForm("sprintSelect");
+            </script>
         </span>
     </div>
 

@@ -1,14 +1,10 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dba.tables.TaskStatuses;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
-
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+
+import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
+import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 
 /**
  * Task model class to manage in app.
@@ -23,8 +19,10 @@ public class Task {
 	private User assignee;
 	private TaskStatus status;
 	private Project project;
+	private UserStory userStory;
 	private String color;
 	private String description;
+	private Sprint sprint;
 	private int estimatedTime;
 
 	public int getId() {
@@ -91,18 +89,27 @@ public class Task {
 		this.project = project;
 	}
 
+	public UserStory getUserStory() {
+		return userStory;
+	}
+
+	public void setUserStory(UserStory userStory) {
+		this.userStory = userStory;
+	}
+	
+	public Sprint getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
+	}
+
 	@Override
 	public String toString() {
-		return "Task{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", assignee=" + assignee +
-				", status=" + status +
-				", project=" + project +
-				", color='" + color + '\'' +
-				", description='" + description + '\'' +
-				", estimatedTime=" + estimatedTime +
-				'}';
+		return "Task [id=" + id + ", name=" + name + ", assignee=" + assignee + ", status=" + status + ", project="
+				+ project + ", userStory=" + userStory + ", color=" + color + ", description=" + description
+				+ ", sprint=" + sprint + ", estimatedTime=" + estimatedTime + "]";
 	}
 
 	/**
@@ -110,25 +117,46 @@ public class Task {
 	 *
 	 * @param record Database record fetched by jOOQ
 	 * @param user User assigned to this task
+	 * @param sprints 
 	 * @return Converted task
 	 * @throws NoSuchTaskStatusException Thrown if wrong task status supplied (check your database)
 	 */
-	public static Task fromDba(TasksRecord record, User user, Project project, List<TaskStatus> taskStatusesList) throws NoSuchTaskStatusException {
+	public static Task fromDba(TasksRecord record, User user, Project project, List<TaskStatus> taskStatusesList, List<UserStory> userStories, List<Sprint> sprints) throws NoSuchTaskStatusException {
 		Task task = new Task();
 
 		task.setId(record.getId());
 		task.setAssignee(user);
 		task.setName(record.getName());
 		task.setProject(project);
-		Optional<TaskStatus> taskStatus = taskStatusesList.stream()
-				.filter(status -> status.getId() == record.getId())
-				.findFirst();
-		if(taskStatus.isPresent()) {
-			task.setStatus(taskStatus.get());
+		if(record.getTaskStatusId() != null) {
+			Optional<TaskStatus> taskStatus = taskStatusesList.stream()
+					.filter(status -> status.getId() == record.getTaskStatusId())
+					.findAny();
+			
+			if(taskStatus.isPresent()) {
+				task.setStatus(taskStatus.get());
+			}
 		}
+		
 		task.setEstimatedTime(record.getEstimatedTime());
 		task.setDescription(record.getDescription());
 		task.setColor(record.getColor());
+		
+		Optional<UserStory> userStory = userStories.stream()
+				.filter(story -> story.getId() == record.getUserStoryId())
+				.findAny();
+		
+		if(userStory.isPresent()) {
+			task.setUserStory(userStory.get());
+		}
+		
+		Optional<Sprint> sprint = sprints.stream()
+				.filter(sprt -> sprt.getId() == record.getSprintId())
+				.findAny();
+		
+		if(sprint.isPresent()) {
+			task.setSprint(sprint.get());
+		}
 
 		return task;
 	}

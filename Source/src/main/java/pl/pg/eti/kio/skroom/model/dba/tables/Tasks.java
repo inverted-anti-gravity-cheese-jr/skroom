@@ -35,7 +35,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.TasksRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tasks extends TableImpl<TasksRecord> {
 
-    private static final long serialVersionUID = 737022563;
+    private static final long serialVersionUID = 840922220;
 
     /**
      * The reference instance of <code>TASKS</code>
@@ -91,6 +91,16 @@ public class Tasks extends TableImpl<TasksRecord> {
     public final TableField<TasksRecord, Integer> PROJECT_ID = createField("PROJECT_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
+     * The column <code>TASKS.USER_STORY_ID</code>.
+     */
+    public final TableField<TasksRecord, Integer> USER_STORY_ID = createField("USER_STORY_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>TASKS.SPRINT_ID</code>.
+     */
+    public final TableField<TasksRecord, Integer> SPRINT_ID = createField("SPRINT_ID", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
      * Create a <code>TASKS</code> table reference
      */
     public Tasks() {
@@ -141,7 +151,7 @@ public class Tasks extends TableImpl<TasksRecord> {
      */
     @Override
     public List<ForeignKey<TasksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TasksRecord, ?>>asList(Keys.FK_TASKS_USERS_1, Keys.FK_TASKS_TASK_STATUSES_1, Keys.FK_TASKS_PROJECTS_1);
+        return Arrays.<ForeignKey<TasksRecord, ?>>asList(Keys.FK_TASKS_USERS_1, Keys.FK_TASKS_TASK_STATUSES_1, Keys.FK_TASKS_PROJECTS_1, Keys.FK_TASKS_USER_STORIES_1, Keys.FK_TASKS_SPRINTS_1);
     }
 
     /**

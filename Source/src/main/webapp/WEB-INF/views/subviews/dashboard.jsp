@@ -16,14 +16,14 @@
 	<h2>What do you want to do?</h2>
 	<a href="addTask" class="btn btn-sm btn-accent">Create task</a>
 	<button class="btn btn-sm btn-accent">Create issue</button>
-	<button class="btn btn-sm btn-accent">View tasks</button>
+	<a href="kanban" class="btn btn-sm btn-accent">View tasks</a>
 	<h2>Tasks assigned to you</h2>
 	<div class="dashboard-task-list">
 		<ul>
 			<c:if test="${not empty list}">
 				<c:forEach var="task" items="${list}">
 					<c:if test="${ (task.assignee.name eq loggedUser.name) and (task.status != 'COMPLETED')}">
-						<li>${task.name}</li>
+						<li><a href="viewTask/${task.id}">${task.name}</a></li>
 					</c:if>
 				</c:forEach>
 			</c:if>

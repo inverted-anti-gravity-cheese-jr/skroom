@@ -53,11 +53,11 @@
         
     </div>
     
-    <form class="skroom-form user-story-form" method="post">
+    <form class="skroom-form user-story-form" action="../editUserStory/${userStory.id}" method="post">
         <div class="management-bar">
             <input type="submit" class="btn" value="Save changes" />
             <button type="button" class="btn" onclick="switchViews(false)">Cancel</button>
-            <a href="../../removeUserStory/${userStory.id}/" class="btn red pull-right">Delete</a>
+            <a href="../removeUserStory/${userStory.id}" class="btn red pull-right">Delete</a>
         </div>
 
         </c:when>
@@ -70,7 +70,7 @@
         </c:otherwise>
     </c:choose>
 
-        <input name="name" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />  
+        <input name="userStoryName" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />  
         <div class="input-group">
           <span class="input-group-addon">As A</span>
           <input name="as-a-story" type="text" class="form-control" placeholder="user" value="${userStory.asA}" />
@@ -79,17 +79,17 @@
           <span class="input-group-addon">so that</span>
           <input name="so-that-story" type="text" class="form-control" placeholder="some reason" value="${userStory.soThat}" />
         </div>
-        <textarea name="description" class="form-control" placeholder="Description">${userStory.description}</textarea> 
+        <textarea name="userStoryDescription" class="form-control" placeholder="Description">${userStory.description}</textarea> 
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">P</span>
           <input name="priority" type="text" class="form-control" placeholder="Priority" value="${userStory.priority}" />
         </div>
-        <select id="story-points-select" name="storyPoints" class="form-control">
+        <select id="story-points-select" name="userStoryPoints" class="form-control">
             <c:forEach var="sp" items="${availableStoryPoints}">
                 <option>${sp}</option>
             </c:forEach>
         </select>
-        <select id="user-story-status-select" name="status" class="form-control">
+        <select id="user-story-status-select" name="userStoryStatus" class="form-control">
             <c:forEach var="ss" items="${availableStoryStatuses}">
                 <option>${ss.name}</option>
             </c:forEach>
