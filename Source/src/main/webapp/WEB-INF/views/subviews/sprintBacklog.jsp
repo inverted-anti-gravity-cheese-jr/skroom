@@ -29,6 +29,15 @@
         <c:if test="${not empty showNewButton}">
         <a href="addTask" class="btn green">Add task</a>
         </c:if>
+        <span class="bar-text">Tasks per page</span>
+        <select id="productBacklogUserStoriesUpp" name="upp" onchange="saveTasksPerPage(this.value)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
     </div>
     
     <table class="table">
