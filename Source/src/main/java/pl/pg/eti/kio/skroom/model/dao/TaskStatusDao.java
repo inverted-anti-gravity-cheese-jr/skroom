@@ -82,6 +82,14 @@ public class TaskStatusDao {
 		return deletedRows > 0;
 	}
 
+	public boolean removeById(Connection connection, int tsId) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int deletedRows = query.deleteFrom(TASK_STATUSES).where(TASK_STATUSES.ID.eq(tsId)).execute();
+
+		return deletedRows > 0;
+	}
+
 	public boolean createTaskStatus(Connection connection, TaskStatus taskStatus) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
@@ -92,5 +100,38 @@ public class TaskStatusDao {
 						taskStatus.getProject().getId()).execute();
 
 		return insertedRows == 1;
+	}
+
+	public boolean updateTaskStatuses(Connection connection, List<TaskStatus> taskStatuses) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		try {
+			query.transaction( t -> {
+				for (TaskStatus taskStatus : taskStatuses) {
+					DSLContext nquery = DSL.using(t);
+					int results;
+					if(taskStatus.getId() < 0) {
+						results = createTaskStatus(connection, taskStatus) ? 1 : 0;
+					}
+					else {
+						results = nquery.update(TASK_STATUSES)
+								.set(TASK_STATUSES.NAME, taskStatus.getName())
+								.set(TASK_STATUSES.STAYS_IN_SPRINT, taskStatus.isStaysInSprint() ? 1 : 0)
+								.set(TASK_STATUSES.PROJECT_ID, taskStatus.getProject().getId())
+								.where(TASK_STATUSES.ID.eq(taskStatus.getId()))
+								.execute();
+					}
+					if(results < 1) {
+						throw new Exception("Rollback on value " + taskStatus.toString());
+					}
+				}
+			});
+		}
+		catch (Exception e) {
+			// rollback
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

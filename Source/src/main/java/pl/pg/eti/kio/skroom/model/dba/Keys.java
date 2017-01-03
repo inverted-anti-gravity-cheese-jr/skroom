@@ -55,6 +55,7 @@ public class Keys {
 
     public static final Identity<ProjectsRecord, Integer> IDENTITY_PROJECTS = Identities0.IDENTITY_PROJECTS;
     public static final Identity<SprintsRecord, Integer> IDENTITY_SPRINTS = Identities0.IDENTITY_SPRINTS;
+    public static final Identity<TasksRecord, Integer> IDENTITY_TASKS = Identities0.IDENTITY_TASKS;
     public static final Identity<TaskStatusesRecord, Integer> IDENTITY_TASK_STATUSES = Identities0.IDENTITY_TASK_STATUSES;
     public static final Identity<UsersRecord, Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
     public static final Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = Identities0.IDENTITY_USERS_PROJECTS;
@@ -107,6 +108,7 @@ public class Keys {
     private static class Identities0 extends AbstractKeys {
         public static Identity<ProjectsRecord, Integer> IDENTITY_PROJECTS = createIdentity(Projects.PROJECTS, Projects.PROJECTS.ID);
         public static Identity<SprintsRecord, Integer> IDENTITY_SPRINTS = createIdentity(Sprints.SPRINTS, Sprints.SPRINTS.ID);
+        public static Identity<TasksRecord, Integer> IDENTITY_TASKS = createIdentity(Tasks.TASKS, Tasks.TASKS.ID);
         public static Identity<TaskStatusesRecord, Integer> IDENTITY_TASK_STATUSES = createIdentity(TaskStatuses.TASK_STATUSES, TaskStatuses.TASK_STATUSES.ID);
         public static Identity<UsersRecord, Integer> IDENTITY_USERS = createIdentity(Users.USERS, Users.USERS.ID);
         public static Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = createIdentity(UsersProjects.USERS_PROJECTS, UsersProjects.USERS_PROJECTS.ID);

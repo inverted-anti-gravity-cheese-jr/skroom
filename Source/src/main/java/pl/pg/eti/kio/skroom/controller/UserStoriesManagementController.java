@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import pl.pg.eti.kio.skroom.PlainTextUtil;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.UserStory;
@@ -17,6 +18,7 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
 import static pl.pg.eti.kio.skroom.controller.Views.USER_STORY_FORM_JSP_LOCATION;
 
 /**
@@ -116,7 +118,7 @@ public class UserStoriesManagementController {
 			return new ModelAndView("redirect:/");
 		}
 		String errorMessage = null;
-		description = description.replace("\r", "").replace("\n", "<br />");
+		description = description.replace(WINDOWS_ENDLINE_STRING, UNIX_ENDLINE_STRING).replace(PLAIN_TEXT_ENDLINE_STRING, HTML_ENDLINE_STRING);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 

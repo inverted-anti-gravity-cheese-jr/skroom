@@ -1,8 +1,6 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import javafx.scene.control.Tab;
 import org.jooq.DSLContext;
-import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;

@@ -41,9 +41,10 @@
 </div>
 -->
 
-<table id="taskBoard">
+<table id="taskBoard" class="striped">
 	<thead>
 		<tr>
+		    <th id="columnUserStories">User Stories</th>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 				<th id="column${taskColumn.id}">${taskColumn.name}</th>
 			</c:forEach>
@@ -51,14 +52,20 @@
 	</thead>
 	<tbody>
 		<tr>
+		    <td>
+		        User Story
+		    </td>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 			<td class="canDrop">
+				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
 				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
 			</td>
 			</c:forEach>
 		</tr>
-		
 		<tr>
+		    <td>
+                User Story
+            </td>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 			<td class="canDrop">
 				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
@@ -69,59 +76,50 @@
 </table>
 
 <script>
-	function fitView(container) {
+    var container = $("#taskBoard");
+	//fitView(container);
+	makeTaskItemsDraggable(container);
+	makeTaskColumnsDroppable(container);
+
+    function makeTaskItemsDraggable(container) {
+        container.find(".taskItem.data-canDrag").each( function() {
+            $(this).draggable({
+                helper : "clone",
+                revert: "invalid",
+                opacity: 0.5,
+                cursor: "move",
+                containment : container,
+            });
+        });
+    }
+
+    function makeTaskColumnsDroppable(container) {
+        container.find(".canDrop").each(function() {
+            $(this).droppable({
+                accept: ".taskItem",
+                hoverClass: "ui-drop-hover",
+                drop: function(event, ui) {
+                    var item = ui.draggable;
+                    console.log(item);
+                    var dropped = $(ui.draggable);
+                    var droppedTrParent = $(event.target);
+                    console.log(droppedTrParent);
+                    var index = $(this).index();
+                    dropped.detach();
+                    droppedTrParent.append(dropped);
+                }
+            });
+        });
+    }
+
+	/*function fitView(container) {
 		var fullWidth = 0;
 		$(".kanban-column").each(function() {
 			fullWidth += $(this).outerWidth( true );
 		});
 		container.css('min-width', fullWidth + 5);
 	}
-	
-	function makeTaskItemsDraggable(container) {
-		
-
-		$('.taskItem.canDrag').each( function() {
-			$(this).draggable({
-				helper : "clone",
-				zIndex : 100,
-				revert: "invalid",
-				opacity: 0.5,
-				containment : container
-			});
-		});
-	}
-
-	function makeTaskItemStatusDroppable(container) {
-		container.find(".canDrop").each(function() {
-			$(this).droppable({
-				accept: ".taskItem",
-				drop: function(event, ui) {
-					var dropped = $(ui.draggable);
-					var droppedTrParent = dropped.closest("tr");
-					var index = $(this).index();
-					dropped.detach();
-					droppedTrParent.find("td:eq("+index+")").append(dropped);
-				}
-			});
-		});
-		
-		/*
-		
-		container.find("td.dragDrop").each(function() {
-			var acceptItem = $(".taskItem").not($(this).find(".taskItem"));
-			$(this).droppable({
-				accept : acceptItem,
-				cursor : 'auto',
-				drop : function(event, ui) {
-					var item = ui.draggable;
-					var newTaskStatus = $(this).attr("id");
-					console.log("Update task");
-					//handleTaskUpdate(item, newTaskStatus);
-				}
-			});
-		});
-		*/
-	}
+	*/
 
 	/*
 	function handleTaskUpdate(item, newTaskStatus) {
@@ -148,11 +146,6 @@
 		return false;
 	}
 	*/
-
-	var container = $("#taskBoard");
-	fitView(container);
-	makeTaskItemsDraggable(container);
-	makeTaskItemStatusDroppable(container);
 </script>
 
 </t:index>
