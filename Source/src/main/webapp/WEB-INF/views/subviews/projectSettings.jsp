@@ -11,6 +11,7 @@
         <c:otherwise>
             <c:if test="${projectIsEditable}">
                 <jsp:include page="forms/projectForm.jsp"></jsp:include>
+                <jsp:include page="projectUsersList.jsp"></jsp:include>
             </c:if>
         </c:otherwise>
     </c:choose>

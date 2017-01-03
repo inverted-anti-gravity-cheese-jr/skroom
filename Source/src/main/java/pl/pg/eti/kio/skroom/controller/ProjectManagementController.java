@@ -1,6 +1,11 @@
 package pl.pg.eti.kio.skroom.controller;
 
 import java.sql.Connection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,14 +18,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
-import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.*;
+import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
@@ -33,6 +32,9 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 @SessionAttributes({"loggedUser", "userSettings"})
 public class ProjectManagementController {
 
+	private static final String ADDING_USER_PROJECT_NO_SUCH_USER = "User does not exist";
+	private static final String ADDING_USER_PROJECT_USER_ALREADY_IN_PROJECT = "User already in project";
+
 	@Autowired private ProjectDao projectDao;
 	@Autowired private SprintDao sprintDao;
 	@Autowired private UserDao userDao;
@@ -40,6 +42,8 @@ public class ProjectManagementController {
 	@Autowired private UserStoryDao userStoryDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
+	@Autowired private UserProjectDao userProjectDao;
+	@Autowired private UserRolesInProjectDao userRolesInProjectDao;
 
 	@ModelAttribute("loggedUser")
 	public User defaultNullUser() {
@@ -106,6 +110,7 @@ public class ProjectManagementController {
         modelAndView.addObject("project", userSettings.getRecentProject());
         modelAndView.addObject("submitButtonText", "Update Project");
         modelAndView.addObject("createProject", "false");
+		modelAndView.addObject("projectUsers", userProjectDao.listAllUsersForProject(dbConnection, userSettings.getRecentProject().getId()));
 		return modelAndView;
 	}
 
@@ -134,6 +139,76 @@ public class ProjectManagementController {
 
         return new ModelAndView("redirect:/");
     }
+
+	@RequestMapping(value = "/settings/{projectId}/", method = RequestMethod.GET)
+	public ModelAndView addUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int projectId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		List<UserRolesInProject> allRoles = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
+
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Add Project User", userSettings.getRecentProject(), user, request);
+
+		modelAndView.addObject("availableUserProjectRoles", allRoles);
+		modelAndView.addObject("userHasAllRoles", false);
+		modelAndView.addObject("availableProjectUsers", userProjectDao.availableUsersForProject(dbConnection, projectId));
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/settings/{projectId}/", method = RequestMethod.POST)
+	public ModelAndView addUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int projectId, @RequestParam String projectUserName, @RequestParam String userRoleInProject) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		User projectUser = userDao.fetchByName(dbConnection, projectUserName);
+		UserRolesInProject role = userRolesInProjectDao.fetchByName(dbConnection, userRoleInProject);
+
+		List<String> errors = new ArrayList<>();
+		if (projectUser == null) {
+			errors.add(ADDING_USER_PROJECT_NO_SUCH_USER);
+		} else if (userProjectDao.checkIfUserIsAlreadyInProject(dbConnection, projectUser, projectId)) {
+			errors.add(ADDING_USER_PROJECT_USER_ALREADY_IN_PROJECT);
+		}
+		if (!errors.isEmpty()) {
+			ModelAndView modelAndView = addUserProject(user, userSettings, projectId);
+			modelAndView.addObject("lastSelectedRole", role.getRole());
+			modelAndView.addObject("lastUserName", projectUserName);
+			modelAndView.addObject("UserProjectErrors", errors);
+			return modelAndView;
+		}
+		userProjectDao.add(dbConnection, projectUser.getId(), projectId, role.getId());
+		return new ModelAndView(MessageFormat.format("redirect:/settings/{0}/{1}/", projectId, projectUser.getId()));
+	}
+
+	@RequestMapping(value = "/settings/{projectId}/{userId}", method = RequestMethod.GET)
+	public ModelAndView showUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		Optional<UserProjectContainer> userProjectContainer = this.userProjectDao.fetchContainerById(dbConnection, projectId, userId);
+		if (!userProjectContainer.isPresent()) {
+			return new ModelAndView(MessageFormat.format("redirect:/settings/{0}/", projectId));
+		}
+		List<UserRolesInProject> userRoles = userProjectContainer.get().getRoles();
+		List<UserRolesInProject> allRoles = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
+
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Project User", userSettings.getRecentProject(), user, request);
+
+		modelAndView.addObject("ProjectUser", userProjectContainer.get());
+		modelAndView.addObject("availableUserProjectRoles", getUserAvailableRolesForProject(userRoles, allRoles));
+		modelAndView.addObject("userHasAllRoles", allRoles.size() == userRoles.size());
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/settings/{projectId}/{userId}", method = RequestMethod.POST)
+	public ModelAndView showUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId, @RequestParam String userRoleInProject) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		UserRolesInProject newRole = userRolesInProjectDao.fetchByName(dbConnection, userRoleInProject);
+		userProjectDao.add(dbConnection, userId, projectId, newRole.getId());
+		return new ModelAndView(MessageFormat.format("redirect:/settings/{0}/{1}/", projectId, userId));
+	}
+
+	private List<UserRolesInProject> getUserAvailableRolesForProject(List<UserRolesInProject> userProjectContainer, List<UserRolesInProject> allRoles) {
+		List<Integer> userRolesIds = userProjectContainer.stream().map(UserRolesInProject::getId).collect(Collectors.toList());
+		return allRoles.stream().filter(x -> !userRolesIds.contains(x.getId())).collect(Collectors.toList());
+	}
 
 	@RequestMapping(value = "/removeProject/{projectId}")
 	public ModelAndView removeProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer projectId) {
