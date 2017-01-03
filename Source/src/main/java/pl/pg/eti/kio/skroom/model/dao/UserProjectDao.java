@@ -111,4 +111,27 @@ public class UserProjectDao {
 
         return !records.isEmpty();
     }
+
+    public boolean deleteUserFromProject(Connection connection, int userId, int projectId) {
+        DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+        int deletedRows = query.delete(USERS_PROJECTS)
+                .where(USERS_PROJECTS.USER_ID.eq(userId))
+                .and(USERS_PROJECTS.PROJECT_ID.eq(projectId))
+                .execute();
+
+        return deletedRows > 0;
+    }
+
+    public boolean deleteUserFromProject(Connection connection, int userId, int projectId, int roleId) {
+        DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+        int deletedRows = query.delete(USERS_PROJECTS)
+                .where(USERS_PROJECTS.USER_ID.eq(userId))
+                .and(USERS_PROJECTS.PROJECT_ID.eq(projectId))
+                .and(USERS_PROJECTS.USER_ROLE_ID.eq(roleId))
+                .execute();
+
+        return deletedRows > 0;
+    }
 }

@@ -175,6 +175,10 @@ public class ProjectManagementController {
 	@RequestMapping(value = "/settings/{projectId}/", method = RequestMethod.GET)
 	public ModelAndView addUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int projectId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
+
 		List<UserRolesInProject> allRoles = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
 
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Add Project User", userSettings.getRecentProject(), user, request);
@@ -188,6 +192,9 @@ public class ProjectManagementController {
 	@RequestMapping(value = "/settings/{projectId}/", method = RequestMethod.POST)
 	public ModelAndView addUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int projectId, @RequestParam String projectUserName, @RequestParam String userRoleInProject) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
 
 		User projectUser = userDao.fetchByName(dbConnection, projectUserName);
 		UserRolesInProject role = userRolesInProjectDao.fetchByName(dbConnection, userRoleInProject);
@@ -212,6 +219,9 @@ public class ProjectManagementController {
 	@RequestMapping(value = "/settings/{projectId}/{userId}", method = RequestMethod.GET)
 	public ModelAndView showUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
 
 		Optional<UserProjectContainer> userProjectContainer = this.userProjectDao.fetchContainerById(dbConnection, projectId, userId);
 		if (!userProjectContainer.isPresent()) {
@@ -231,9 +241,33 @@ public class ProjectManagementController {
 	@RequestMapping(value = "/settings/{projectId}/{userId}", method = RequestMethod.POST)
 	public ModelAndView showUserProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId, @RequestParam String userRoleInProject) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
+
 
 		UserRolesInProject newRole = userRolesInProjectDao.fetchByName(dbConnection, userRoleInProject);
 		userProjectDao.add(dbConnection, userId, projectId, newRole.getId());
+		return new ModelAndView(MessageFormat.format("redirect:/settings/{0}/{1}/", projectId, userId));
+	}
+
+	@RequestMapping(value = "/settings/{projectId}/{userId}/removeUserFromProject/")
+	public ModelAndView removeUserFromProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
+		userProjectDao.deleteUserFromProject(dbConnection, userId, projectId);
+		return new ModelAndView("redirect:/settings/");
+	}
+
+	@RequestMapping(value = "/settings/{projectId}/{userId}/removeUserFromProject/{roleId}/")
+	public ModelAndView removeUserFromProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable int userId, @PathVariable int projectId, @PathVariable int roleId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if (!projectDao.checkUserEditPermissionsForProject(dbConnection, projectId, user)) {
+			return new ModelAndView("redirect:/");
+		}
+		userProjectDao.deleteUserFromProject(dbConnection, userId, projectId, roleId);
 		return new ModelAndView(MessageFormat.format("redirect:/settings/{0}/{1}/", projectId, userId));
 	}
 

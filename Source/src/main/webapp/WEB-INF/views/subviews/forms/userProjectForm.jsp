@@ -1,5 +1,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <t:index>
 
@@ -33,6 +34,7 @@
                 <button class="btn" type="button" onclick="switchAddRole(true)">Add role</button>
             </c:if>
             <a href="../../" class="btn" >Back</a>
+            <a href="removeUserFromProject/" class="red btn pull-right">Delete</a>
         </div>
 
         <div class="panel panel-info">
@@ -47,7 +49,12 @@
             <div class="panel-heading">Roles</div>
             <div class="panel-body">
                 <c:forEach items="${ProjectUser.roles}" var="role">
-                    <span style="color: ${role.color};">${role.role}</span> <br />
+                    <div>
+                        <span style="color: ${role.color};">${role.role}</span>
+                        <c:if test="${fn:length(ProjectUser.roles) > 1}">
+                            <a href="removeUserFromProject/${role.id}/" class="link-notarget"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </c:if>
+                    </div>
                 </c:forEach>
             </div>
         </div>
