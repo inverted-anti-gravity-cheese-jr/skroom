@@ -8,7 +8,7 @@
 </div>
 <div class="signup-form-part-2">
 	<h3>E-mail address</h3>
-	<input type="text" name="email" />
+	<input type="email" name="email" />
 	<h3>Security question</h3>
 	<input type="text" name="question" />
 	<h3>Security question answer</h3>

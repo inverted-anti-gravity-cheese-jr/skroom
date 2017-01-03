@@ -91,22 +91,18 @@ public class MainController {
 
 	@RequestMapping(value = "/productbacklog", method = RequestMethod.GET)
 	public ModelAndView showProductBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-										   @RequestParam(value = "p", required = false) String pageString) {
+										   @RequestParam(value = "p", required = false) Integer page) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
 		}
 
-		int userStoriesPerPage = userSettings.getUserStoriesPerPage(), page=0;
-		try {
-			if(userStoriesPerPage < 1) {
-				userStoriesPerPage = 10;
-			}
-			if(pageString != null && !pageString.isEmpty()) {
-				page = Integer.parseInt(pageString);
-			}
+		int userStoriesPerPage = userSettings.getUserStoriesPerPage();
+		if(page == null) {
+			page = 0;
 		}
-		catch (Exception e) {
+		if(userStoriesPerPage < 1) {
+			userStoriesPerPage = 10;
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -132,7 +128,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/sprintbacklog", method = RequestMethod.GET)
-	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) String sprintId) {
+	public ModelAndView showSprintBacklog(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) Integer sprintId) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
@@ -151,28 +147,24 @@ public class MainController {
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 		
 		sprints.remove(lastSprint);
-		
-		int spr = lastSprint.getId();
-		try {
-			spr = Integer.parseInt(sprintId);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+
+		if(sprintId == null) {
+			sprintId = lastSprint.getId();
 		}
 
-		if(!userStories.isEmpty() && (sprintId == null || spr == lastSprint.getId())) {
+		if(!userStories.isEmpty() && (sprintId == null || sprintId == lastSprint.getId())) {
 			model.addObject("showNewButton", true);
 		}
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
-		final int sprFin = spr;
+		final int sprFin = sprintId;
 		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
 		model.addObject("tasks", tasksFiltered);
 		return model;
 	}
 
 	@RequestMapping(value = "/kanban", method = RequestMethod.GET)
-	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) String sprintId) {
+	public ModelAndView showKanbanBoard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam(value = "spr", required = false) Integer sprintId) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
@@ -189,19 +181,16 @@ public class MainController {
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 		
 		sprints.remove(lastSprint);
-		
-		int spr = lastSprint.getId();
-		try {
-			spr = Integer.parseInt(sprintId);
+
+		if(sprintId == null) {
+			sprintId = lastSprint.getId();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+
 
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
-		final int sprFin = spr;
+		final int sprFin = sprintId;
 		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
 		model.addObject("tasks", tasksFiltered);
 		model.addObject("taskStatuses", taskStatuses);
@@ -221,14 +210,9 @@ public class MainController {
 
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-												   @RequestParam(value = "upp", required = false) String usersPerPageString, @RequestParam(value = "un", required = false) String userNameFilter) {
-		int usersPerPage = 5;
-		if(usersPerPageString != null) {
-			try {
-				usersPerPage = Integer.parseInt(usersPerPageString);
-			}
-			catch (Exception e) {
-			}
+												   @RequestParam(value = "upp", required = false) Integer usersPerPage, @RequestParam(value = "un", required = false) String userNameFilter) {
+		if(usersPerPage == null || usersPerPage < 1) {
+			usersPerPage = 5;
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();

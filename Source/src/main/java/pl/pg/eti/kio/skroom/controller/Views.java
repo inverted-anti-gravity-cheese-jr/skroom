@@ -21,6 +21,7 @@ class Views {
 
 	static final String USER_STORY_FORM_JSP_LOCATION = "subviews/forms/userStoryForm";
 	static final String TASK_FORM_JSP_LOCATION = "subviews/forms/taskForm";
+	static final String TASK_FULL_TABLE_BODY_JSP_LOCATION = "model/taskFullTable";
 
 	static final String USER_FORM_JSP_LOCATION = "subviews/forms/userEditForm";
 	static final String USERROLEINPROJECT_FORM_JSP_LOCATION = "subviews/forms/userRoleInProjectForm";

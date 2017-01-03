@@ -29,7 +29,7 @@
 				<input type="text" name="name" />
 				<h3>Password</h3>
 				<input type="password" name="password" />
-				<input class="btn btn-sm btn-accent<%if (!canAnonymousCreateAccount) { out.print(" noallow"); } %>" type="submit" />
+				<input class="btn btn-sm btn-accent green<%if (!canAnonymousCreateAccount) { out.print(" noallow"); } %>" type="submit" value="Sign in" />
 			</form>
 
 			<% if (canAnonymousCreateAccount) { %>
