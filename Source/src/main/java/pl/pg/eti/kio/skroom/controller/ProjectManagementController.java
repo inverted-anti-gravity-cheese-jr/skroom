@@ -20,15 +20,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import pl.pg.eti.kio.skroom.PlainTextUtil;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.TaskStatus;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
-import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.*;
+import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
