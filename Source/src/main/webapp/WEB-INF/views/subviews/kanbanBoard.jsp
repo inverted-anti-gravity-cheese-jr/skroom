@@ -96,13 +96,8 @@
     function makeTaskColumnsDroppable(container) {
         container.find(".canDrop").each(function() {
             $(this).droppable({
-                //activeClass: "ui-state-default",
-                //hoverClass: "ui-drop-hover",
-                //accept: ":not(.ui-sortable-helper)",
-                //accept: ".taskItem",
-                //over: function (event, ui) {
-                //    var $this = $(this);
-                //},
+                accept: ".taskItem",
+                hoverClass: "ui-drop-hover",
                 drop: function(event, ui) {
                     var item = ui.draggable;
                     console.log(item);
@@ -115,61 +110,7 @@
                 }
             });
         });
-
-        /*container.find("td.dragDrop").each(function() {
-            var acceptItem = $(".taskItem").not($(this).find(".taskItem"));
-            $(this).droppable({
-                accept : acceptItem,
-                cursor : 'auto',
-                drop : function(event, ui) {
-                    var item = ui.draggable;
-                    var newTaskStatus = $(this).attr("id");
-                    console.log("Update task");
-                    //handleTaskUpdate(item, newTaskStatus);
-                }
-            });
-        });*/
     }
-
-
-
-
-    /*$(function () {
-        $(".taskItem.data-canDrag").draggable(
-        {
-            appendTo: "body",
-            helper: "clone",
-            cursor: "move",
-            revert: "invalid"
-        });
-
-        initDroppable($("#taskBoard td.canDrop"));
-        function initDroppable($elements) {
-            $elements.droppable({
-                activeClass: "ui-state-default",
-                hoverClass: "ui-drop-hover",
-                accept: ":not(.ui-sortable-helper)",
-
-                over: function (event, ui) {
-                    var $this = $(this);
-                },
-                drop: function (event, ui) {
-                    var $this = $(this);
-                    console.log(event);
-                    event.target.appendChild();
-                    //var data = event.dataTransfer.getData("text");
-                    //event.target.appendChild(document.getElementById(data));
-                    //$("<span></span>").text(ui.draggable.text()).appendTo(this);
-                    //$(".taskItem").find(":contains('" + ui.draggable.text() + "')")[0].remove();
-                }
-            });
-        }
-    });*/
-
-
-
-
-
 
 	/*function fitView(container) {
 		var fullWidth = 0;
@@ -178,52 +119,7 @@
 		});
 		container.css('min-width', fullWidth + 5);
 	}
-	
-	function makeTaskItemsDraggable(container) {
-		
-
-		$('.taskItem.canDrag').each( function() {
-			$(this).draggable({
-				helper : "clone",
-				zIndex : 100,
-				revert: "invalid",
-				opacity: 0.5,
-				containment : container
-			});
-		});
-	}
-
-	function makeTaskItemStatusDroppable(container) {
-		container.find(".canDrop").each(function() {
-			$(this).droppable({
-				accept: ".taskItem",
-				drop: function(event, ui) {
-					var dropped = $(ui.draggable);
-					var droppedTrParent = dropped.closest("tr");
-					var index = $(this).index();
-					dropped.detach();
-					droppedTrParent.find("td:eq("+index+")").append(dropped);
-				}
-			});
-		});*/
-		
-		/*
-		
-		container.find("td.dragDrop").each(function() {
-			var acceptItem = $(".taskItem").not($(this).find(".taskItem"));
-			$(this).droppable({
-				accept : acceptItem,
-				cursor : 'auto',
-				drop : function(event, ui) {
-					var item = ui.draggable;
-					var newTaskStatus = $(this).attr("id");
-					console.log("Update task");
-					//handleTaskUpdate(item, newTaskStatus);
-				}
-			});
-		});
-
-	}*/
+	*/
 
 	/*
 	function handleTaskUpdate(item, newTaskStatus) {
@@ -250,11 +146,6 @@
 		return false;
 	}
 	*/
-
-	//var container = $("#taskBoard");
-	//fitView(container);
-	//makeTaskItemsDraggable(container);
-	//makeTaskItemStatusDroppable(container);
 </script>
 
 </t:index>

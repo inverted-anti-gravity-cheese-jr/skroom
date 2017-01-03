@@ -115,3 +115,7 @@
 #taskBoard tr {
     height: 56px;
 }
+
+#taskBoard td.canDrop.ui-drop-hover {
+  background: #dddddd;
+}
