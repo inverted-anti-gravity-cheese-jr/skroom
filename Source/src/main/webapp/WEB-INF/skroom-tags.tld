@@ -44,6 +44,11 @@
         <body-content>empty</body-content>
     </tag>
     <tag>
+        <name>html2plain</name>
+        <tag-class>pl.pg.eti.kio.skroom.tags.HtmlToPlainTag</tag-class>
+        <body-content>JSP</body-content>
+    </tag>
+    <tag>
     	<name>interpolate-color</name>
     	<tag-class>pl.pg.eti.kio.skroom.tags.InterpolateColorTag</tag-class>
     	<bodycontent>empty</bodycontent>

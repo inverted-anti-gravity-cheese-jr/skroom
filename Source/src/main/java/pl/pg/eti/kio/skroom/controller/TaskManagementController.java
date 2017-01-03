@@ -1,10 +1,12 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
 import static pl.pg.eti.kio.skroom.controller.Views.TASK_FORM_JSP_LOCATION;
 
 import java.sql.Connection;
 import java.util.List;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.pg.eti.kio.skroom.PlainTextUtil;
 import pl.pg.eti.kio.skroom.SprintGeneratorService;
 import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
 import pl.pg.eti.kio.skroom.model.Sprint;
@@ -87,6 +90,15 @@ public class TaskManagementController {
 		
 		return new ModelAndView("redirect:/sprintbacklog");
 	}
+
+	@RequestMapping("deleteTaskStatus/{taskStatusId}")
+	public ModelAndView deleteTaskStatus(@PathVariable Integer taskStatusId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		taskStatusDao.removeById(dbConnection, taskStatusId);
+
+		return new ModelAndView("redirect:/settings");
+	}
 	
 	@RequestMapping("viewTask/{taskId}")
 	public ModelAndView viewTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId) {
@@ -155,7 +167,7 @@ public class TaskManagementController {
 		Task task = new Task();
 		task.setName(taskName);
 		task.setColor(taskColor);
-		task.setDescription(taskDescription);
+		task.setDescription(taskDescription.replace(WINDOWS_ENDLINE_STRING, UNIX_ENDLINE_STRING).replace(PLAIN_TEXT_ENDLINE_STRING, HTML_ENDLINE_STRING));
 		task.setEstimatedTime(estimatedTime);
 		task.setProject(userSettings.getRecentProject());
 		if(taskAssignee != null && !taskAssignee.trim().isEmpty()) {
