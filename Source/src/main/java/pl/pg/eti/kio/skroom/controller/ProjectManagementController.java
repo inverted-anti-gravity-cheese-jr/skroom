@@ -1,6 +1,9 @@
 package pl.pg.eti.kio.skroom.controller;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.pg.eti.kio.skroom.PlainTextUtil;
 import pl.pg.eti.kio.skroom.model.Project;
+import pl.pg.eti.kio.skroom.model.TaskStatus;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
@@ -22,6 +27,8 @@ import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+
+import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
 
 /**
  * Main controller for managing projects.
@@ -41,6 +48,21 @@ public class ProjectManagementController {
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
 
+	private static final List<TaskStatus> defaultTaskStatusesMock = Arrays.asList(
+			new TaskStatus() {{
+				setName("To do");
+				setStaysInSprint(false);
+			}},
+			new TaskStatus() {{
+				setName("In progress");
+				setStaysInSprint(false);
+			}},
+			new TaskStatus() {{
+				setName("Done");
+				setStaysInSprint(true);
+			}}
+	);
+
 	@ModelAttribute("loggedUser")
 	public User defaultNullUser() {
 		return new User();
@@ -57,6 +79,7 @@ public class ProjectManagementController {
 
 		modelAndView.addObject("submitButtonText", "Add Project");
 		modelAndView.addObject("createProject", "true");
+		modelAndView.addObject("taskStatuses", defaultTaskStatusesMock);
 
 		return modelAndView;
 	}
@@ -80,7 +103,7 @@ public class ProjectManagementController {
 		Project project = new Project();
 
 		project.setName(projectName);
-		project.setDescription(projectDescription);
+		project.setDescription(projectDescription.replace(WINDOWS_ENDLINE_STRING, UNIX_ENDLINE_STRING).replace(PLAIN_TEXT_ENDLINE_STRING, HTML_ENDLINE_STRING));
 		project.setDefaultSprintLength(sprintLength);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -101,17 +124,35 @@ public class ProjectManagementController {
             return new ModelAndView("redirect:/userSettings");
         }
 
+		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
+
 		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Project Settings", userSettings.getRecentProject(), user, request);
         modelAndView.addObject("projectIsEditable", projectDao.checkUserEditPermissionsForProject(dbConnection, userSettings.getRecentProject(), user));
         modelAndView.addObject("project", userSettings.getRecentProject());
         modelAndView.addObject("submitButtonText", "Update Project");
         modelAndView.addObject("createProject", "false");
+		modelAndView.addObject("taskStatuses", taskStatuses);
+
 		return modelAndView;
 	}
 
     @RequestMapping(value = "/settings", method = RequestMethod.POST)
-    public ModelAndView saveProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @RequestParam("projectName") String name, @RequestParam("projectDescription") String description, @RequestParam("sprint-length") String sprintLengthString) {
+    public ModelAndView saveProjectSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
+											@RequestParam("projectName") String name, @RequestParam("projectDescription") String description,
+											@RequestParam("sprint-length") String sprintLengthString, @RequestParam("tsNameKey[]") Integer[] taskStatusIds,
+											@RequestParam("tsName[]") String[] taskNames, @RequestParam("tsStaysInSprint[]") Integer[] tasksStaysInSprint) {
         Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		List<Integer> taskStatusesThatStaysInSprint = Arrays.asList(tasksStaysInSprint);
+		List<TaskStatus> taskStatuses = new ArrayList<TaskStatus>();
+		for(int i = 0; i < taskStatusIds.length; i++) {
+			TaskStatus taskStatus = new TaskStatus();
+			taskStatus.setId(taskStatusIds[i]);
+			taskStatus.setName(taskNames[i]);
+			taskStatus.setProject(userSettings.getRecentProject());
+			taskStatus.setStaysInSprint(taskStatusesThatStaysInSprint.contains(taskStatusIds[i]));
+			taskStatuses.add(taskStatus);
+		}
 
         Project project = userSettings.getRecentProject();
         if(!projectDao.checkUserEditPermissionsForProject(dbConnection, project, user)) {
@@ -127,12 +168,13 @@ public class ProjectManagementController {
         }
 
         project.setName(name);
-        project.setDescription(description);
+        project.setDescription(description.replace(WINDOWS_ENDLINE_STRING, UNIX_ENDLINE_STRING).replace(PLAIN_TEXT_ENDLINE_STRING, HTML_ENDLINE_STRING));
         project.setDefaultSprintLength(sprintLength);
 
         projectDao.updateProject(dbConnection, project);
+		taskStatusDao.updateTaskStatuses(dbConnection, taskStatuses);
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/settings");
     }
 
 	@RequestMapping(value = "/removeProject/{projectId}")

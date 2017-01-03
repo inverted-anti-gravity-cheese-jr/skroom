@@ -8,24 +8,7 @@
 
     
 <t:index>
-    <c:if test="${not empty task}">
     <script type="text/javascript">
-        var task_taskStatus = "${task.status.name}";
-
-        function switchViews(showEdit) {
-            if(showEdit) {
-                $(".task-body").slideUp(function () {
-                    $(".task-form").slideDown();
-                });
-
-            }
-            else {
-                $(".task-form").slideUp(function () {
-                    $(".task-body").slideDown();
-                });
-            }
-        }
-        
         function updatePreview(part, value) {
             if(part === "color") {
                 $("#kanbanPreview").css("background-color", value);
@@ -42,6 +25,25 @@
             }
             if(part === "name") {
                 $("#kanbanPreviewTaskName").text(value);
+            }
+        }
+    </script>
+    
+    <c:if test="${not empty task}">
+    <script type="text/javascript">
+        var task_taskStatus = "${task.status.name}";
+
+        function switchViews(showEdit) {
+            if(showEdit) {
+                $(".task-body").slideUp(function () {
+                    $(".task-form").slideDown();
+                });
+
+            }
+            else {
+                $(".task-form").slideUp(function () {
+                    $(".task-body").slideDown();
+                });
             }
         }
     </script>
