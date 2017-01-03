@@ -18,10 +18,12 @@
         </c:if>
     </div>
     
+    <label>Project name</label>
     <input name="projectName" placeholder="Project name" value="${project.name}" class="form-control" />
+    <label>Project description</label>
     <textarea name="projectDescription" placeholder="Project description" class="form-control"><s:html2plain>${project.description}</s:html2plain></textarea>
+    <label>Sprint length in weeks</label>
     <div class="input-group">
-        <span class="input-group-addon">Sprint length</span>
         <input name="sprint-length" placeholder="Sprint length" class="form-control" value="${project.defaultSprintLength}" />
         <span class="input-group-addon">[weeks]</span>
     </div>
@@ -44,14 +46,17 @@
         <tbody id="tsTableBody">
             <c:forEach var="taskStatus" items="${taskStatuses}">
             <tr>
-                <td><input type="hidden" name="tsNameKey[]" value="${taskStatus.id}" /><input name="tsName[]" type="text" style="display: none;" value="${taskStatus.name}" /><a <c:if test="${projectIsEditable}">class="tsNameEdit"</c:if> >${taskStatus.name}</a></td>
+                <td><input type="hidden" name="tsNameKey[]" value="${taskStatus.id}" /><input name="tsName[]" type="text" style="display: none;" value="${taskStatus.name}" />
+                <c:if test="${projectIsEditable}"><a class="link-notarget tsNameEdit" >${taskStatus.name}</a></c:if>
+                <c:if test="${createProject}">${taskStatus.name}</c:if></td>
                 <td><input name="tsStaysInSprint[]" value="${taskStatus.id}" type="checkbox" <c:if test="${taskStatus.staysInSprint}">checked</c:if> <c:if test="${createProject}">disabled</c:if> /></td>
-                <td><a href="deleteTaskStatus/${taskStatus.id}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                <td><a onclick="removeTaskStatus(${taskStatus.id}, this);" class="link-notarget"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
             </tr>
             </c:forEach>
         </tbody>
     </table>
-    <a id="addNewTaskStatus">Add new task status</a>
+    <a id="addNewTaskStatus" class="link-notarget">Add new task status</a>
+    <div id="projectFormTaskStatusAlert" class="alert alert-danger" style="margin-top: 5px; display: none;"></div>
 
     <script type="text/javascript">
         function removeNewTaskStatus(obj) {

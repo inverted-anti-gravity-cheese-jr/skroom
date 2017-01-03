@@ -195,6 +195,10 @@ textarea {
     padding: 3px 10px;
 }
 
+.link-notarget {
+	cursor: pointer;
+}
+
 table.striped tr:nth-child(even) {
     background-color: #E9E2D9;
 }

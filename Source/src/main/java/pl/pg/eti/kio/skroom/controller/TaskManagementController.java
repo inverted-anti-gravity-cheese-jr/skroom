@@ -1,38 +1,21 @@
 package pl.pg.eti.kio.skroom.controller;
 
-import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
-import static pl.pg.eti.kio.skroom.controller.Views.TASK_FORM_JSP_LOCATION;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+import pl.pg.eti.kio.skroom.SprintGeneratorService;
+import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
+import pl.pg.eti.kio.skroom.model.*;
+import pl.pg.eti.kio.skroom.model.dao.*;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import java.sql.Connection;
 import java.util.List;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-
-import pl.pg.eti.kio.skroom.PlainTextUtil;
-import pl.pg.eti.kio.skroom.SprintGeneratorService;
-import pl.pg.eti.kio.skroom.exception.NoSuchTaskStatusException;
-import pl.pg.eti.kio.skroom.model.Sprint;
-import pl.pg.eti.kio.skroom.model.Task;
-import pl.pg.eti.kio.skroom.model.TaskStatus;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.UserStory;
-import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
+import static pl.pg.eti.kio.skroom.controller.Views.TASK_FORM_JSP_LOCATION;
 
 /**
  * Main controller for managing tasks in project.

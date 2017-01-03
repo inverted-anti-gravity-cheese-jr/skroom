@@ -1,5 +1,14 @@
 package pl.pg.eti.kio.skroom.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+import pl.pg.eti.kio.skroom.model.*;
+import pl.pg.eti.kio.skroom.model.dao.*;
+import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+
 import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -7,22 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
-
-import pl.pg.eti.kio.skroom.PlainTextUtil;
-import pl.pg.eti.kio.skroom.model.*;
-import pl.pg.eti.kio.skroom.model.dao.*;
-import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
 

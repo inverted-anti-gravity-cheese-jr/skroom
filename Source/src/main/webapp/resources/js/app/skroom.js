@@ -184,3 +184,36 @@ function reloadSprintForm(selectId) {
         searchForOptionInSelectAndCheckIfEquals(document.getElementById(selectId).children, takeGETParamValue("spr"));
     }
 }
+
+/**
+ * Remove selected task status and remove caller from table.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 03.01.17
+ */
+function removeTaskStatus(taskStatusId, caller) {
+    $("#projectFormTaskStatusAlert").fadeOut();
+    $.ajax({
+        type : "POST",
+        url : "rest/taskStatus/removeTaskStatus",
+        data: {"taskStatusId": taskStatusId},
+        complete : function(res) {
+            if( res.responseText === "OK" ) {
+                $(caller).closest("tr").remove();
+            }
+            if( res.responseText === "TASKS" ) {
+                var cont = $("#projectFormTaskStatusAlert");
+                cont.html("<b>Tasks have this status!</b> Cannot remove this status because some tasks still have this status.");
+                cont.fadeIn(300);
+            }
+            if( res.responseText === "ERROR" ) {
+                var cont = $("#projectFormTaskStatusAlert");
+                cont.html("<b>Error while deleting this status!</b> Cannot remove this status, try again later.");
+                cont.fadeIn(300);
+            }
+        }
+    });
+    
+    
+    
+}

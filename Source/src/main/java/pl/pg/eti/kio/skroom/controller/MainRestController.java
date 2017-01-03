@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.dao.TaskDao;
+import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
@@ -27,9 +28,15 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 @SessionAttributes({"userSettings"})
 public class MainRestController {
 
+	private static final String TASKS_PENDING_ERROR_STATUS = "TASKS";
+	private static final String OK_STATUS = "OK";
+	private static final String ERROR_STATUS = "ERROR";
+
+
 	@Autowired private TaskDao taskDao;
 	@Autowired private UserDao userDao;
 	@Autowired private ProjectDao projectDao;
+	@Autowired private TaskStatusDao taskStatusDao;
 
 	@RequestMapping(value = "/task/update", method = RequestMethod.POST)
 	public void reloadTask(@RequestParam("taskId") String taskId, @RequestParam("status") String status) {
@@ -68,6 +75,20 @@ public class MainRestController {
 			taskDao.updateTaskStatus(dbConnection, task.get());
 		}
 		*/
+	}
+
+	@RequestMapping(value = "taskStatus/removeTaskStatus", method = RequestMethod.POST)
+	public String removeTaskStatus(@RequestParam Integer taskStatusId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		if(taskDao.countTasksForStatus(dbConnection, taskStatusId) > 0) {
+			return TASKS_PENDING_ERROR_STATUS;
+		}
+
+		if(taskStatusDao.removeById(dbConnection, taskStatusId)) {
+			return OK_STATUS;
+		}
+		return ERROR_STATUS;
 	}
 
 	@RequestMapping(value="userSettings/userStoriesPerPage", method = RequestMethod.POST)
