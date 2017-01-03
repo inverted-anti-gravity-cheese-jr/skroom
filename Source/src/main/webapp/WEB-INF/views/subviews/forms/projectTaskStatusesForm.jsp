@@ -3,7 +3,7 @@
 
 <h2>Available task statuses</h2>
 <c:if test="${createProject}">
-This statuses are the default statuses for every new project. If you wish to change them go to project settings or kanban board after project creation.
+This is a list of the default statuses for every new project. If you wish to change them go to project settings or kanban board after project creation.
 </c:if>
 <c:if test="${projectIsEditable}">
     <div class="management-bar">

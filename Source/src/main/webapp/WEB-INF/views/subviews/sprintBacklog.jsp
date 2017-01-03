@@ -16,8 +16,11 @@
     
     <h1>Tasks</h1>
     <div class="management-bar">
+        <c:if test="${not empty showNewButton}">
+        <a href="addTask" class="btn green">Add task</a>
+        </c:if>
         <span class="bar-text search-bar"><i class="fa fa-search" aria-hidden="true"></i><input type="text" oninput="filterTasksByName(this.value);" /></span>
-        <span class="bar-text">Choose sprint
+        <span class="bar-text">Sprint
             <select id="sprintSelect" onchange="selectSprintInMenu(this);">
             <c:forEach var="sprint" items="${sprintsWithoutLast}">
                 <option value="${sprint.id}">${sprint.name}</option>    
@@ -28,18 +31,16 @@
                 reloadSprintForm("sprintSelect");
             </script>
         </span>
-        <c:if test="${not empty showNewButton}">
-        <a href="addTask" class="btn green">Add task</a>
-        </c:if>
-        <span class="bar-text">Tasks per page</span>
-        <select id="sprintBacklogTasksPP" name="tpp" onchange="saveTasksPerPage(this.value)">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
+        <span class="bar-text">View
+            <select id="sprintBacklogTasksPP" name="tpp" onchange="saveTasksPerPage(this.value)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </span>
         <button class="btn">Order by <span class="caret"></span></button>
         <script type="text/javascript">
             reloadTpp();
