@@ -41,9 +41,10 @@
 </div>
 -->
 
-<table id="taskBoard">
+<table id="taskBoard" class="striped">
 	<thead>
 		<tr>
+		    <th id="columnUserStories">User Stories</th>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 				<th id="column${taskColumn.id}">${taskColumn.name}</th>
 			</c:forEach>
@@ -51,14 +52,20 @@
 	</thead>
 	<tbody>
 		<tr>
+		    <td>
+		        User Story
+		    </td>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 			<td class="canDrop">
+				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
 				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
 			</td>
 			</c:forEach>
 		</tr>
-		
 		<tr>
+		    <td>
+                User Story
+            </td>
 			<c:forEach var="taskColumn" items="${taskStatuses}">
 			<td class="canDrop">
 				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
@@ -69,7 +76,102 @@
 </table>
 
 <script>
-	function fitView(container) {
+    var container = $("#taskBoard");
+	//fitView(container);
+	makeTaskItemsDraggable(container);
+	makeTaskColumnsDroppable(container);
+
+    function makeTaskItemsDraggable(container) {
+        container.find(".taskItem.data-canDrag").each( function() {
+            $(this).draggable({
+                helper : "clone",
+                revert: "invalid",
+                opacity: 0.5,
+                cursor: "move",
+                containment : container,
+            });
+        });
+    }
+
+    function makeTaskColumnsDroppable(container) {
+        container.find(".canDrop").each(function() {
+            $(this).droppable({
+                //activeClass: "ui-state-default",
+                //hoverClass: "ui-drop-hover",
+                //accept: ":not(.ui-sortable-helper)",
+                //accept: ".taskItem",
+                //over: function (event, ui) {
+                //    var $this = $(this);
+                //},
+                drop: function(event, ui) {
+                    var item = ui.draggable;
+                    console.log(item);
+                    var dropped = $(ui.draggable);
+                    var droppedTrParent = $(event.target);
+                    console.log(droppedTrParent);
+                    var index = $(this).index();
+                    dropped.detach();
+                    droppedTrParent.append(dropped);
+                }
+            });
+        });
+
+        /*container.find("td.dragDrop").each(function() {
+            var acceptItem = $(".taskItem").not($(this).find(".taskItem"));
+            $(this).droppable({
+                accept : acceptItem,
+                cursor : 'auto',
+                drop : function(event, ui) {
+                    var item = ui.draggable;
+                    var newTaskStatus = $(this).attr("id");
+                    console.log("Update task");
+                    //handleTaskUpdate(item, newTaskStatus);
+                }
+            });
+        });*/
+    }
+
+
+
+
+    /*$(function () {
+        $(".taskItem.data-canDrag").draggable(
+        {
+            appendTo: "body",
+            helper: "clone",
+            cursor: "move",
+            revert: "invalid"
+        });
+
+        initDroppable($("#taskBoard td.canDrop"));
+        function initDroppable($elements) {
+            $elements.droppable({
+                activeClass: "ui-state-default",
+                hoverClass: "ui-drop-hover",
+                accept: ":not(.ui-sortable-helper)",
+
+                over: function (event, ui) {
+                    var $this = $(this);
+                },
+                drop: function (event, ui) {
+                    var $this = $(this);
+                    console.log(event);
+                    event.target.appendChild();
+                    //var data = event.dataTransfer.getData("text");
+                    //event.target.appendChild(document.getElementById(data));
+                    //$("<span></span>").text(ui.draggable.text()).appendTo(this);
+                    //$(".taskItem").find(":contains('" + ui.draggable.text() + "')")[0].remove();
+                }
+            });
+        }
+    });*/
+
+
+
+
+
+
+	/*function fitView(container) {
 		var fullWidth = 0;
 		$(".kanban-column").each(function() {
 			fullWidth += $(this).outerWidth( true );
@@ -103,7 +205,7 @@
 					droppedTrParent.find("td:eq("+index+")").append(dropped);
 				}
 			});
-		});
+		});*/
 		
 		/*
 		
@@ -120,8 +222,8 @@
 				}
 			});
 		});
-		*/
-	}
+
+	}*/
 
 	/*
 	function handleTaskUpdate(item, newTaskStatus) {
@@ -149,10 +251,10 @@
 	}
 	*/
 
-	var container = $("#taskBoard");
-	fitView(container);
-	makeTaskItemsDraggable(container);
-	makeTaskItemStatusDroppable(container);
+	//var container = $("#taskBoard");
+	//fitView(container);
+	//makeTaskItemsDraggable(container);
+	//makeTaskItemStatusDroppable(container);
 </script>
 
 </t:index>

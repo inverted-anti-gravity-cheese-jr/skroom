@@ -194,3 +194,20 @@ textarea {
     border-radius: 20px;
     padding: 3px 10px;
 }
+
+table.striped tr:nth-child(even) {
+    background-color: #E9E2D9;
+}
+
+table.striped tr:nth-child(odd) {
+    background-color: #E9E6E0;
+}
+
+table.striped tr {
+    border: 0 solid lightgray;
+    border-bottom-width: 1px;
+}
+
+table.striped {
+    border: 1px solid lightgray;
+}
