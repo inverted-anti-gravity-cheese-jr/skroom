@@ -36,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSettings extends TableImpl<UsersSettingsRecord> {
 
-    private static final long serialVersionUID = 2048783628;
+    private static final long serialVersionUID = -1126024829;
 
     /**
      * The reference instance of <code>USERS_SETTINGS</code>
@@ -70,6 +70,11 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
      * The column <code>USERS_SETTINGS.USER_STORIES_PER_PAGE</code>.
      */
     public final TableField<UsersSettingsRecord, Integer> USER_STORIES_PER_PAGE = createField("USER_STORIES_PER_PAGE", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>USERS_SETTINGS.TASKS_PER_PAGE</code>.
+     */
+    public final TableField<UsersSettingsRecord, Integer> TASKS_PER_PAGE = createField("TASKS_PER_PAGE", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>USERS_SETTINGS</code> table reference
