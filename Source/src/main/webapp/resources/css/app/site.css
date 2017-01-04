@@ -195,12 +195,13 @@ textarea {
     padding: 3px 10px;
 }
 
-table.striped tr:nth-child(even) {
-    background-color: #E9E2D9;
+table.striped tbody tr:nth-child(odd) {
+    background-color: #E9E6E0;
 }
 
-table.striped tr:nth-child(odd) {
-    background-color: #E9E6E0;
+table.striped thead tr,
+table.striped tbody tr:nth-child(even) {
+    background-color: #E9E2D9;
 }
 
 table.striped tr {

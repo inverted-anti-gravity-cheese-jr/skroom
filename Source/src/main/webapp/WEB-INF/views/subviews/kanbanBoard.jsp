@@ -7,7 +7,7 @@
     pageEncoding="UTF-8"%>
 
 <t:index>
-    
+
     <div class="management-bar" style="margin-top: 10px; margin-bottom: 10px;">
         <span class="bar-text">Choose sprint
             <select id="sprintSelect" onchange="selectSprintInMenu(this);">
@@ -77,7 +77,6 @@
 
 <script>
     var container = $("#taskBoard");
-	//fitView(container);
 	makeTaskItemsDraggable(container);
 	makeTaskColumnsDroppable(container);
 
@@ -88,7 +87,7 @@
                 revert: "invalid",
                 opacity: 0.5,
                 cursor: "move",
-                containment : container,
+                containment : $(this).parents('tr'),
             });
         });
     }
@@ -121,8 +120,7 @@
 	}
 	*/
 
-	/*
-	function handleTaskUpdate(item, newTaskStatus) {
+	/*function handleTaskUpdate(item, newTaskStatus) {
 		var taskId = item.find(".taskId").data('taskid');
 		//var taskName = item.find(".taskName").val();
 		//var taskAssignee = item.find(".taskAssignee").val();
@@ -144,8 +142,7 @@
 
 		});
 		return false;
-	}
-	*/
+	}*/
 </script>
 
 </t:index>
