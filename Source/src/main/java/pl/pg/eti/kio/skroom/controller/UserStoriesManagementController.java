@@ -88,8 +88,8 @@ public class UserStoriesManagementController {
 
 	@RequestMapping(value = "addUserStory", method = RequestMethod.POST)
 	public ModelAndView addUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-									  @RequestParam String name, @RequestParam String description, @RequestParam("priority") String priorityString,
-									  @RequestParam String storyPoints, @RequestParam String status,
+									  @RequestParam("userStoryName") String name, @RequestParam("userStoryDescription") String description, @RequestParam("priority") String priorityString,
+									  @RequestParam("userStoryPoints") String storyPoints, @RequestParam("userStoryStatus") String status,
 									 @RequestParam("as-a-story") String asA, @RequestParam("i-want-to-story") String iWantTo, @RequestParam("so-that-story") String soThat) {
 		return addOrEditUserStory(user, userSettings, null, name, description, priorityString, storyPoints, status, asA, iWantTo, soThat);
 	}
