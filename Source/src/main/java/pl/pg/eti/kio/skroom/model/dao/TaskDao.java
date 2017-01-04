@@ -50,7 +50,14 @@ public class TaskDao {
 		query.update(TASKS).set(TASKS.TASK_STATUS_ID, task.getStatus().getId())
 				.where(TASKS.ID.eq(task.getId())).execute();
 	}
-	
+
+	public void updateTaskStatus(Connection connection, Integer taskId, Integer taskStatusId) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		query.update(TASKS).set(TASKS.TASK_STATUS_ID, taskStatusId)
+				.where(TASKS.ID.eq(taskId)).execute();
+	}
+
 	public boolean updateTask(Connection connection, Task task) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 

@@ -79,6 +79,12 @@
                     var index = $(this).index();
                     dropped.detach();
                     droppedTrParent.append(dropped);
+                    var classes = droppedTrParent.attr('class').split(/\s/);
+                    for (var i = 0, len = classes.length; i < len; i++) {
+                        if (/^taskColumn-/.test(classes[i])) {
+                            handleTaskUpdate(item, classes[i].substring(11));
+                        }
+                    }
                 }
             });
         });
@@ -93,7 +99,7 @@
 	}
 	*/
 
-	/*function handleTaskUpdate(item, newTaskStatus) {
+	function handleTaskUpdate(item, newTaskStatusId) {
 		var taskId = item.find(".taskId").data('taskid');
 		//var taskName = item.find(".taskName").val();
 		//var taskAssignee = item.find(".taskAssignee").val();
@@ -101,21 +107,20 @@
 		var serializedItem = {
 			TaskId : taskId,
 		}
-		updateTaskStatus(newTaskStatus, taskId);
+		updateTaskStatus(taskId, newTaskStatusId);
 	}
 
-	function updateTaskStatus(newTaskStatus, taskId) {
+	function updateTaskStatus(taskId, newTaskStatusId) {
 		$.ajax({
 			type : "POST",
-			data : { 'taskId' : taskId, 'status' : newTaskStatus },
+			data : { 'taskId' : taskId, 'statusId' : newTaskStatusId },
 			url : "rest/task/update",
 			complete : function(response) {
-				location.reload();
+				//location.reload();
 			}
 
 		});
-		return false;
-	}*/
+	}
 </script>
 
 </t:index>

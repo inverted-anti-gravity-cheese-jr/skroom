@@ -43,7 +43,9 @@ public class MainRestController {
 	@Autowired private UserStoryDao userStoryDao;
 
 	@RequestMapping(value = "/task/update", method = RequestMethod.POST)
-	public void reloadTask(@RequestParam("taskId") String taskId, @RequestParam("status") String status) {
+	public void reloadTask(@RequestParam("taskId") Integer taskId, @RequestParam("statusId") Integer statusId) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		taskDao.updateTaskStatus(dbConnection, taskId, statusId);
 		/*
 		TaskStatus newStatusEnum = TaskStatus.NOT_STARTED;
 		switch (status) {
