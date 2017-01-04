@@ -20,7 +20,8 @@ INSERT INTO USERS_SETTINGS VALUES (
     NULL, /* autoincremented value */
     1,
     -1,
-    10
+    10,
+    25
 );
 
 /* USER ROLES IN PROJECT */

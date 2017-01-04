@@ -46,6 +46,7 @@ public class UserDao {
 		int updatedRows = query.update(USERS_SETTINGS)
 				.set(USERS_SETTINGS.RECENT_PROJECT_ID, projectId)
 				.set(USERS_SETTINGS.USER_STORIES_PER_PAGE, userSettings.getUserStoriesPerPage())
+				.set(USERS_SETTINGS.TASKS_PER_PAGE, userSettings.getTasksPerPage())
 				.execute();
 
 		return updatedRows > 0;
@@ -299,7 +300,7 @@ public class UserDao {
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
 						userSecurity.getSecureAnswer(), 0).execute();
 
-				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, userId.intValue() + 1, -1, 10).execute();
+				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, userId.intValue() + 1, -1, 10, 25).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1 || usersSettingsCreateRows != 1) {
 					// rollback

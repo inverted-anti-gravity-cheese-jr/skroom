@@ -69,8 +69,9 @@
         </div>
         </c:otherwise>
     </c:choose>
-
-        <input name="userStoryName" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />  
+        <label>Name</label>
+        <input name="userStoryName" type="text" class="form-control" placeholder="User story name" value="${userStory.name}" />
+        <label>User story</label>
         <div class="input-group">
           <span class="input-group-addon">As A</span>
           <input name="as-a-story" type="text" class="form-control" placeholder="user" value="${userStory.asA}" />
@@ -79,16 +80,20 @@
           <span class="input-group-addon">so that</span>
           <input name="so-that-story" type="text" class="form-control" placeholder="some reason" value="${userStory.soThat}" />
         </div>
-        <textarea name="userStoryDescription" class="form-control" placeholder="Description">${userStory.description}</textarea> 
+        <label>Description</label>
+        <textarea name="userStoryDescription" class="form-control" placeholder="Description">${userStory.description}</textarea>
+        <label>Priority</label>
         <div class="input-group">
           <span class="input-group-addon" id="basic-addon1">P</span>
           <input name="priority" type="text" class="form-control" placeholder="Priority" value="${userStory.priority}" />
         </div>
+        <label>Story points</label>
         <select id="story-points-select" name="userStoryPoints" class="form-control">
             <c:forEach var="sp" items="${availableStoryPoints}">
                 <option>${sp}</option>
             </c:forEach>
         </select>
+        <label>Status</label>
         <select id="user-story-status-select" name="userStoryStatus" class="form-control">
             <c:forEach var="ss" items="${availableStoryStatuses}">
                 <option>${ss.name}</option>

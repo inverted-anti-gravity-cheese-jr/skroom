@@ -79,7 +79,7 @@ function reloadEditUserForm(role) {
 }
 
 /**
- * Saves in database how many user stories user wants to display.
+ * Saves in database how many user stories user wants to display per page.
  * 
  * @author Wojciech Stanisławski
  * @since 05.12.16
@@ -89,6 +89,23 @@ function saveUserStoriesPerPage(value) {
         type : "POST",
         data : { 'perPage': value },
         url : "rest/userSettings/userStoriesPerPage",
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}
+
+/**
+ * Saves in database how many tasks user wants to display per page.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 03.01.16
+ */
+function saveTasksPerPage(value) {
+    $.ajax({
+        type : "POST",
+        data : { 'perPage': value },
+        url : "rest/sprintBacklog/tasksPerPage",
         complete : function(response) {
             location.reload();
         }
@@ -183,4 +200,60 @@ function reloadSprintForm(selectId) {
     if(takeGETParamValue("spr") != undefined) {
         searchForOptionInSelectAndCheckIfEquals(document.getElementById(selectId).children, takeGETParamValue("spr"));
     }
+}
+
+/**
+ * Remove selected task status and remove caller from table.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 03.01.17
+ */
+function removeTaskStatus(taskStatusId, caller) {
+    $("#projectFormTaskStatusAlert").fadeOut();
+    $.ajax({
+        type : "POST",
+        url : "rest/taskStatus/removeTaskStatus",
+        data: {"taskStatusId": taskStatusId},
+        complete : function(res) {
+            if( res.responseText === "OK" ) {
+                $(caller).closest("tr").remove();
+            }
+            if( res.responseText === "TASKS" ) {
+                var cont = $("#projectFormTaskStatusAlert");
+                cont.html("<b>Tasks have this status!</b> Cannot remove this status because some tasks still have this status.");
+                cont.fadeIn(300);
+            }
+            if( res.responseText === "ERROR" ) {
+                var cont = $("#projectFormTaskStatusAlert");
+                cont.html("<b>Error while deleting this status!</b> Cannot remove this status, try again later.");
+                cont.fadeIn(300);
+            }
+        }
+    });
+}
+
+/**
+ * Filters tasks by name.
+ * 
+ * @author Wojciech Stanisławski
+ * @since 31.12.16
+ */
+function filterTasksByName(query) {
+    var sprint = takeGETParamValue("spr");
+    if(sprint == undefined) {
+        sprint = $("#sprintSelect").val();
+    }
+    
+    $.ajax({
+        type : "POST",
+        url : "rest/sprintBacklog/taskQuery",
+        data: {"query": query,
+              "sprintId": sprint},
+        complete : function(res) {
+            if(res.status == 200) {
+                var tbody = $("#sprintBacklogTable").find("tbody");
+                tbody.html(res.responseText);
+            }
+        }
+    });     
 }

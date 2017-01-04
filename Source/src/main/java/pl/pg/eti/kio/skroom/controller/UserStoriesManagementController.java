@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import pl.pg.eti.kio.skroom.PlainTextUtil;
 import pl.pg.eti.kio.skroom.model.User;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.UserStory;

@@ -100,6 +100,15 @@
 	}
 }
 
+.login-form .btn.green {
+    background-color: #7bbe41;
+    color: black;
+}
+
+.login-form .btn.green:hover {
+    color: white;
+}
+
 .login-form form {
 	display: inline;
 }

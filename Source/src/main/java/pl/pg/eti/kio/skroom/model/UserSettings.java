@@ -17,6 +17,7 @@ public class UserSettings {
 	private int id;
 	private Project recentProject;
 	private int userStoriesPerPage;
+	private int tasksPerPage;
 
 	public int getId() {
 		return id;
@@ -42,6 +43,14 @@ public class UserSettings {
 		this.userStoriesPerPage = userStoriesPerPage;
 	}
 
+	public int getTasksPerPage() {
+		return tasksPerPage;
+	}
+
+	public void setTasksPerPage(int tasksPerPage) {
+		this.tasksPerPage = tasksPerPage;
+	}
+
 	/**
 	 * Method for converting database records into model classes.
 	 *
@@ -57,6 +66,7 @@ public class UserSettings {
 
 		settings.setId(record.getId());
 		settings.setUserStoriesPerPage(record.getUserStoriesPerPage());
+		settings.setTasksPerPage(record.getTasksPerPage());
 
 		if(record.getRecentProjectId() != null && record.getRecentProjectId().intValue() != -1) {
 			ProjectsRecord projectRecord = query.selectFrom(Tables.PROJECTS).where(Tables.PROJECTS.ID.eq(record.getRecentProjectId().intValue())).fetchOne();
@@ -73,6 +83,7 @@ public class UserSettings {
 				"id=" + id +
 				", recentProject=" + recentProject +
 				", userStoriesPerPage=" + userStoriesPerPage +
+				", tasksPerPage=" + tasksPerPage +
 				'}';
 	}
 }

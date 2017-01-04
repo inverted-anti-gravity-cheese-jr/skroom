@@ -22,7 +22,7 @@
 		<div class="login-form signup-form<%if (request.getAttribute("signupError") != null) { out.print(" withmessage"); }%>">
 			<form action="signup" method="post">
 				<%@include file="/WEB-INF/views/subviews/forms/signupForm.jsp" %>
-				<input class="btn btn-sm btn-accent" type="submit" />
+				<input class="btn btn-sm btn-accent" type="submit" value="Sign up" />
 			</form>
 			<a href="."><button class="btn btn-sm btn-accent">Cancel</button></a>
 			<c:if test="${signupError != null}">

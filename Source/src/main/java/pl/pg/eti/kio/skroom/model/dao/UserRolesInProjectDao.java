@@ -45,6 +45,16 @@ public class UserRolesInProjectDao {
         return UserRolesInProject.fromDba(record);
     }
 
+    public UserRolesInProject fetchByName(Connection connection, String role) {
+        DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+        UserRolesInProjectRecord record = query.selectFrom(USER_ROLES_IN_PROJECT)
+                .where(USER_ROLES_IN_PROJECT.ROLE.like(role))
+                .fetchOne();
+
+        return UserRolesInProject.fromDba(record);
+    }
+
     public boolean update(Connection connection, UserRolesInProject userRolesInProject) {
         DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 

@@ -183,6 +183,18 @@ public class TaskDao {
 		
 		return deletedRows == 1;
 	}
+
+	public int countTasksForStatus(Connection dbConnection, int taskStatusId) {
+		DSLContext query = DSL.using(dbConnection, DatabaseSettings.getCurrentSqlDialect());
+
+		Record1<Integer> count = query.selectCount().from(TASKS).where(TASKS.TASK_STATUS_ID.eq(taskStatusId)).fetchAny();
+
+		if(count == null || count.value1() == null) {
+			return 0;
+		}
+
+		return count.value1().intValue();
+	}
 	
 	/**
 	 * Tuple containing tasks and users

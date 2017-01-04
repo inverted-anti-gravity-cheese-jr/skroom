@@ -47,14 +47,15 @@
         <a href="addUserStory" class="btn green">Add user story</a>
         <button class="btn">Show filters</button>
         <button class="btn">Order by <span class="caret"></span></button>
-        <span class="bar-text">User stories per page</span>
-        <select id="productBacklogUserStoriesUpp" name="upp" onchange="saveUserStoriesPerPage(this.value)">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-        </select>
+        <span class="bar-text">View
+            <select id="productBacklogUserStoriesUpp" name="upp" onchange="saveUserStoriesPerPage(this.value)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+        </span>
     </div>
     
     <table class="table">

@@ -87,20 +87,29 @@
             <input type="submit" class="btn" value="Save" />
         </div>
     </c:if>
+        <label>Task name</label>
         <input name="taskName" type="text" class="form-control" placeholder="Task name" value="${task.name}" oninput="updatePreview('name', this.value);" />  
-        <textarea name="taskDescription" class="form-control" placeholder="Description">${task.description}</textarea> 
+        <label>Task description</label>
+        <textarea name="taskDescription" class="form-control" placeholder="Description"><s:html2plain>${task.description}</s:html2plain></textarea>
+        <label>Assignee</label>
         <input id="taskAssignee" name="taskAssignee" type="text" class="form-control" placeholder="Assignee" value="<c:if test="${not empty task.assignee}">${task.assignee.name} [${task.assignee.email}]</c:if>" onchange="updatePreview('assignee', this.value);" />
+        <label>Kanban sticker color</label>
         <div id="taskColorPicker" class="input-group">
             <input name="taskColor" type="text" class="form-control" placeholder="Color" value="${taskColor}" />
             <span class="input-group-addon"><i></i></span>
         </div>
-        <input name="taskEstimated" type="text" class="form-control" placeholder="Estimated time" value="${task.estimatedTime}" />  
+        <label>Estimated time in hours</label>
+        <div class="input-group">
+            <input name="taskEstimated" type="text" class="form-control" placeholder="Estimated time" value="${task.estimatedTime}" />
+            <span class="input-group-addon">[hours]</span>
+        </div>
+        <label>Task status</label>
         <select id="task-status-select" name="taskStatus" class="form-control">
             <c:forEach var="taskStatus" items="${taskStatuses}">
                 <option>${taskStatus.name}</option>
             </c:forEach>
         </select>
-
+        <label>User story</label>
         <select id="user-story-select" name="userStoryId" class="form-control">
             <c:forEach var="userStory" items="${userStories}">
                 <option value="${userStory.id}">${userStory.name}</option>
