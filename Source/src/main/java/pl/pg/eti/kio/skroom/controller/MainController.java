@@ -192,6 +192,7 @@ public class MainController {
 		model.addObject("lastSprint", lastSprint);
 		final int sprFin = sprintId;
 		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
+		model.addObject("userStories", userStories);
 		model.addObject("tasks", tasksFiltered);
 		model.addObject("taskStatuses", taskStatuses);
 		return model;

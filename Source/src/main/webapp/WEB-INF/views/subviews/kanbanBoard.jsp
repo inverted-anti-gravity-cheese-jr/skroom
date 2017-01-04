@@ -22,25 +22,6 @@
         </span>
     </div>
 
-<!--
-<div id="taskBoard" class="onerow">
-	<c:forEach var="taskColumn" items="${taskStatuses}">
-		<div id="column${taskColumn.id}" class="kanban-column dragDrop">
-		<h3>
-			${taskColumn.name}
-		</h3>
-		<c:if test="${not empty tasks}">
-			<c:forEach var="task" items="${tasks}">
-				<c:if test="${ task.status.id ==  taskColumn.id}">
-					<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				</c:if>
-			</c:forEach>
-		</c:if>
-	</div>
-	</c:forEach>
-</div>
--->
-
 <table id="taskBoard" class="striped">
 	<thead>
 		<tr>
@@ -51,30 +32,24 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-		    <td>
-		        User Story
-		    </td>
-			<c:forEach var="taskColumn" items="${taskStatuses}">
-			<td class="canDrop">
-				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-			</td>
-			</c:forEach>
-		</tr>
-		<tr>
-		    <td>
-                User Story
-            </td>
-			<c:forEach var="taskColumn" items="${taskStatuses}">
-			<td class="canDrop">
-				<%@ include file="/WEB-INF/views/model/taskView.jsp"%>
-			</td>
-			</c:forEach>
-		</tr>
+        <c:forEach var="userStory" items="${userStories}">
+            <tr class="userStory-${userStory.id}">
+                <td>
+                    ${userStory.name}
+                </td>
+                <c:forEach var="taskColumn" items="${taskStatuses}">
+                <td class="canDrop taskColumn-${taskColumn.id}">
+                </td>
+                </c:forEach>
+            </tr>
+        </c:forEach>
 	</tbody>
 </table>
-
+<script>
+<c:forEach var="task" items="${tasks}">
+    $(".userStory-${task.userStory.id} .taskColumn-${task.status.id}").append(<%@ include file="/WEB-INF/views/model/taskView.jsp"%>);
+</c:forEach>
+</script>
 <script>
     var container = $("#taskBoard");
 	makeTaskItemsDraggable(container);
@@ -99,10 +74,8 @@
                 hoverClass: "ui-drop-hover",
                 drop: function(event, ui) {
                     var item = ui.draggable;
-                    console.log(item);
                     var dropped = $(ui.draggable);
                     var droppedTrParent = $(event.target);
-                    console.log(droppedTrParent);
                     var index = $(this).index();
                     dropped.detach();
                     droppedTrParent.append(dropped);

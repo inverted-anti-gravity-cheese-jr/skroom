@@ -99,7 +99,6 @@ public class UserStoryDao {
 		for(UserStoriesRecord record: userStoriesRecords) {
 			list.add(UserStory.fromDba(record, query));
 		}
-
 		return list;
 	}
 
