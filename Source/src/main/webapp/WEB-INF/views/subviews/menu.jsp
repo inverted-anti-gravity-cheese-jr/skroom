@@ -28,20 +28,22 @@
         });
     </script>
 	<hr>
-	<div class="project-name">${selectedProject.name}</div>
-	<ul class="nav nav-sidebar">
-        
-        <s:menuitem href="" fa="fa fa-tachometer" disabled="${not isProjectSelected}">Dashboard</s:menuitem>
-        <s:menuitem href="productbacklog" fa="fa fa-list" disabled="${not isProjectSelected}">Product backlog</s:menuitem>
-		<s:menuitem href="sprintbacklog" fa="fa fa-tasks" disabled="${not isProjectSelected}">Sprint backlog</s:menuitem>
-        <s:menuitem href="kanban" fa="fa fa-sticky-note" disabled="${not isProjectSelected}">Kanban board</s:menuitem>
-        <s:menuitem href="issues" fa="fa fa-fire" disabled="${not isProjectSelected}">Issues</s:menuitem>
-        <s:menuitem href="settings" fa="fa fa-cogs" disabled="${not isProjectSelected}">Project settings</s:menuitem>
-	</ul>
-	<hr>
+    <c:if test="${isProjectSelected}">
+        <div class="project-name">${selectedProject.name}</div>
+        <ul class="nav nav-sidebar">
+
+            <s:menuitem href="" fa="fa fa-tachometer" disabled="${not isProjectSelected}">Dashboard</s:menuitem>
+            <s:menuitem href="productbacklog" fa="fa fa-list" disabled="${not isProjectSelected}">Product backlog</s:menuitem>
+            <s:menuitem href="sprintbacklog" fa="fa fa-tasks" disabled="${not isProjectSelected}">Sprint backlog</s:menuitem>
+            <s:menuitem href="kanban" fa="fa fa-sticky-note" disabled="${not isProjectSelected}">Kanban board</s:menuitem>
+            <s:menuitem href="issues" fa="fa fa-fire" disabled="${not isProjectSelected}">Issues</s:menuitem>
+            <s:menuitem href="settings" fa="fa fa-cogs" disabled="${not canEditThisProject or not isProjectSelected}">Project settings</s:menuitem>
+        </ul>
+        <hr>
+    </c:if>
 	<ul class="nav nav-sidebar">
 
-		<s:menuitem href="userSettings" fa="fa fa-sliders">User settings</s:menuitem>
+		<!-- s:menuitem href="userSettings" fa="fa fa-sliders"    User settings   /s:menuitem -->
         <s:menuitem href="userAdmin" fa="fa fa-users" disabled="${not isAdmin}">User privilages settings</s:menuitem>
 		<s:menuitem href="logout" fa="fa fa-sign-out">Sign out</s:menuitem>
 	</ul>

@@ -10,6 +10,9 @@ import pl.pg.eti.kio.skroom.model.dao.ProjectDao;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
+import java.sql.Connection;
+import java.util.List;
+
 /**
  * Class for injecting default data inside a JSP page based on index
  *
@@ -54,17 +57,22 @@ public class DefaultTemplateDataInjector {
 		if(checkForLogin && (user == null || user.getId() < 0)) {
 			return new ModelAndView(REDIRECT_TO_LOGIN);
 		}
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		ModelAndView modelAndView = new ModelAndView(viewName);
 		modelAndView.addObject("pageTitle", pageTitle);
 		modelAndView.addObject("siteName", request.getDescription(false).substring(4));
 		if(selectedProject != null) {
 			modelAndView.addObject("selectedProject", selectedProject);
+			modelAndView.addObject("canEditThisProject", projectDao.checkUserEditPermissionsForProject(dbConnection, selectedProject, user));
 		}
 		modelAndView.addObject("canCreateProjects", UserRole.ADMIN.equals(user.getRole()) || UserRole.PROJECT_MANAGER.equals(user.getRole()));
 		modelAndView.addObject("isAdmin", UserRole.ADMIN.equals(user.getRole()));
 		modelAndView.addObject("isProjectSelected", selectedProject != null);
 
-		modelAndView.addObject("menuAvailableProjects", projectDao.getProjectsForUser(DatabaseSettings.getDatabaseConnection(), user));
+		List<Project> projectsForUser = projectDao.getProjectsForUser(dbConnection, user);
+
+		modelAndView.addObject("menuAvailableProjects", projectsForUser);
+		modelAndView.addObject("menuAvailableProjectsSize", projectsForUser.size());
 		return modelAndView;
 	}
 

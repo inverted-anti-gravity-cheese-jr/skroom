@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
-import pl.pg.eti.kio.skroom.model.Project;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserSecurity;
-import pl.pg.eti.kio.skroom.model.UserSettings;
+import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
@@ -231,6 +228,14 @@ public class UserDao {
 		}
 
 		return user;
+	}
+
+	public boolean assignToProject(Connection connection, User user, Project project, UserRolesInProject role) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int newRows = query.insertInto(USERS_PROJECTS).values(null, user.getId(), project.getId(), role.getId()).execute();
+
+		return newRows > 0;
 	}
 
 	/**

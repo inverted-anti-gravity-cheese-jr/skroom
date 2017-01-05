@@ -103,6 +103,13 @@ public class ProjectManagementController {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
 		projectDao.addProject(dbConnection, project, taskStatusDao);
+
+		List<UserRolesInProject> userRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
+		if(!userRolesInProjects.isEmpty()) {
+			Optional<UserRolesInProject> superRole = userRolesInProjects.stream().filter(role -> role.isPrivileges()).findAny();
+			UserRolesInProject role = superRole.isPresent() ? superRole.get() : userRolesInProjects.iterator().next();
+			userDao.assignToProject(dbConnection, user, project, role);
+		}
 		sprintDao.createFirstSprint(dbConnection, project, firstSprintName);
 
         userSettings.setRecentProject(project);

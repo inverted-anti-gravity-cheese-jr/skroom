@@ -15,5 +15,4 @@
             </c:if>
         </c:otherwise>
     </c:choose>
-    <jsp:include page="forms/projectTaskStatusesForm.jsp"></jsp:include>
 </t:index>
