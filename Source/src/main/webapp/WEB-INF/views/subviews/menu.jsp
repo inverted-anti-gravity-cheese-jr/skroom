@@ -44,7 +44,7 @@
 	<ul class="nav nav-sidebar">
 
 		<!-- s:menuitem href="userSettings" fa="fa fa-sliders"    User settings   /s:menuitem -->
-        <s:menuitem href="userAdmin" fa="fa fa-users" disabled="${not isAdmin}">User privilages settings</s:menuitem>
+        <s:menuitem href="admin" fa="fa fa-lock" disabled="${not isAdmin}">Admin panel</s:menuitem>
 		<s:menuitem href="logout" fa="fa fa-sign-out">Sign out</s:menuitem>
 	</ul>
 </div>

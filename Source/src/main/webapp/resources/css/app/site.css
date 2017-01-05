@@ -208,6 +208,10 @@ textarea {
     padding: 3px 10px;
 }
 
+.form-control.auto-cont{
+    width: auto;
+}
+
 .link-notarget {
 	cursor: pointer;
 }

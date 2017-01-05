@@ -1,9 +1,12 @@
 package pl.pg.eti.kio.skroom.controller;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jooq.util.derby.sys.Sys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -153,8 +156,6 @@ public class MainRestController {
 	@RequestMapping(value="userSettings/selectProject", method = RequestMethod.POST)
 	public void pickProject(@RequestParam Integer projectId, @ModelAttribute("userSettings") UserSettings userSettings) {
 		Connection connection = DatabaseSettings.getDatabaseConnection();
-		System.out.println("------------------------------------------------------------------------------------------");
-		System.out.println(projectId);
 		try {
 			userSettings.setRecentProject(projectDao.fetchProjectById(connection, projectId));
 
@@ -164,5 +165,21 @@ public class MainRestController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@RequestMapping(value = "admin/changeUserStoryStatuses", method = RequestMethod.POST)
+	public void changeUserStoryStatuses(@RequestParam("usIds[]") Integer[] ids, @RequestParam("usNames[]") String[] names, @RequestParam("usColors[]") String[] colors, @RequestParam("isArchive[]") Integer[] archives) {
+		List<UserStoryStatus> statuses = new ArrayList<>();
+		List<Integer> archivedIds = Arrays.asList(archives);
+		for(int i = 0; i < ids.length; i++) {
+			UserStoryStatus uss = new UserStoryStatus();
+			uss.setId(ids[i]);
+			uss.setName(names[i]);
+			uss.setColor(colors[i]);
+			uss.setArchive(archivedIds.contains(ids[i]));
+			statuses.add(uss);
+		}
+		
+		// TODO: zapis
 	}
 }

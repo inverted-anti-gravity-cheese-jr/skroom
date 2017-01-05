@@ -197,7 +197,7 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) Integer usersPerPage, @RequestParam(value = "un", required = false) String userNameFilter) {
 		if(usersPerPage == null || usersPerPage < 1) {

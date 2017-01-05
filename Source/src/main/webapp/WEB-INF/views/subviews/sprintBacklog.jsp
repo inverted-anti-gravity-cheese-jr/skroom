@@ -65,7 +65,8 @@
         </tbody>
     </table>
     <c:if test="${fn:length(tasks) == 0}">
-        <h4>No existing tasks, <a href="addTask">add one!</a></h4>
+        <h4>No existing tasks<c:if test="${not empty showNewButton}">, <a href="addTask">add one!</a></c:if><c:if test="${empty showNewButton}">.</c:if>
+        </h4>
     </c:if>
 
 </t:index>
