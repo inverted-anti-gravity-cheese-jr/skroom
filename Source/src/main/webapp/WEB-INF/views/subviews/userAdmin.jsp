@@ -15,17 +15,27 @@
 <div class="admin-panel">
     <h1>Users</h1>
 
-    <form method="get"><input name="un" /></form>
-    <form method="get">
-        Users per page
-        <select id="adminPanelUppSelect" name="upp" onchange="this.form.submit()">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-        </select>
-    </form>
+    <div class="management-bar">
+        <span class="bar-text search-bar">
+            <form method="get">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <input name="un" type="text" />
+            </form>
+        </span>
+
+        <span class="bar-text">View
+            <form method="get" style="display: inline;  ">
+                <select id="adminPanelUppSelect" name="upp" onchange="this.form.submit()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </form>
+        </span>
+    </div>
+
     <script type="text/javascript">
     function adminUppPick() {
         var i, upp, url = window.location.toString();
@@ -64,13 +74,13 @@
     </div>
 
     <table class="table">
-        <thead><tr><td>Role</td><td>Color</td><td>Privileges</td></tr></thead>
+        <thead><tr><td>Role</td><td>Color</td><td>Can edit project</td></tr></thead>
         <tbody>
             <c:forEach var="userRoleInProject" items="${globalUserRolesInProjects}">
                 <tr>
                     <td><a href="userRoleInProject/${userRoleInProject.id}/">${userRoleInProject.role}</a></td>
-                    <td>${userRoleInProject.color}</td>
-                    <td>${userRoleInProject.privileges}</td>
+                    <td><span style="color: ${userRoleInProject.color};">${userRoleInProject.color}</span></td>
+                    <td>${userRoleInProject.privileges ? 'Yes' : 'No'}</td>
                 </tr>
             </c:forEach>
         </tbody>

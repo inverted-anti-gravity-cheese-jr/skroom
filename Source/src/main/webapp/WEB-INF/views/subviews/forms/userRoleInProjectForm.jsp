@@ -22,6 +22,13 @@
                 });
             }
         }
+
+        function reloadUserRoleInProjectForm(privileges) {
+            if (privileges != undefined) {
+                var select = document.getElementById("select-user-role-in-project-privileges");
+                searchForOptionInSelectAndCheckIfEquals(select.children, privileges);
+            }
+        }
     </script>
 
     <c:choose>
@@ -47,7 +54,7 @@
             <div class="panel-body">
                 <b>Role</b> <span>${userRoleInProject.role}</span> <br />
                 <b>Color</b> <span style="color: ${userRoleInProject.color};">${userRoleInProject.color}</span> <br />
-                <b>Privileges</b> <span>${userRoleInProject.privileges}</span> <br />
+                <b>Can edit project</b> <span>${userRoleInProject.privileges ? 'Yes' : 'No'}</span> <br />
             </div>
         </div>
     </div>
@@ -56,11 +63,28 @@
         <div>
             <div class="management-bar">
                 <input type="submit" class="btn" value="Save" />
-                <button class="btn" type="button" onclick="switchViews(false)">Cancel</button>
+                <c:choose>
+                   <c:when test="${not empty userRoleInProject.id}">
+                       <button class="btn" type="button" onclick="switchViews(false)">Cancel</button>
+                   </c:when>
+                   <c:otherwise>
+                       <a href="../userAdmin" class="btn" >Back</a>
+                   </c:otherwise>
+               </c:choose>
+
             </div>
             <input name="projectRole" type="text" class="form-control" placeholder="Role" value="${userRoleInProjectEdit.role}" />
-            <input name="color" type="text" class="form-control" placeholder="Color" value="${userRoleInProjectEdit.color}" />
-            <input name="privileges" type="text" class="form-control" placeholder="Privileges" value="${userRoleInProjectEdit.privileges}" />
+            <div id="userRoleInProjectColorPicker" class="input-group">
+                <input name="color" type="text" class="form-control" placeholder="Color" value="${userRoleInProjectEdit.color}" />
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Can edit project</span>
+                <select id="select-user-role-in-project-privileges" name="privileges" class="form-control" value="${userRoleInProjectEdit.privileges}">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
         </div>
 
         <c:if test="${not empty userRoleInProjectErrors}">
@@ -78,6 +102,11 @@
             $(".user-role-in-project-view").hide();
             $(".user-role-in-project-edit").show();
         }
+
+        var privileges = "${userRoleInProjectEdit.privileges}";
+        reloadUserRoleInProjectForm(privileges);
+
+        $("#userRoleInProjectColorPicker").colorpicker();
     </script>
 
 </t:index>
