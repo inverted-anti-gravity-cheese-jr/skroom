@@ -27,4 +27,6 @@ class Views {
 	static final String USERROLEINPROJECT_FORM_JSP_LOCATION = "subviews/forms/userRoleInProjectForm";
 
 	static final String USERS_PROJECTS_FORM_JSP_LOCATION = "subviews/forms/userProjectForm";
+
+	static final String PROJECT_ISSUE_FORM_JSP_LOCATION = "subviews/forms/issueForm";
 }

@@ -119,13 +119,10 @@ public class UserRoleInProjectController {
             }
             return new ModelAndView("redirect:/userAdmin");
         } else {
-            UserRolesInProject userRolesInProjectView = userRolesInProjectEdit;
-            if (userRoleInProjectId != null) {
-                userRolesInProjectView = userRolesInProjectDao.fetchById(dbConnection, userRoleInProjectId);
-            }
-
             ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit userRoleInProject", userSettings.getRecentProject(), user, request);
-            model.addObject("userRoleInProject", userRolesInProjectView);
+            if (userRoleInProjectId != null) {
+                model.addObject("userRoleInProject", userRolesInProjectDao.fetchById(dbConnection, userRoleInProjectId));
+            }
             model.addObject("userRoleInProjectEdit", userRolesInProjectEdit);
             model.addObject("userRoleInProjectErrors", errors);
             return model;

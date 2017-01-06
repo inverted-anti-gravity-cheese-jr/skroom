@@ -6,6 +6,7 @@ package pl.pg.eti.kio.skroom.model.dba;
 
 import javax.annotation.Generated;
 
+import pl.pg.eti.kio.skroom.model.dba.tables.Issues;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
@@ -32,6 +33,11 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>ISSUES</code>.
+     */
+    public static final Issues ISSUES = pl.pg.eti.kio.skroom.model.dba.tables.Issues.ISSUES;
 
     /**
      * The table <code>PROJECTS</code>.

@@ -27,9 +27,6 @@
         <div class="management-bar">
             <button class="btn" type="button" onclick="switchViews(true)">Edit</button>
             <a href="../../userAdmin" class="btn" >Back</a>
-            <c:if test="${not editUser.accepted}">
-                <input value="Save and accept" name="user-accept-button" type="submit" class="btn"/>
-            </c:if>
         </div>
 
         <div class="panel panel-info">

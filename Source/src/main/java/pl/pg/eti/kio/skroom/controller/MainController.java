@@ -198,17 +198,6 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = "/issues", method = RequestMethod.GET)
-	public ModelAndView showIssues(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView check = checkSessionAttributes(user, userSettings);
-		if(check != null) {
-			return check;
-		}
-
-		ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues", userSettings.getRecentProject(), user, request);
-		return model;
-	}
-
 	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) Integer usersPerPage, @RequestParam(value = "un", required = false) String userNameFilter) {

@@ -14,6 +14,7 @@ import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
+import pl.pg.eti.kio.skroom.model.dba.tables.Issues;
 import pl.pg.eti.kio.skroom.model.dba.tables.Projects;
 import pl.pg.eti.kio.skroom.model.dba.tables.Sprints;
 import pl.pg.eti.kio.skroom.model.dba.tables.SqliteSequence;
@@ -41,12 +42,17 @@ import pl.pg.eti.kio.skroom.model.dba.tables.UsersSettings;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -1126035416;
+    private static final long serialVersionUID = -1611079139;
 
     /**
      * The reference instance of <code></code>
      */
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
+
+    /**
+     * The table <code>ISSUES</code>.
+     */
+    public final Issues ISSUES = pl.pg.eti.kio.skroom.model.dba.tables.Issues.ISSUES;
 
     /**
      * The table <code>PROJECTS</code>.
@@ -133,6 +139,7 @@ public class DefaultSchema extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            Issues.ISSUES,
             Projects.PROJECTS,
             Sprints.SPRINTS,
             Tasks.TASKS,
