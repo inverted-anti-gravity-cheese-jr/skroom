@@ -105,7 +105,7 @@ public class AccountManagementController {
 			userDao.acceptUser(dbConnection, editUser);
 		}
 
-		return new ModelAndView("redirect:/userAdmin");
+		return new ModelAndView("redirect:/admin");
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

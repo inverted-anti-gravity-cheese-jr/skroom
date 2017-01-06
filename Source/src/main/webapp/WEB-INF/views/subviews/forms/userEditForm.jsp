@@ -26,7 +26,7 @@
     <div class="user-view">
         <div class="management-bar">
             <button class="btn" type="button" onclick="switchViews(true)">Edit</button>
-            <a href="../../userAdmin" class="btn" >Back</a>
+            <a href="../../admin" class="btn" >Back</a>
         </div>
 
         <div class="panel panel-info">

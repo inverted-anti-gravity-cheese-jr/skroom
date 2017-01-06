@@ -117,7 +117,7 @@ public class UserRoleInProjectController {
             } else {
                 userRolesInProjectDao.update(dbConnection, userRolesInProjectEdit);
             }
-            return new ModelAndView("redirect:/userAdmin");
+            return new ModelAndView("redirect:/admin");
         } else {
             ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit userRoleInProject", userSettings.getRecentProject(), user, request);
             if (userRoleInProjectId != null) {
@@ -138,7 +138,7 @@ public class UserRoleInProjectController {
 
         userRolesInProjectDao.remove(dbConnection, userRoleInProjectId);
 
-        return new ModelAndView("redirect:/userAdmin");
+        return new ModelAndView("redirect:/admin");
     }
 
     private List<String> validate(UserRolesInProject userRolesInProject) {

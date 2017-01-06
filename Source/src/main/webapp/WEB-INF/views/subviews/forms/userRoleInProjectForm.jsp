@@ -43,7 +43,7 @@
     <div class="user-role-in-project-view">
         <div class="management-bar">
             <button class="btn" type="button" onclick="switchViews(true)">Edit</button>
-            <a href="../../userAdmin" class="btn" >Back</a>
+            <a href="../../admin" class="btn" >Back</a>
             <c:if test="${not empty userRoleInProject.id}">
                 <a href="../../removeUserRoleInProject/${userRoleInProject.id}/" class="btn red pull-right" >Delete</a>
             </c:if>
@@ -68,7 +68,7 @@
                        <button class="btn" type="button" onclick="switchViews(false)">Cancel</button>
                    </c:when>
                    <c:otherwise>
-                       <a href="../userAdmin" class="btn" >Back</a>
+                       <a href="../admin" class="btn" >Back</a>
                    </c:otherwise>
                </c:choose>
 
