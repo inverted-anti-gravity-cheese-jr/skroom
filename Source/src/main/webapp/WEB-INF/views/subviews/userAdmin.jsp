@@ -85,6 +85,8 @@
             </c:forEach>
         </tbody>
     </table>
+    
+    <jsp:include page="forms/userStoryStatusForm.jsp"></jsp:include>
 
 </div>
 

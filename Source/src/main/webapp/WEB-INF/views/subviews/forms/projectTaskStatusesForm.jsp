@@ -23,7 +23,7 @@ This is a list of the default statuses for every new project. If you wish to cha
     <tbody id="tsTableBody">
         <c:forEach var="taskStatus" items="${taskStatuses}">
         <tr>
-            <td><input type="hidden" name="tsNameKey[]" value="${taskStatus.id}" /><input name="tsName[]" type="text" style="display: none;" value="${taskStatus.name}" />
+            <td><input type="hidden" name="tsNameKey[]" value="${taskStatus.id}" /><input class="form-control auto-cont" name="tsName[]" type="text" style="display: none;" value="${taskStatus.name}" />
             <c:if test="${projectIsEditable}"><a class="link-notarget tsNameEdit" >${taskStatus.name}</a></c:if>
             <c:if test="${createProject}">${taskStatus.name}</c:if></td>
             <td><input name="tsStaysInSprint[]" value="${taskStatus.id}" type="checkbox" <c:if test="${taskStatus.staysInSprint}">checked</c:if> <c:if test="${createProject}">disabled</c:if> /></td>

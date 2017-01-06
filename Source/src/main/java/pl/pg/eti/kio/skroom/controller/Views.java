@@ -14,6 +14,7 @@ class Views {
 	static final String KANBAN_BOARD_FORM_JSP_LOCATION = "subviews/kanbanBoard";
 	static final String USER_ADMIN_FORM_JSP_LOCATION = "subviews/userAdmin";
 	static final String USER_SETTINGS_FORM_JSP_LOCATION = "subviews/userSettings";
+	static final String NO_PROJECT_JSP_LOCATION = "subviews/noProjectSelected";
 	static final String PROJECT_SETTINGS_FORM_JSP_LOCATION = "subviews/projectSettings";
 	static final String PROJECT_ISSUES_FORM_JSP_LOCATION = "subviews/projectIssues";
 	static final String SPRINT_BACKLOG_FORM_JSP_LOCATION = "subviews/sprintBacklog";

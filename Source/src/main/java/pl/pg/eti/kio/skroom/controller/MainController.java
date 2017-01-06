@@ -1,6 +1,7 @@
 package pl.pg.eti.kio.skroom.controller;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,19 +17,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import pl.pg.eti.kio.skroom.model.Sprint;
-import pl.pg.eti.kio.skroom.model.Task;
-import pl.pg.eti.kio.skroom.model.TaskStatus;
-import pl.pg.eti.kio.skroom.model.User;
-import pl.pg.eti.kio.skroom.model.UserRolesInProject;
-import pl.pg.eti.kio.skroom.model.UserSettings;
-import pl.pg.eti.kio.skroom.model.UserStory;
-import pl.pg.eti.kio.skroom.model.dao.SprintDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskDao;
-import pl.pg.eti.kio.skroom.model.dao.TaskStatusDao;
-import pl.pg.eti.kio.skroom.model.dao.UserDao;
-import pl.pg.eti.kio.skroom.model.dao.UserRolesInProjectDao;
-import pl.pg.eti.kio.skroom.model.dao.UserStoryDao;
+import pl.pg.eti.kio.skroom.model.*;
+import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
@@ -47,6 +37,7 @@ public class MainController {
 	@Autowired private UserDao userDao;
 	@Autowired private SprintDao sprintDao;
 	@Autowired private UserStoryDao userStoryDao;
+	@Autowired private UserStoryStatusDao userStoryStatusDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
 	@Autowired private UserRolesInProjectDao userRolesInProjectDao;
@@ -68,9 +59,6 @@ public class MainController {
 
 	@RequestMapping(value = { "/", "/dashboard" }, method = RequestMethod.GET)
 	public ModelAndView showDashboard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		if(userSettings.getRecentProject() == null) {
-			return new ModelAndView("redirect:/addProject");
-		}
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
@@ -190,6 +178,7 @@ public class MainController {
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
+		model.addObject("sprintId", sprintId);
 		final int sprFin = sprintId;
 		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
 		model.addObject("userStories", userStories);
@@ -198,7 +187,7 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = "/userAdmin", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
 												   @RequestParam(value = "upp", required = false) Integer usersPerPage, @RequestParam(value = "un", required = false) String userNameFilter) {
 		if(usersPerPage == null || usersPerPage < 1) {
@@ -214,10 +203,13 @@ public class MainController {
 			return new ModelAndView("redirect:/");
 		}
 
+		ArrayList<UserStoryStatus> userStoryStatuses = userStoryStatusDao.listAllStatuses(dbConnection);
+
 		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
 		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection, userNameFilter);
 		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
+		model.addObject("usStatuses", userStoryStatuses);
 
 		List<UserRolesInProject> allUserRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
 		model.addObject("globalUserRolesInProjects", allUserRolesInProjects);
@@ -230,9 +222,16 @@ public class MainController {
 		return model;
 	}
 
+	@RequestMapping(value = "/selectProject", method = RequestMethod.GET)
+	public ModelAndView noProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+		ModelAndView model = injector.getIndexForSiteName(Views.NO_PROJECT_JSP_LOCATION, "Select project", userSettings.getRecentProject(), user, request);
+
+		return model;
+	}
+
 	private ModelAndView checkSessionAttributes(User user, UserSettings userSettings) {
 		if (userSettings.getRecentProject() == null) {
-			return showUserSettings(user, userSettings);
+			return noProjectForm(user, userSettings);
 		}
 		return null;
 	}

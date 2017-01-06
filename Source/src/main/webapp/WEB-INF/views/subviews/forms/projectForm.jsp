@@ -31,4 +31,5 @@
     <label>Name of a first sprint</label>
     <input name="first-sprint-name" placeholder="Name of a first sprint" value="Sprint 1" class="form-control" />
     </c:if>
+    <jsp:include page="projectTaskStatusesForm.jsp"></jsp:include>
 </form>

@@ -21,39 +21,56 @@
             </script>
         </span>
     </div>
-
-<table id="taskBoard" class="striped">
-	<thead>
-		<tr>
-		    <th id="columnUserStories">User Stories</th>
-			<c:forEach var="taskColumn" items="${taskStatuses}">
-				<th id="column${taskColumn.id}">${taskColumn.name}</th>
-			</c:forEach>
-		</tr>
-	</thead>
-	<tbody>
-        <c:forEach var="userStory" items="${userStories}">
-            <tr class="userStory-${userStory.id}">
-                <td>
-                    ${userStory.name}
-                </td>
-                <c:forEach var="taskColumn" items="${taskStatuses}">
-                <td class="canDrop taskColumn-${taskColumn.id}">
-                </td>
-                </c:forEach>
-            </tr>
-        </c:forEach>
-	</tbody>
-</table>
+<c:choose>
+    <c:when test="${fn:length(userStories) == 0}">
+        <div class="errorInfo">No user stories present. <a href="productbacklog">Add a story</a></div>
+    </c:when>
+    <c:when test="${fn:length(tasks) == 0}">
+        <div class="errorInfo">No tasks in selected sprint. Do you want to <a href="sprintbacklog">create a task</a>?</div>
+    </c:when>
+    <c:otherwise>
+    <table id="taskBoard" class="striped">
+    	<thead>
+    		<tr>
+    		    <th id="columnUserStories">User Stories</th>
+    			<c:forEach var="taskColumn" items="${taskStatuses}">
+    				<th id="column${taskColumn.id}">${taskColumn.name}</th>
+    			</c:forEach>
+    		</tr>
+    	</thead>
+    	<tbody>
+            <c:forEach var="userStory" items="${userStories}">
+                <tr class="userStory-${userStory.id}">
+                    <td class="userStoryTile">
+                        ${userStory.name}
+                    </td>
+                    <c:forEach var="taskColumn" items="${taskStatuses}">
+                    <td class="canDrop taskColumn-${taskColumn.id}">
+                    </td>
+                    </c:forEach>
+                </tr>
+            </c:forEach>
+    	</tbody>
+    </table>
+    </c:otherwise>
+</c:choose>
 <script>
 <c:forEach var="task" items="${tasks}">
     $(".userStory-${task.userStory.id} .taskColumn-${task.status.id}").append(<%@ include file="/WEB-INF/views/model/taskView.jsp"%>);
 </c:forEach>
+    //hide empty userStories
+    $('tbody tr').each(function() {
+        if(!$(this).find(".taskItem").length > 0) {
+            $(this).css('display', 'none');
+        }
+    });
 </script>
 <script>
-    var container = $("#taskBoard");
-	makeTaskItemsDraggable(container);
-	makeTaskColumnsDroppable(container);
+    <c:if test="${sprintId == lastSprint.id}">
+        var container = $("#taskBoard");
+        makeTaskItemsDraggable(container);
+        makeTaskColumnsDroppable(container);
+    </c:if>
 
     function makeTaskItemsDraggable(container) {
         container.find(".taskItem.data-canDrag").each( function() {
