@@ -1,17 +1,21 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
 import static pl.pg.eti.kio.skroom.model.dba.Tables.USER_STORIES;
+import static pl.pg.eti.kio.skroom.model.dba.Tables.USER_STORY_STATUS;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
 import pl.pg.eti.kio.skroom.model.Project;
 import pl.pg.eti.kio.skroom.model.UserStory;
+import pl.pg.eti.kio.skroom.model.UserStoryStatus;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UserStoriesRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
@@ -23,6 +27,46 @@ import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
  */
 @Service
 public class UserStoryDao {
+
+	public int countUserStoriesWithStatus(Connection connection, int userStoryStatusId) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		Record1<Integer> record = query.selectCount().from(USER_STORIES).where(USER_STORIES.STATUS_ID.eq(userStoryStatusId)).fetchAny();
+
+		return record.value1();
+	}
+
+	public boolean removeUserStoryStatusWithId(Connection connection, int userStoryStatusId) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		int removedRows = query.deleteFrom(USER_STORY_STATUS).where(USER_STORY_STATUS.ID.eq(userStoryStatusId)).execute();
+
+		return removedRows > 0;
+	}
+
+	public boolean updateUserStoryStatuses(Connection connection, List<UserStoryStatus> statuses) {
+		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
+
+		boolean success = false;
+
+		for(UserStoryStatus status: statuses) {
+			if(status.getId() < 0) {
+				int inserted = query.insertInto(USER_STORY_STATUS)
+						.values(null, status.getName(), status.getColor(), status.isArchive() ? 1 : 0).execute();
+				success = success && inserted > 0;
+			}
+			else {
+				int updated = query.update(USER_STORY_STATUS)
+						.set(USER_STORY_STATUS.STATUS_NAME, status.getName())
+						.set(USER_STORY_STATUS.COLOR, status.getColor())
+						.set(USER_STORY_STATUS.IS_ARCHIVE, status.isArchive() ? 1 : 0)
+						.where(USER_STORY_STATUS.ID.eq(status.getId())).execute();
+				success = success && updated > 0;
+			}
+		}
+
+		return success;
+	}
 
 	/**
 	 * Removes user story with supplied id from a database.

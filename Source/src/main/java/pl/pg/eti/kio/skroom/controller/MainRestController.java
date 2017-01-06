@@ -3,6 +3,7 @@ package pl.pg.eti.kio.skroom.controller;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dao.*;
+import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 import static pl.pg.eti.kio.skroom.controller.Views.TASK_FULL_TABLE_BODY_JSP_LOCATION;
@@ -30,7 +32,7 @@ import static pl.pg.eti.kio.skroom.controller.Views.TASK_FULL_TABLE_BODY_JSP_LOC
  */
 @RestController
 @RequestMapping("/rest")
-@SessionAttributes({"userSettings"})
+@SessionAttributes({"userSettings", "loggedUser"})
 public class MainRestController {
 
 	private static final String TASKS_PENDING_ERROR_STATUS = "TASKS";
@@ -167,10 +169,27 @@ public class MainRestController {
 		}
 	}
 
+	@RequestMapping(value = "admin/deleteUserStoryStatus", method = RequestMethod.POST)
+	public String deleteUserStoryStatus(@ModelAttribute("loggedUser") User user, @RequestParam("ussId") Integer id) {
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+
+		if(!UserRole.ADMIN.equals(user.getRole())) {
+			return "NOADMIN";
+		}
+		if(userStoryDao.countUserStoriesWithStatus(dbConnection, id) > 0) {
+			return "USER_STORIES_EXIST";
+		}
+		if(userStoryDao.removeUserStoryStatusWithId(dbConnection, id)) {
+			return "OK";
+		}
+
+		return "ERROR";
+	}
+
 	@RequestMapping(value = "admin/changeUserStoryStatuses", method = RequestMethod.POST)
-	public void changeUserStoryStatuses(@RequestParam("usIds[]") Integer[] ids, @RequestParam("usNames[]") String[] names, @RequestParam("usColors[]") String[] colors, @RequestParam("isArchive[]") Integer[] archives) {
+	public String changeUserStoryStatuses(@RequestParam("usIds[]") Integer[] ids, @RequestParam("usNames[]") String[] names, @RequestParam("usColors[]") String[] colors, @RequestParam(value = "isArchive[]", required = false) Integer[] archives) {
 		List<UserStoryStatus> statuses = new ArrayList<>();
-		List<Integer> archivedIds = Arrays.asList(archives);
+		List<Integer> archivedIds = archives != null ? Arrays.asList(archives) : Collections.EMPTY_LIST;
 		for(int i = 0; i < ids.length; i++) {
 			UserStoryStatus uss = new UserStoryStatus();
 			uss.setId(ids[i]);
@@ -179,7 +198,10 @@ public class MainRestController {
 			uss.setArchive(archivedIds.contains(ids[i]));
 			statuses.add(uss);
 		}
-		
-		// TODO: zapis
+		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		if(userStoryDao.updateUserStoryStatuses(dbConnection, statuses)) {
+			return "OK";
+		}
+		return "ERROR";
 	}
 }

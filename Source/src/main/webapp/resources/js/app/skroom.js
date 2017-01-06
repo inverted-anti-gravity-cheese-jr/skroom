@@ -214,16 +214,16 @@ function removeTaskStatus(taskStatusId, caller) {
         type : "POST",
         url : "rest/taskStatus/removeTaskStatus",
         data: {"taskStatusId": taskStatusId},
-        complete : function(res) {
-            if( res.responseText === "OK" ) {
+        success : function(data) {
+            if( data === "OK" ) {
                 $(caller).closest("tr").remove();
             }
-            if( res.responseText === "TASKS" ) {
+            if( data === "TASKS" ) {
                 var cont = $("#projectFormTaskStatusAlert");
                 cont.html("<b>Tasks have this status!</b> Cannot remove this status because some tasks still have this status.");
                 cont.fadeIn(300);
             }
-            if( res.responseText === "ERROR" ) {
+            if( data === "ERROR" ) {
                 var cont = $("#projectFormTaskStatusAlert");
                 cont.html("<b>Error while deleting this status!</b> Cannot remove this status, try again later.");
                 cont.fadeIn(300);
