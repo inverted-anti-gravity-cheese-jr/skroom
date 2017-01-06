@@ -217,6 +217,7 @@ function removeTaskStatus(taskStatusId, caller) {
         success : function(data) {
             if( data === "OK" ) {
                 $(caller).closest("tr").remove();
+                $("#projectFormTaskStatusAlert").fadeOut(300);
             }
             if( data === "TASKS" ) {
                 var cont = $("#projectFormTaskStatusAlert");

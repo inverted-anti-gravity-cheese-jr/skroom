@@ -16,6 +16,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.pg.eti.kio.skroom.PlainTextUtil.*;
+
 /**
  * Created by Marek Czerniawski on 2017-01-06.
  */
@@ -114,7 +116,7 @@ public class IssuesManagmentController {
 
         Issue issue = new Issue();
         issue.setName(issueName);
-        issue.setDescription(issueDescription);
+        issue.setDescription(issueDescription.replace(WINDOWS_ENDLINE_STRING, UNIX_ENDLINE_STRING).replace(PLAIN_TEXT_ENDLINE_STRING, HTML_ENDLINE_STRING));
         issue.setStatus(status);
         issue.setAssignee(assignee);
         issue.setTask(task);

@@ -1,5 +1,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="s" uri="/WEB-INF/skroom-tags.tld"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -46,11 +47,17 @@
             <div class="panel-heading">Details</div>
             <div class="panel-body">
                 <b>Name</b> <span>${projectIssue.name}</span> <br />
-                <b>Description</b> <span>${projectIssue.description}</span> <br />
                 <b>Status</b> <span>${projectIssue.status.name}</span> <br />
                 <b>Assignee</b> <c:if test="${not empty projectIssue.assignee}"> <span>${projectIssue.assignee.name} [${projectIssue.assignee.email}]</span> </c:if> <br />
                 <b>Priority</b> <span>${projectIssue.priority}</span> <br />
-                <b>Task</b> <span>${projectIssue.task.name}</span> <br />
+                <b>Task</b> <span><c:if test="${empty projectIssue.task}">No related tasks</c:if>${projectIssue.task.name}</span> <br />
+            </div>
+        </div>
+        
+        <div class="panel panel-info">
+            <div class="panel-heading">Description</div>
+            <div class="panel-body">
+                ${projectIssue.description}
             </div>
         </div>
     </div>
@@ -69,21 +76,29 @@
                </c:choose>
 
             </div>
+            <label>Issue name</label>
             <input name="issueName" type="text" class="form-control" placeholder="Name" value="${projectIssueEdit.name}" />
-            <input name="issueDescription" type="text" class="form-control" placeholder="Description" value="${projectIssueEdit.description}" />
-            <input name="issueStatus" type="text" class="form-control" placeholder="Status" value="${projectIssueEdit.status.name}" list="statuses" />
-            <datalist id="statuses">
+            <label>Description</label>
+            <textarea name="issueDescription" class="form-control" placeholder="Description"><s:html2plain>${projectIssueEdit.description}</s:html2plain></textarea>
+            <label>Status</label>
+            <select name="issueStatus" class="form-control" >
                 <c:forEach items="${availableIssueStatuses}" var="status">
-                    <option>${status.name}</option>
+                    <option <c:if test="${projectIssueEdit.status.name == status.name}">selected</c:if>>${status.name}</option>
                 </c:forEach>
-            </datalist>
+            </select>
+            <label>Assignee</label>
             <input name="issueAssignee" type="text" class="form-control" placeholder="Assignee" value="${projectIssueEdit.assignee.name}" list="project-users" />
             <datalist id="project-users">
                 <c:forEach items="${availableIssueUsers}" var="user">
                     <option>${user.name}</option>
                 </c:forEach>
             </datalist>
-            <input name="issuePriority" type="text" class="form-control" placeholder="Priority" value="${projectIssueEdit.priority}" />
+            <label>Issue priority</label>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">P</span>
+                <input name="issuePriority" type="text" class="form-control" placeholder="Priority" value="${projectIssueEdit.priority}" />
+            </div>
+            <label>Related task</label>
             <input name="issueTask" type="text" class="form-control" placeholder="Task" value="${projectIssueEdit.task.name}" list="project-tasks" />
             <datalist id="project-tasks">
                 <c:forEach items="${availableIssueTasks}" var="task">

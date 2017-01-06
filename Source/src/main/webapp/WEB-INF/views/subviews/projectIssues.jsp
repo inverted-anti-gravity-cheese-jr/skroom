@@ -14,21 +14,19 @@
     <table class="table">
         <thead><tr>
             <td>Name</td>
-            <td>Description</td>
             <td>Status</td>
             <td>Assignee</td>
             <td>Priority</td>
-            <td>Task</td>
         </tr></thead>
         <tbody>
             <c:forEach items="${projectIssues}" var="issue" >
                 <tr>
                     <td><a href="/skroom/issue/${userSettings.recentProject.id}/${issue.id}/">${issue.name}</a></td>
-                    <td>${issue.description}</td>
                     <td>${issue.status.name}</td>
-                    <td><c:if test="${not empty issue.assignee}">${issue.assignee.name} [${issue.assignee.email}]</c:if></td>
-                    <td>${issue.priority}</td>
-                    <td>${issue.task.name}</td>
+                    <td>
+                        <c:if test="${not empty issue.assignee}"><span class="round-table-label"><s:shorten max="15">${issue.assignee.name}</s:shorten></span></c:if>
+                        <c:if test="${empty issue.assignee}"><span class="round-table-label" style="background-color: #ff9d00;">Unassigned</span></c:if></td>
+                    <td>P${issue.priority}</td>
                 </tr>
             </c:forEach>
         </tbody>

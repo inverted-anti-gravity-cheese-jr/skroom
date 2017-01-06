@@ -51,41 +51,6 @@ public class MainRestController {
 	public void reloadTask(@RequestParam("taskId") Integer taskId, @RequestParam("statusId") Integer statusId) {
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		taskDao.updateTaskStatus(dbConnection, taskId, statusId);
-		/*
-		TaskStatus newStatusEnum = TaskStatus.NOT_STARTED;
-		switch (status) {
-		case "inProgress":
-			newStatusEnum = TaskStatus.IN_PROGRESS;
-			break;
-		case "notStarted":
-			newStatusEnum = TaskStatus.NOT_STARTED;
-			break;
-		case "completed":
-			newStatusEnum = TaskStatus.COMPLETED;
-			break;
-		case "accepted":
-			newStatusEnum = TaskStatus.ACCEPTED;
-			break;
-		case "awaitingReview":
-			newStatusEnum = TaskStatus.AWAITING_REVIEW;
-			break;
-		case "blocked":
-			newStatusEnum = TaskStatus.BLOCKED;
-			break;
-		}
-
-
-		final int taskIdInt = Integer.parseInt(taskId);
-
-		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
-		List<Task> tasks = taskDao.fetchTasks(dbConnection);
-
-		Optional<Task> task = tasks.stream().filter(x -> x.getId() == taskIdInt).findFirst();
-		if (task.isPresent()) {
-			task.get().setStatus(newStatusEnum);
-			taskDao.updateTaskStatus(dbConnection, task.get());
-		}
-		*/
 	}
 
 	@RequestMapping(value = "taskStatus/removeTaskStatus", method = RequestMethod.POST)
