@@ -66,6 +66,9 @@
     });
 </script>
 <script>
+    $("#page-content").css("width", "inherit");
+    $("#page-content").css("min-width", "75%");
+
     <c:if test="${sprintId == lastSprint.id}">
         var container = $("#taskBoard");
         makeTaskItemsDraggable(container);
