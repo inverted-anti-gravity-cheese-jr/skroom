@@ -178,6 +178,7 @@ public class MainController {
 		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
+		model.addObject("sprintId", sprintId);
 		final int sprFin = sprintId;
 		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
 		model.addObject("userStories", userStories);

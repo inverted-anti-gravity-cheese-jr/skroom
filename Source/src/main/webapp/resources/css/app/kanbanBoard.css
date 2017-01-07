@@ -100,12 +100,27 @@
     border-color: rgba(0, 0, 0, 0.3) #E9E6C9;
 }
 
+.taskItem.data-canDrag {
+    cursor: grab;
+}
+
 .taskName {
 	/*background-color: #6F6712;
 	//color: white; */
 	margin: -10px -10px 2px -10px;
 	padding: 2px 10px;
 	font-weight: bold;
+}
+
+.userStoryTile {
+    text-align: center;
+    border: 1px solid lightgray
+}
+
+.errorInfo {
+    text-align: center;
+    margin-top: 20px;
+    display: block;
 }
 
 #taskBoard>div.highlight {
@@ -117,5 +132,9 @@
 }
 
 #taskBoard td.canDrop.ui-drop-hover {
-  background: #dddddd;
+    background: #dddddd;
+}
+
+#page-content {
+    width: inherit;
 }
