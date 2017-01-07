@@ -32,7 +32,7 @@
 @media (min-width: 769px) {
 	.login-form {
 		width: 500px;
-		height: 260px;
+		height: 320px;
 		background-color: #393E51;
 		color: #C2C3CA;
 		padding-left: 50px;
@@ -71,7 +71,7 @@
 	}
 
 	.login-form.withmessage {
-		height: 280px;
+		height: 350px;
 	}
 
 	.login-form.signup-form {
@@ -118,4 +118,13 @@
 	margin-top: 10px;
 	color: #F55;
 	font-size: 9pt;
+}
+
+.login-form .center {
+    text-align: center;
+    width: 100%;
+}
+
+.login-form .center img {
+    display: inline-block;
 }

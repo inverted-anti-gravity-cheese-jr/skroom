@@ -39,14 +39,14 @@ public class AccountManagementController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountManagementController.class);
 
 	// Messages
-	private static final String YOUR_ACCOUNT_MUST_BE_ACCEPTED = "Your account hasn't been accepted yet. Please contact your system administrator.";
+	private static final String YOUR_ACCOUNT_MUST_BE_ACCEPTED = "Your account hasn't been accepted yet. Please contact your administrator.";
 	private static final String WRONG_USERNAME_OR_PASSWORD_MESSAGE = "You entered wrong username or password. Please try again.";
 	private static final String SUCCESSFULLY_CREATED_ACCOUNT = "Thank you, your account has been created successfully.";
 
 	// Redirects
 	private static final String REDIRECT_AFTER_SUCCESSFULL_LOGIN = "redirect:/dashboard";
 	private static final String PASSWORDS_NOT_MATCH = "Passwords not match";
-	private static final String WRONG_EMAIL_FORMAT = "Wrong email format.";
+	private static final String WRONG_EMAIL_FORMAT = "Wrong email format. Use email in format <email>@<domain>.<suffix>";
 
 	@Autowired private UserDao userDao;
 	@Autowired private DefaultTemplateDataInjector injector;

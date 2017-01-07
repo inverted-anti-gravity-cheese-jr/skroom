@@ -16,7 +16,7 @@ import pl.pg.eti.kio.skroom.ResourcesBundlesService;
  */
 public class ResourceBundleTag extends SimpleTagSupport {
 	private static final ResourcesBundlesService bundlesService = new ResourcesBundlesService();
-	private static final String ROOT_PATH = "/skroom/";
+	private static String ROOT_PATH = "/skroom/";
 	
 	private String name;
 
@@ -45,6 +45,10 @@ public class ResourceBundleTag extends SimpleTagSupport {
 				jspWriter.println("<link href=\"" + resource + "\" rel=\"stylesheet\" />");
 			}
 		}
+	}
+
+	public static void changeRootPath(String newRoot) {
+		ROOT_PATH = newRoot;
 	}
 
 }

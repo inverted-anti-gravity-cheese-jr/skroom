@@ -26,23 +26,12 @@ dependencies {
 	//compile group: 'log4j', name: 'log4j', version: '1.2.17'
 }
 
-buildscript {
-	repositories {
-		jcenter()
-	}
-
-	dependencies {
-		classpath 'org.akhikhl.gretty:gretty:+'
-	}
-}
-
 task generateClasses(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	main = 'org.jooq.util.GenerationTool'
 	args 'src/main/webapp/WEB-INF/jooq-class-gen.xml'
 }
 
-// Embeded Jetty for testing
 jettyRun {
 	contextPath = "skroom"
 	httpPort = 8080
@@ -51,4 +40,3 @@ jettyRun {
 	scanIntervalSeconds = 5
 }
 
-defaultTasks 'generateClasses jettyRun'

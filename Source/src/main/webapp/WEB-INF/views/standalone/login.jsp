@@ -24,6 +24,7 @@
 	%>
 	<body>
 		<div class="login-form<%if (request.getAttribute("loginError") != null) { out.print(" withmessage"); }%>">
+            <div class="center"><img src="${pageContext.servletContext.contextPath}/resources/img/logo-panel.png" style="margin-left: -58px;" /></div>
 			<form action="login" method="post">
 				<h3>Username or email</h3>
 				<input type="text" name="name" />

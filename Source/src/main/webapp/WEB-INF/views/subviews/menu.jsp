@@ -1,5 +1,5 @@
 <div id="main-menu" class="col-xs-12 col-sm-3 sidebar">
-	<h1>Skroom</h1>
+	<img src="${pageContext.servletContext.contextPath}/resources/img/logo-panel.png" style="margin-top: 10px; margin-bottom: 10px;" />
 	<ul class="nav project-list-container">
 		<li><a><i class="fa fa-ellipsis-h" aria-hidden="true"/></i>Project list</a></li>
 		<ul class="nav project-list">
