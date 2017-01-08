@@ -9,3 +9,13 @@
 .user-role-in-project-edit {
     display: none;
 }
+
+.user-edit .management-bar,
+.user-view .management-bar {
+    margin-bottom: 10px;
+}
+
+.user-role-in-project-view .management-bar,
+.user-role-in-project-edit .management-bar {
+    margin-bottom: 10px;
+}

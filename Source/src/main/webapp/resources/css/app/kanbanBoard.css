@@ -134,3 +134,14 @@
 #taskBoard td.canDrop.ui-drop-hover {
     background: #dddddd;
 }
+
+/*
+ * ISSUES
+ */
+
+ .issue-edit .management-bar {
+    margin-bottom: 5px;
+ }
+ .issue-view .management-bar {
+    margin-bottom: 10px;
+ }

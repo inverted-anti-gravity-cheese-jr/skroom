@@ -120,6 +120,20 @@ public class MainRestController {
 		}
 	}
 
+	@RequestMapping(value="userSettings/usersPerPage", method = RequestMethod.POST)
+	public void changeUsersPerPage(@RequestParam String perPage, @ModelAttribute("userSettings") UserSettings userSettings) {
+		Connection connection = DatabaseSettings.getDatabaseConnection();
+		try {
+			int perPageInt = Integer.parseInt(perPage);
+			userSettings.setUsersPerPage(perPageInt);
+
+			userDao.saveUserSettings(connection, userSettings);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@RequestMapping(value="userSettings/selectProject", method = RequestMethod.POST)
 	public void pickProject(@RequestParam Integer projectId, @ModelAttribute("userSettings") UserSettings userSettings) {
 		Connection connection = DatabaseSettings.getDatabaseConnection();

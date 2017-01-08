@@ -1,9 +1,13 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <t:index>
+
+<spring:url value="/resources/css/app/adminPanel.css" var="adminCss" />
+<link href="${adminCss}" rel="stylesheet" />
 
     <script type="text/javascript">
         function switchViews(showEdit) {

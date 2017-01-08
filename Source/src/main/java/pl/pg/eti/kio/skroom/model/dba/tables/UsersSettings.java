@@ -11,7 +11,6 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +35,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSettings extends TableImpl<UsersSettingsRecord> {
 
-    private static final long serialVersionUID = -1126024829;
+    private static final long serialVersionUID = -1116472558;
 
     /**
      * The reference instance of <code>USERS_SETTINGS</code>
@@ -77,6 +76,11 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
     public final TableField<UsersSettingsRecord, Integer> TASKS_PER_PAGE = createField("TASKS_PER_PAGE", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
+     * The column <code>USERS_SETTINGS.USERS_PER_PAGE</code>.
+     */
+    public final TableField<UsersSettingsRecord, Integer> USERS_PER_PAGE = createField("USERS_PER_PAGE", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
      * Create a <code>USERS_SETTINGS</code> table reference
      */
     public UsersSettings() {
@@ -104,14 +108,6 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Identity<UsersSettingsRecord, Integer> getIdentity() {
-        return Keys.IDENTITY_USERS_SETTINGS;
     }
 
     /**

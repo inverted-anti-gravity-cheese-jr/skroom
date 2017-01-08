@@ -95,6 +95,24 @@ function saveUserStoriesPerPage(value) {
     });
 }
 
+
+/**
+ * Saves in database how many users user wants to display per page.
+ *
+ * @author Marek Czerniawski
+ * @since 08.01.17
+ */
+function saveUsersPerPage(value) {
+    $.ajax({
+        type : "POST",
+        data : { 'perPage': value },
+        url : "rest/userSettings/usersPerPage",
+        complete : function(response) {
+            location.reload();
+        }
+    });
+}
+
 /**
  * Saves in database how many tasks user wants to display per page.
  * 

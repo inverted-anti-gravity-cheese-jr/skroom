@@ -44,6 +44,8 @@ public class UserDao {
 				.set(USERS_SETTINGS.RECENT_PROJECT_ID, projectId)
 				.set(USERS_SETTINGS.USER_STORIES_PER_PAGE, userSettings.getUserStoriesPerPage())
 				.set(USERS_SETTINGS.TASKS_PER_PAGE, userSettings.getTasksPerPage())
+				.set(USERS_SETTINGS.USERS_PER_PAGE, userSettings.getUsersPerPage())
+
 				.execute();
 
 		return updatedRows > 0;

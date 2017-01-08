@@ -19,36 +19,27 @@
         <span class="bar-text search-bar">
             <form method="get">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                <input name="un" type="text" />
+                <input name="un" type="text" placeholder="Username"/>
             </form>
         </span>
 
         <span class="bar-text">View
-            <form method="get" style="display: inline;  ">
-                <select id="adminPanelUppSelect" name="upp" onchange="this.form.submit()">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
-            </form>
+
+            <select id="adminPanelUppSelect" name="upp" onchange="saveUsersPerPage(this.value)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+
         </span>
     </div>
 
     <script type="text/javascript">
     function adminUppPick() {
-        var i, upp, url = window.location.toString();
-        upp = document.getElementById("adminPanelUppSelect");
-        for(i = 0; i < upp.children.length; i++) {
-            var option = upp.children[i];
-            if(option.getAttribute("value") == "5") {
-                continue;
-            }
-            if(url.search("upp="+option.getAttribute("value")) != -1) {
-                option.setAttribute("selected", "true");  
-            }
-        }
+        var us = document.getElementById("adminPanelUppSelect");
+        searchForOptionInSelectAndCheckIfEquals(us.children, ${userSettings.usersPerPage});
     }
         
     adminUppPick();
@@ -66,6 +57,14 @@
             </c:forEach>
         </tbody>
     </table>
+
+    <c:if test="${pages > 0}">
+        <div class="btn-group" role="group">
+        <c:forEach var="page" begin="0" end="${pages}">
+            <a href="?p=${page}" class="btn btn-default">${page + 1}</a>
+        </c:forEach>
+        </div>
+    </c:if>
 
     <h1>Projects roles</h1>
 

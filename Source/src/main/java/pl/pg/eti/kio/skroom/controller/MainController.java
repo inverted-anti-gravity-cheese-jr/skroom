@@ -208,9 +208,14 @@ public class MainController {
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView showUserPrivilagesSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings,
-												   @RequestParam(value = "upp", required = false) Integer usersPerPage, @RequestParam(value = "un", required = false) String userNameFilter) {
-		if(usersPerPage == null || usersPerPage < 1) {
+												   @RequestParam(value = "un", required = false) String userNameFilter, @RequestParam(value = "p", required = false) Integer page) {
+		int usersPerPage = userSettings.getUsersPerPage();
+		if(usersPerPage < 1) {
 			usersPerPage = 5;
+		}
+
+		if (page == null) {
+			page = 0;
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
@@ -227,8 +232,12 @@ public class MainController {
 		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
 		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection, userNameFilter);
-		model.addObject("globalUsers", allUsers.subList(0, Math.min(allUsers.size(), usersPerPage)));
+
+		PaginationHelper pagination = new PaginationHelper(allUsers.size(), usersPerPage, page);
+
+		model.addObject("globalUsers", pagination.slice(allUsers));
 		model.addObject("usStatuses", userStoryStatuses);
+		model.addObject("pages", pagination.numberOfPages());
 
 		List<UserRolesInProject> allUserRolesInProjects = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
 		model.addObject("globalUserRolesInProjects", allUserRolesInProjects);
@@ -254,4 +263,39 @@ public class MainController {
 		}
 		return null;
 	}
+
+	private static class PaginationHelper {
+		private int itemsCount;
+		private int itemsPerPage;
+		private int currentPage;
+
+		private PaginationHelper(int itemsCount, int itemsPerPage, int currentPage) {
+			this.itemsCount = itemsCount;
+			this.itemsPerPage = itemsPerPage;
+			this.currentPage = currentPage;
+		}
+
+		public boolean fit() {
+			return itemsPerPage > itemsCount;
+		}
+
+		public int numberOfPages() {
+			return itemsCount / itemsPerPage;
+		}
+
+		public <E> List<E> slice(List<E> list) {
+			return list.subList(startIndex(), endIndex());
+		}
+
+
+		public int startIndex() {
+			return Math.min(itemsCount - 1, currentPage * itemsPerPage);
+		}
+
+		public int endIndex() {
+			return Math.min(itemsCount, (currentPage + 1) * itemsPerPage);
+		}
+
+	}
+
 }

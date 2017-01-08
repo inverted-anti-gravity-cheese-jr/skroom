@@ -21,7 +21,8 @@ INSERT INTO USERS_SETTINGS VALUES (
     1,
     -1,
     10,
-    25
+    25,
+    5
 );
 
 /* USER ROLES IN PROJECT */
