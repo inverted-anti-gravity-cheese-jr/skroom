@@ -105,7 +105,7 @@ public class TaskDao {
 				// find user in the list with supplied ID
 				User user = null;
 				if(taskRecord.getAssignee() != null) {
-					user = records.usersRecordsList.stream().findAny().filter(x -> x.getId() == taskRecord.getAssignee()).get();
+					user = records.usersRecordsList.stream().filter(x -> x.getId() == taskRecord.getAssignee()).findAny().get();
 				}
 				Task task = Task.fromDba(taskRecord, user, project, taskStatuses, userStories, sprints);
 				records.tasksRecordList.add(task);

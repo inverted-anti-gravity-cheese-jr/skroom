@@ -45,7 +45,7 @@ This is a list of the default statuses for every new project. If you wish to cha
         var body = $("#tsTableBody");
         var tabSize = body.children("tr").length;
         var elem = $("<tr>" +
-                     '<td><input type="hidden" name="tsNameKey[]" value="-' + tabSize.toString() + '" /><input name="tsName[]" type="text" value="" /></td>' +
+                     '<td><input type="hidden" name="tsNameKey[]" value="-' + tabSize.toString() + '" /><input class="form-control auto-cont" name="tsName[]" type="text" value="" /></td>' +
                      '<td><input name="tsStaysInSprint[]" value="-' + tabSize.toString() + '" type="checkbox" /></td>' +
                      '<td><a onclick="removeNewTaskStatus(this);"><i class="fa fa-trash" aria-hidden="true"></i></a></td>' +
                      "</tr>");

@@ -7,12 +7,16 @@
                 <c:choose>
                     <c:when test="${ selectedProject.id eq project.id }">
                         <li>
-                            <a class="project-link" href="javascript:selectProject(${project.id})"><i class="fa fa-sticky-note" aria-hidden="true"/></i>${project.name}</a>
+                            <a class="project-link" href="javascript:selectProject(${project.id})"><i class="fa fa-sticky-note" aria-hidden="true"/></i>
+															<s:shorten max="28">${project.name}</s:shorten>
+														</a>
                         </li>
                     </c:when>
                     <c:otherwise>
                         <li>
-                            <a class="project-link" href="javascript:selectProject(${project.id})"><i class="fa fa-sticky-note-o" aria-hidden="true"/></i>${project.name}</a>
+                            <a class="project-link" href="javascript:selectProject(${project.id})"><i class="fa fa-sticky-note-o" aria-hidden="true"/></i>
+															<s:shorten max="28">${project.name}</s:shorten>
+														</a>
                         </li>
                     </c:otherwise>
                 </c:choose>
@@ -29,7 +33,7 @@
     </script>
 	<hr>
     <c:if test="${isProjectSelected}">
-        <div class="project-name">${selectedProject.name}</div>
+        <div class="project-name"><s:shorten max="25">${selectedProject.name}</s:shorten></div>
         <ul class="nav nav-sidebar">
 
             <s:menuitem href="" fa="fa fa-tachometer" disabled="${not isProjectSelected}">Dashboard</s:menuitem>

@@ -15,7 +15,7 @@
 	<p class="project-description">${userSettings.recentProject.description}</p>
 	<h2>What do you want to do?</h2>
 	<a href="addTask" class="btn btn-sm btn-accent">Create task</a>
-	<button class="btn btn-sm btn-accent">Create issue</button>
+	<a href="/skroom/issue/${userSettings.recentProject.id}/" class="btn btn-sm btn-accent">Create issue</a>
 	<a href="kanban" class="btn btn-sm btn-accent">View tasks</a>
 	<h2>Tasks assigned to you</h2>
 	<div class="dashboard-task-list">

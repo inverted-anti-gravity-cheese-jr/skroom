@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.pg.eti.kio.skroom.SprintGeneratorService;
 import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
@@ -40,6 +41,7 @@ public class MainController {
 	@Autowired private UserStoryStatusDao userStoryStatusDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest request;
+	@Autowired private SprintGeneratorService generatorService;
 	@Autowired private UserRolesInProjectDao userRolesInProjectDao;
 
 	@PostConstruct
@@ -95,6 +97,11 @@ public class MainController {
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
+		Sprint sprint = sprintDao.findCurrentSprint(dbConnection, userSettings.getRecentProject());
+		if(sprint == null) {
+			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
+		}
+		
 		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", userSettings.getRecentProject(), user, request);
 
 		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
@@ -123,6 +130,12 @@ public class MainController {
 		}
 		
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		Sprint sprint = sprintDao.findCurrentSprint(dbConnection, userSettings.getRecentProject());
+		if(sprint == null) {
+			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
+		}
+		
 		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
 
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
@@ -159,6 +172,12 @@ public class MainController {
 		}
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
+		
+		Sprint sprint = sprintDao.findCurrentSprint(dbConnection, userSettings.getRecentProject());
+		if(sprint == null) {
+			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
+		}
+		
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
 		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
 		
@@ -180,7 +199,7 @@ public class MainController {
 		model.addObject("lastSprint", lastSprint);
 		model.addObject("sprintId", sprintId);
 		final int sprFin = sprintId;
-		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint().getId() == sprFin).collect(Collectors.toList());
+		List<Task> tasksFiltered = taskList.stream().filter(t -> t.getSprint() != null && t.getSprint().getId() == sprFin).collect(Collectors.toList());
 		model.addObject("userStories", userStories);
 		model.addObject("tasks", tasksFiltered);
 		model.addObject("taskStatuses", taskStatuses);
