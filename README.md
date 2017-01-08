@@ -8,7 +8,7 @@ A web-based tool for development in Scrum.
 ## Documentation
 
 Guides on how to use Skroom are located in the
-[docs](https://github.com//inverted-anti-gravity-cheese-jr/skroom/tree/master/docs) directory.
+[wiki](https://github.com//inverted-anti-gravity-cheese-jr/skroom/wiki).
 
 ## Quick Start
 
