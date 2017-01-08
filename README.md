@@ -7,9 +7,8 @@ A web-based tool for development in Scrum.
 
 ## Documentation
 
-Guides and the API reference are located in the
-[docs](https://github.com/electron/electron/tree/master/docs) directory. It also
-contains documents describing how to build and contribute to Electron.
+Guides on how to use Skroom are located in the
+[docs](https://github.com//inverted-anti-gravity-cheese-jr/skroom/tree/master/docs) directory.
 
 ## Quick Start
 
