@@ -11,8 +11,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
+apply plugin: 'spring-boot'
 
 jar {
 	baseName = 'skroom'
@@ -20,7 +19,7 @@ jar {
 
 	from('../../Source/src/main/webapp/WEB-INF/views') {
 			include '**'
-			into 'resources'
+			into 'WEB-INF/jsp'
 	}
 	
 	from('../../Source/src/main/webapp/WEB-INF/views') {
@@ -42,16 +41,8 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-
-	//compile 'ch.qos.logback:logback-classic:1.1.3'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.4.3.RELEASE'
-	compile 'org.springframework:spring-webmvc:4.3.5.RELEASE'
-	compile 'javax.servlet:jstl:1.2'
-	compile 'javax.servlet.jsp:jsp-api:2.2'
-	compile 'org.springframework:spring-web:4.3.5.RELEASE'
-	compile group: 'org.jooq', name: 'jooq', version: '3.8.4'
-	compile group: 'org.jooq', name: 'jooq-meta', version: '3.8.4'
-	compile group: 'org.jooq', name: 'jooq-codegen', version: '3.8.4'
-	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+	compile('javax.servlet:jstl')
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+	compile('org.apache.tomcat.embed:tomcat-embed-jasper')
 	compile project(':skroom')
 }

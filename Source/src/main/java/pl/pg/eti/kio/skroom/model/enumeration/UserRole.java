@@ -2,6 +2,7 @@ package pl.pg.eti.kio.skroom.model.enumeration;
 
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * @author Wojciech Stanisławski
  * @since 21.08.16
  */
-public enum UserRole {
+public enum UserRole implements Serializable {
 	ADMIN(0), PROJECT_MANAGER(1), PEASANT(2);
 
 	private int code;

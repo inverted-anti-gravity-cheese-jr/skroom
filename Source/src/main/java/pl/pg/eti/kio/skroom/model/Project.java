@@ -1,5 +1,7 @@
 package pl.pg.eti.kio.skroom.model;
 
+import java.io.Serializable;
+
 import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
 
 /**
@@ -8,7 +10,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
  * @author Wojciech Stanisławski
  * @since 17.08.16
  */
-public class Project {
+public class Project implements Serializable {
 
 	private int id = -1;
 	private String name;

@@ -5,10 +5,12 @@ import static pl.pg.eti.kio.skroom.controller.Views.SIGNUP_JSP_LOCATION;
 import static pl.pg.eti.kio.skroom.controller.Views.USER_FORM_JSP_LOCATION;
 
 import java.sql.Connection;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -109,7 +111,7 @@ public class AccountManagementController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView tryLoggingIn(@ModelAttribute("loggedUser") User user, @RequestParam String name, @RequestParam String password) {
+	public ModelAndView tryLoggingIn(HttpSession session, @ModelAttribute("loggedUser") User user, @RequestParam String name, @RequestParam String password) {
 		if (!isUserNull(user)) {
 			return new ModelAndView(REDIRECT_AFTER_SUCCESSFULL_LOGIN);
 		}
@@ -131,6 +133,9 @@ public class AccountManagementController {
 			if(settings != null) {
 				model.addObject("userSettings", settings);
 			}
+			session.setAttribute("loggedUser", user);
+			System.out.println(user);
+			
 			return model;
 		}
 		else {
@@ -147,7 +152,9 @@ public class AccountManagementController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView loginScreen(@ModelAttribute("loggedUser") User user) {
+	public ModelAndView loginScreen(HttpSession session, @ModelAttribute("loggedUser") User user) {
+		System.out.println(user);
+		System.out.println("sess: " + session.getAttribute("loggedUser"));
 		if (!isUserNull(user)) {
 			return new ModelAndView(REDIRECT_AFTER_SUCCESSFULL_LOGIN);
 		}

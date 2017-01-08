@@ -1,5 +1,10 @@
 package pl.pg.eti.kio.skroom.model;
 
+import java.io.Serializable;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
@@ -10,7 +15,9 @@ import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
  * @author Wojciech Stanisławski
  * @since 17.08.16
  */
-public class User {
+@Component
+@Scope("session")
+public class User implements Serializable {
 
 	private int id = -1;
 	private String name;
@@ -32,10 +39,6 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		for(StackTraceElement el : stackTrace) {
-			System.out.println(el.getClassName() + "." + el.getMethodName() + " : " + el.getLineNumber());
-		}
 	}
 
 	public String getEmail() {

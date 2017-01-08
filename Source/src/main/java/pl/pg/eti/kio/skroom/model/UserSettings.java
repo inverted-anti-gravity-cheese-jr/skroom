@@ -1,6 +1,10 @@
 package pl.pg.eti.kio.skroom.model;
 
+import java.io.Serializable;
+
 import org.jooq.DSLContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
@@ -12,7 +16,9 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
  * @author Wojciech Stanisławski
  * @since 14.11.16
  */
-public class UserSettings {
+@Component
+@Scope("session")
+public class UserSettings implements Serializable {
 
 	private int id;
 	private Project recentProject;

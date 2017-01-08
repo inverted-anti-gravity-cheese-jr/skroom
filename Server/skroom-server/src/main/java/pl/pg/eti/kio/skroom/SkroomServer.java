@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package sample.jsp;
+package pl.pg.eti.kio.skroom;
 
-import java.util.Date;
-import java.util.Map;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import pl.pg.eti.kio.skroom.tags.ResourceBundleTag;
 
-@Controller
-public class WelcomeController {
-
-	@Value("${application.message:Hello World}")
-	private String message = "Hello World";
-
-	@GetMapping("/")
-	public  String  welcome() {
-		return "welcome";
+@SpringBootApplication
+@EnableJdbcHttpSession
+@ComponentScan("pl.pg.eti.kio.skroom")
+public class SkroomServer {
+	
+	public static void main(String[] args) throws Exception {
+		ResourceBundleTag.changeRootPath("/");
+		SpringApplication.run(SkroomServer.class, args);
 	}
 
 }

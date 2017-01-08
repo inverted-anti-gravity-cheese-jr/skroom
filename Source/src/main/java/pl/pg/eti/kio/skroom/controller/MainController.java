@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,7 +61,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = { "/", "/dashboard" }, method = RequestMethod.GET)
-	public ModelAndView showDashboard(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
+	public ModelAndView showDashboard(HttpSession session, @ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
 		ModelAndView check = checkSessionAttributes(user, userSettings);
 		if(check != null) {
 			return check;
