@@ -289,7 +289,7 @@ public class MainController {
 
 
 		public int startIndex() {
-			return Math.min(itemsCount - 1, currentPage * itemsPerPage);
+			return Math.max(0, Math.min(itemsCount - 1, currentPage * itemsPerPage));
 		}
 
 		public int endIndex() {
