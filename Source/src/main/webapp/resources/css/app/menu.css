@@ -79,3 +79,9 @@
 #main-menu .project-name {
     font-size: 22px;
 }
+
+@media screen and (max-width: 767px) {
+    #main-menu {
+        position: relative;
+    }
+}
