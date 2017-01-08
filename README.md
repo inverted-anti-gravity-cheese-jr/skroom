@@ -3,8 +3,6 @@
 # Skroom
 A web-based tool for development in Scrum.
 
-## Downloads
-
 ## Documentation
 
 Guides on how to use Skroom are located in the
