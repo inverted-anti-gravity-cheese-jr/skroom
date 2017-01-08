@@ -120,15 +120,14 @@ public class UserDao {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
 		List<User> users = new ArrayList<User>();
+		
+		SelectConditionStep<Record1<Integer>> usersInProject = query.selectDistinct(USERS_PROJECTS.USER_ID).from(USERS_PROJECTS).where(USERS_PROJECTS.PROJECT_ID.eq(project.getId()));
 
-		Result<Record> records = query.selectDistinct(USERS.fields()).from(USERS)
-				.join(USERS_PROJECTS).on(USERS.ID.eq(USERS_PROJECTS.PROJECT_ID))
-				.where(USERS_PROJECTS.PROJECT_ID.eq(project.getId())).fetch();
+		Result<UsersRecord> records = query.selectFrom(USERS).where(USERS.ID.in(usersInProject)).fetch();
 
 		try {
-			for (Record record : records) {
-				UsersRecord userRecord = record.into(USERS);
-				users.add(User.fromDba(userRecord));
+			for (UsersRecord record : records) {
+				users.add(User.fromDba(record));
 			}
 		}
 		catch (NoSuchUserRoleException e) {

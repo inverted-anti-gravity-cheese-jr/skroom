@@ -1,18 +1,29 @@
 package pl.pg.eti.kio.skroom;
 
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import java.net.InetSocketAddress;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 import pl.pg.eti.kio.skroom.tags.ResourceBundleTag;
 
-@SpringBootApplication
-@ComponentScan({"pl.pg.eti.kio.skroom", "pl.pg.eti.kio.skroom.controller", "pl.pg.eti.kio.skroom.model"})
 public class SkroomServer {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ResourceBundleTag.changeRootPath("/");
-		SpringApplication.run(SkroomServer.class, args);
+		
+		Server server = new Server(new InetSocketAddress(8080));
+
+		WebAppContext webapp = new WebAppContext();
+	    webapp.setContextPath("/");
+	    webapp.setWar("D:/skroom/Source/build/libs/skroom.war");
+	    webapp.setExtractWAR(true);
+	    server.setHandler(webapp);
+
+        server.start();
+        System.out.println("STARTED SKROOM");
+        System.out.println("Go to http://localhost:8080");
+        server.join();
 	}
 }

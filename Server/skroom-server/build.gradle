@@ -2,19 +2,8 @@
  * by 'wojtek' at '07.01.17 13:56' with Gradle 3.0
  *
  */
- 
- buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
-    }
-}
- 
 
 apply plugin: 'java'
-apply plugin: 'war'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -24,16 +13,24 @@ repositories {
     mavenCentral()
 }
 
+task fatJar(type: Jar) {
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    {
+        exclude "skroom/**"
+        exclude "META-INF/*.SF"
+		exclude "META-INF/*.DSA"
+		exclude "META-INF/*.RSA"
+    }
+    with jar
+    manifest {
+        attributes 'Implementation-Title': 'Skroom', 'Implementation-Version': '0.0.1'
+        attributes 'Main-Class': 'pl.pg.eti.kio.skroom.SkroomServer'
+    }
+}
+
 dependencies {
-	compile 'ch.qos.logback:logback-classic:1.1.3'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.4.3.RELEASE'
-	compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
-	compile 'javax.servlet:jstl:1.2'
-	compile 'javax.servlet.jsp:jsp-api:2.2'
-	compile 'org.springframework:spring-web:4.1.6.RELEASE'
-	compile group: 'org.jooq', name: 'jooq', version: '3.8.4'
-	compile group: 'org.jooq', name: 'jooq-meta', version: '3.8.4'
-	compile group: 'org.jooq', name: 'jooq-codegen', version: '3.8.4'
-	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+	compile group: 'org.eclipse.jetty', name: 'jetty-jsp', version: '9.2.20.v20161216'
+	compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.0.v20161208'
 	compile project(':skroom')
 }
