@@ -11,6 +11,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +36,7 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSettingsRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersSettings extends TableImpl<UsersSettingsRecord> {
 
-    private static final long serialVersionUID = -1116472558;
+    private static final long serialVersionUID = 377052404;
 
     /**
      * The reference instance of <code>USERS_SETTINGS</code>
@@ -108,6 +109,14 @@ public class UsersSettings extends TableImpl<UsersSettingsRecord> {
     @Override
     public Schema getSchema() {
         return DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<UsersSettingsRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USERS_SETTINGS;
     }
 
     /**
