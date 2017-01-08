@@ -18,9 +18,19 @@ jar {
 	baseName = 'skroom'
 	version = '0.0.1-SNAPSHOT'
 
-	from('../../Source/src/main/webapp/WEB-INF/') {
+	from('../../Source/src/main/webapp/WEB-INF/views') {
 			include '**'
-			into 'WEB-INF'
+			into 'resources'
+	}
+	
+	from('../../Source/src/main/webapp/WEB-INF/views') {
+			include '**'
+			into 'templates'
+	}
+	
+	from('../../Source/src/main/webapp/resources') {
+			include '**'
+			into 'resources'
 	}
 }
 

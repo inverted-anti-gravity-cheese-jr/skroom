@@ -61,6 +61,7 @@ public class Keys {
     public static final Identity<UsersRecord, Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
     public static final Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = Identities0.IDENTITY_USERS_PROJECTS;
     public static final Identity<UsersSecurityRecord, Integer> IDENTITY_USERS_SECURITY = Identities0.IDENTITY_USERS_SECURITY;
+    public static final Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = Identities0.IDENTITY_USERS_SETTINGS;
     public static final Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = Identities0.IDENTITY_USER_ROLES_IN_PROJECT;
     public static final Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = Identities0.IDENTITY_USER_STORIES;
     public static final Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = Identities0.IDENTITY_USER_STORY_STATUS;
@@ -117,6 +118,7 @@ public class Keys {
         public static Identity<UsersRecord, Integer> IDENTITY_USERS = createIdentity(Users.USERS, Users.USERS.ID);
         public static Identity<UsersProjectsRecord, Integer> IDENTITY_USERS_PROJECTS = createIdentity(UsersProjects.USERS_PROJECTS, UsersProjects.USERS_PROJECTS.ID);
         public static Identity<UsersSecurityRecord, Integer> IDENTITY_USERS_SECURITY = createIdentity(UsersSecurity.USERS_SECURITY, UsersSecurity.USERS_SECURITY.ID);
+        public static Identity<UsersSettingsRecord, Integer> IDENTITY_USERS_SETTINGS = createIdentity(UsersSettings.USERS_SETTINGS, UsersSettings.USERS_SETTINGS.ID);
         public static Identity<UserRolesInProjectRecord, Integer> IDENTITY_USER_ROLES_IN_PROJECT = createIdentity(UserRolesInProject.USER_ROLES_IN_PROJECT, UserRolesInProject.USER_ROLES_IN_PROJECT.ID);
         public static Identity<UserStoriesRecord, Integer> IDENTITY_USER_STORIES = createIdentity(UserStories.USER_STORIES, UserStories.USER_STORIES.ID);
         public static Identity<UserStoryStatusRecord, Integer> IDENTITY_USER_STORY_STATUS = createIdentity(UserStoryStatus.USER_STORY_STATUS, UserStoryStatus.USER_STORY_STATUS.ID);

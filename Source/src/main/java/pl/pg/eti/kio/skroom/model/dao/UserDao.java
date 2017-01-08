@@ -306,7 +306,7 @@ public class UserDao {
 						userSecurity.getPassword(), userSecurity.getSalt(), userSecurity.getSecureQuestion(),
 						userSecurity.getSecureAnswer(), 0).execute();
 
-				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, userId.intValue() + 1, -1, 10, 25).execute();
+				int usersSettingsCreateRows = query.insertInto(USERS_SETTINGS).values(null, userId.intValue() + 1, -1, 10, 25, 5).execute();
 
 				if (usersCreatedRows != 1 || usersSecurityCreatedRows != 1 || usersSettingsCreateRows != 1) {
 					// rollback
