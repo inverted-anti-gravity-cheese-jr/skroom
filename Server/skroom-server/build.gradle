@@ -1,36 +1,49 @@
-/*
- * by 'wojtek' at '07.01.17 13:56' with Gradle 3.0
- *
- */
-
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-    mavenLocal()
-    mavenCentral()
+buildscript {
+	ext {
+		springBootVersion = '1.4.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
 }
 
-task fatJar(type: Jar) {
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    {
-        exclude "skroom/**"
-        exclude "META-INF/*.SF"
-		exclude "META-INF/*.DSA"
-		exclude "META-INF/*.RSA"
-    }
-    with jar
-    manifest {
-        attributes 'Implementation-Title': 'Skroom', 'Implementation-Version': '0.0.1'
-        attributes 'Main-Class': 'pl.pg.eti.kio.skroom.SkroomServer'
-    }
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'skroom'
+	version = '0.0.1-SNAPSHOT'
+/*
+	from('../../Source/src/main/webapp/WEB-INF/views') {
+			include '**'
+			into 'resources'
+	}
+	
+	from('../../Source/src/main/webapp/WEB-INF/views') {
+			include '**'
+			into 'templates'
+	}
+	
+	from('../../Source/src/main/webapp/resources') {
+			include '**'
+			into 'resources'
+	}
+*/
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
 }
 
 dependencies {
-	compile group: 'org.eclipse.jetty', name: 'jetty-jsp', version: '9.2.20.v20161216'
-	compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.0.v20161208'
+	compile('org.springframework.boot:spring-boot-starter-web')
+/*
 	compile project(':skroom')
+*/
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>skroom</name>
-	<comment></comment>
+	<comment>Project skroom created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -17,15 +17,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<variableList>
-		<variable>
-			<name>JAVA_HOME</name>
-			<value>file:/D:/Program%20Files/Java/jdk1.8.0_101</value>
-		</variable>
-	</variableList>
 </projectDescription>
