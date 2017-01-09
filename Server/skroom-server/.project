@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>skroom-server</name>
-	<comment>Project skroom-server created by Buildship.</comment>
+	<name>mine-jetty</name>
+	<comment>Project mine-jetty created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

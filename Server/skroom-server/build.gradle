@@ -1,49 +1,44 @@
-buildscript {
-	ext {
-		springBootVersion = '1.4.3.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-}
-
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+//apply plugin: 'eclipse'
 
-jar {
-	baseName = 'skroom'
-	version = '0.0.1-SNAPSHOT'
-/*
-	from('../../Source/src/main/webapp/WEB-INF/views') {
-			include '**'
-			into 'resources'
-	}
-	
-	from('../../Source/src/main/webapp/WEB-INF/views') {
-			include '**'
-			into 'templates'
-	}
-	
-	from('../../Source/src/main/webapp/resources') {
-			include '**'
-			into 'resources'
-	}
-*/
-}
-
+version = '0.0.1'
 sourceCompatibility = 1.8
+mainClassName  = 'pl.pg.eti.kio.skroom.Main'
+jar {
+	baseName = 'skroom-server'
+	version = '0.0.1-SNAPSHOT'
+
+	manifest {
+		attributes 'Main-Class': 'org.eclipse.jetty.demo.Main'
+	}
+	
+	/*
+	from ("${projectDir}/src/main/webapp") {
+        include('**')
+    }
+    
+    from ("${projectDir}/src/main/webapp/WEB-INF") {
+        include('**')
+    }*/
+
+}
 
 repositories {
 	mavenCentral()
 }
 
+ext {
+	jettyVersion = "9.4.0.v20161208"
+}
+
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-/*
-	compile project(':skroom')
-*/
+	compile "javax.servlet:javax.servlet-api:3.1.0"
+	compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+	compile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+	compile "org.eclipse.jetty:apache-jsp:$jettyVersion"
+	//compile "org.eclipse.jetty:apache-jstl:$jettyVersion"
+	//compile group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.2'
+	compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
+	compile 'org.springframework:spring-web:4.1.6.RELEASE'
 }
