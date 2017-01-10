@@ -5,6 +5,7 @@
 <%@taglib prefix="s" uri="/WEB-INF/skroom-tags.tld"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page import="pl.pg.eti.kio.skroom.settings.AccountManagementSettings" %>
+
 <!DOCTYPE html>
 <html>
 	<head>

@@ -6,6 +6,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import pl.pg.eti.kio.skroom.PathUtils;
 import pl.pg.eti.kio.skroom.ResourcesBundlesService;
 
 /**
@@ -14,9 +15,10 @@ import pl.pg.eti.kio.skroom.ResourcesBundlesService;
  * @author Wojciech Stanisławski
  * @since 22.05.16
  */
+
 public class ResourceBundleTag extends SimpleTagSupport {
+	
 	private static final ResourcesBundlesService bundlesService = new ResourcesBundlesService();
-	private static String ROOT_PATH = "/skroom/";
 	
 	private String name;
 
@@ -37,7 +39,7 @@ public class ResourceBundleTag extends SimpleTagSupport {
 		JspWriter jspWriter = getJspContext().getOut();
 		
 		for (String resource : bundlesService.getBundle(name)) {
-			resource = ROOT_PATH + resource;
+			resource = PathUtils.getRootPath() + resource;
 			//resource = 
 			if (resource.trim().endsWith(".js")) {
 				jspWriter.println("<script type=\"text/javascript\" src=\"" + resource + "\"></script>");
@@ -45,10 +47,6 @@ public class ResourceBundleTag extends SimpleTagSupport {
 				jspWriter.println("<link href=\"" + resource + "\" rel=\"stylesheet\" />");
 			}
 		}
-	}
-
-	public static void changeRootPath(String newRoot) {
-		ROOT_PATH = newRoot;
 	}
 
 }

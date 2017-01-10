@@ -1,11 +1,15 @@
 package pl.pg.eti.kio.skroom.tags;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-import java.io.IOException;
-import java.io.StringWriter;
+
+import pl.pg.eti.kio.skroom.PathUtils;
+
 
 /**
  * Tag for managing menu elements in JSP.
@@ -14,8 +18,7 @@ import java.io.StringWriter;
  * @since 03.11.16
  */
 public class MenuElementTag extends SimpleTagSupport {
-	private static final String ROOT_PATH = "/skroom/";
-
+	
 	private String href;
 	private String siteName;
 	private String fa;
@@ -67,14 +70,14 @@ public class MenuElementTag extends SimpleTagSupport {
 			siteName = href;
 		}
 
-		if(currentSiteName.equals(ROOT_PATH + siteName)) {
+		if(currentSiteName.equals(PathUtils.getRootPath() + siteName)) {
 			out.print("<li class=\"active\">");
 		}
 		else {
 			out.print("<li>");
 		}
 
-		out.print("<a href=\"" + ROOT_PATH + href + "\">");
+		out.print("<a href=\"" + PathUtils.getRootPath() + href + "\">");
 		if(fa != null && !fa.isEmpty()) {
 			out.print("<i class=\"" + fa + "\" aria-hidden=\"true\"></i>");
 		}

@@ -1,0 +1,4 @@
+include ':skroom'
+
+rootProject.name = 'skroom-server'
+project(':skroom').projectDir = new File('../Source')

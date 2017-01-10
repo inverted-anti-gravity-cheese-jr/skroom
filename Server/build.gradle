@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: 'application'
+//apply plugin: 'eclipse'
+
+version = '0.0.1'
+sourceCompatibility = 1.8
+mainClassName  = 'pl.pg.eti.kio.skroom.Main'
+jar {
+	baseName = 'skroom-server'
+	version = '0.0.1-SNAPSHOT'
+
+	manifest {
+		attributes 'Main-Class': 'org.eclipse.jetty.demo.Main'
+	}
+	
+	
+	from('../Source/src/main/webapp/WEB-INF') {
+			include '**'
+			exclude '*.xml'
+			into 'webapp/WEB-INF'
+	}
+	
+	from('../Source/src/main/webapp/resources') {
+			include '**'
+			exclude 'app.properties'
+			into 'webapp/resources'
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	jettyVersion = "9.2.10.v20150310"
+}
+
+dependencies {
+	compile "javax.servlet:javax.servlet-api:3.1.0"
+	compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+	compile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+	compile "org.eclipse.jetty:jetty-jsp:$jettyVersion"
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
+	compile 'javax.servlet:jstl:1.2'
+	compile 'org.springframework:spring-webmvc:4.1.6.RELEASE'
+	compile 'org.springframework:spring-web:4.1.6.RELEASE'
+	compile(project(':skroom')) {
+		exclude group: 'org.springframework'
+		exclude group: 'javax.servlet'
+		exclude group: 'ch.qos.logback'
+	}
+}

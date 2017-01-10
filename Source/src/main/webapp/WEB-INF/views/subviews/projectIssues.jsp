@@ -8,7 +8,7 @@
     <h1>Issues</h1>
 
     <div class="management-bar">
-        <a href="/skroom/issue/${userSettings.recentProject.id}/" class="btn green" >Add new</a>
+        <a href="/issue/${userSettings.recentProject.id}/" class="btn green" >Add new</a>
     </div>
 
     <table class="table">
@@ -21,7 +21,7 @@
         <tbody>
             <c:forEach items="${projectIssues}" var="issue" >
                 <tr>
-                    <td><a href="/skroom/issue/${userSettings.recentProject.id}/${issue.id}/">${issue.name}</a></td>
+                    <td><a href="/issue/${userSettings.recentProject.id}/${issue.id}/">${issue.name}</a></td>
                     <td>${issue.status.name}</td>
                     <td>
                         <c:if test="${not empty issue.assignee}"><span class="round-table-label"><s:shorten max="15">${issue.assignee.name}</s:shorten></span></c:if>

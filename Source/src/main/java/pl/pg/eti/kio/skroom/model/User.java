@@ -32,10 +32,6 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		for(StackTraceElement el : stackTrace) {
-			System.out.println(el.getClassName() + "." + el.getMethodName() + " : " + el.getLineNumber());
-		}
 	}
 
 	public String getEmail() {
