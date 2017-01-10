@@ -10,6 +10,7 @@ This is a list of the default statuses for every new project. If you wish to cha
         <a id="addNewTaskStatus" class="btn green">New task status</a>
     </div>
 </c:if>
+
 <table class="table">
     <thead>
         <tr>

@@ -3,6 +3,7 @@ package pl.pg.eti.kio.skroom;
 import java.io.IOException;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.core.io.ClassPathResource;
@@ -47,7 +48,12 @@ public class Main {
 	private static WebAppContext getServletContextHandler() throws IOException {
 		WebAppContext contextHandler = new WebAppContext();
 		if(DEBUG) {
-			contextHandler.setErrorHandler(null);
+			//contextHandler.setErrorHandler(null);
+			
+			ErrorHandler errorHandler = new ErrorHandler();
+	        errorHandler.setShowStacks(true);
+	        contextHandler.addBean(errorHandler);
+	        contextHandler.setErrorHandler(errorHandler);
 		}
 		// app starts from "localhost/"
 		contextHandler.setContextPath(CONTEXT_PATH);

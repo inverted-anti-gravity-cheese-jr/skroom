@@ -73,6 +73,7 @@ public class ProjectManagementController {
 
 		modelAndView.addObject("submitButtonText", "Add Project");
 		modelAndView.addObject("createProject", "true");
+		modelAndView.addObject("projectIsEditable", "false");
 		modelAndView.addObject("taskStatuses", defaultTaskStatusesMock);
 
 		return modelAndView;
