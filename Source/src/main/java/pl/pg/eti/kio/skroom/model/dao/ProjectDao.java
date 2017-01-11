@@ -1,6 +1,7 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record3;
 import org.jooq.Result;
@@ -46,13 +47,19 @@ public class ProjectDao {
 	public boolean addProject(Connection connection, Project project, TaskStatusDao dao) {
 		DSLContext query = DSL.using(connection, DatabaseSettings.getCurrentSqlDialect());
 
-		Integer projectId = (Integer) query.fetchOne("SELECT seq FROM sqlite_sequence WHERE name='" + PROJECTS.getName() +"'").get(0);
-
 		int inserted = query.insertInto(PROJECTS).values(null, project.getName(), project.getDescription(), project.getDefaultSprintLength()).execute();
 
-		project.setId(projectId + 1);
-		dao.generateDefaultStatusesForProject(connection, project);
-
+		if(inserted == 1) {
+			Result<Record> projIdQuery = query.fetch("SELECT seq FROM sqlite_sequence WHERE name='" + PROJECTS.getName() +"'");
+			Record projIdRes = projIdQuery.iterator().next();
+			if(projIdRes != null) {
+				Integer projectId = (Integer) projIdRes.get(0);
+				
+				project.setId(projectId);
+				dao.generateDefaultStatusesForProject(connection, project);
+			}
+		}
+		
 		return inserted == 1;
 	}
 

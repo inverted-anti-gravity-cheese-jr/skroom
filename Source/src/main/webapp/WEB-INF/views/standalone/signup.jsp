@@ -16,7 +16,7 @@
 		<s:bundle name="bootstrap" />
 		<s:bundle name="main" />
 
-		<title>Test</title>
+		<title>Sign Up to Skroom</title>
 	</head>
 	<body>
 		<div class="login-form signup-form<%if (request.getAttribute("signupError") != null) { out.print(" withmessage"); }%>">

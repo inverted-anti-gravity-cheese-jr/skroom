@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ErrorHandler;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.core.io.ClassPathResource;
@@ -21,7 +22,7 @@ public class Main {
 	private static final String CONTEXT_PATH = "/";
 	private static final String COMPONENT_SCAN_PACKAGE = "pl.pg.eti.kio.skroom";
 	private static final String MAPPING_URL = "/";
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	public static void main(String[] args) throws Exception {
 		int port = getPort(args);
@@ -48,12 +49,15 @@ public class Main {
 	private static WebAppContext getServletContextHandler() throws IOException {
 		WebAppContext contextHandler = new WebAppContext();
 		if(DEBUG) {
-			//contextHandler.setErrorHandler(null);
-			
 			ErrorHandler errorHandler = new ErrorHandler();
 	        errorHandler.setShowStacks(true);
 	        contextHandler.addBean(errorHandler);
 	        contextHandler.setErrorHandler(errorHandler);
+		}
+		else {
+			ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+		    errorHandler.addErrorPage(404, "errorPages/404.html");
+		    contextHandler.setErrorHandler(errorHandler);
 		}
 		// app starts from "localhost/"
 		contextHandler.setContextPath(CONTEXT_PATH);

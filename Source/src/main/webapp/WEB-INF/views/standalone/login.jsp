@@ -18,7 +18,7 @@
 		<s:bundle name="bootstrap" />
 		<s:bundle name="main" />
 
-		<title>Test</title>
+		<title>Welcome to Skroom</title>
 	</head>
 	<%
 		boolean canAnonymousCreateAccount = pl.pg.eti.kio.skroom.settings.AccountManagementSettings.canAnonymousCreateAccount();
