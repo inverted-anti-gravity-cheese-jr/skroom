@@ -27,7 +27,7 @@
     </script>
     
     <c:choose>
-        <c:when test="${ not empty userStory }">
+        <c:when test="${ not empty userStory and userStory.id > 0}">
     <h1>${userStory.name}</h1>
 
     <div class="user-story-body">
