@@ -69,7 +69,7 @@ public class ProjectManagementController {
 
 	@RequestMapping(value = "/addProject", method = RequestMethod.GET)
 	public ModelAndView addProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Add Project", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Create new Project - Skroom", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("submitButtonText", "Add Project");
 		modelAndView.addObject("createProject", "true");
@@ -128,7 +128,7 @@ public class ProjectManagementController {
 
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
 
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, "Project Settings", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.PROJECT_SETTINGS_FORM_JSP_LOCATION, userSettings.getRecentProject().getName() + " Settings - Skroom", userSettings.getRecentProject(), user, request);
         modelAndView.addObject("projectIsEditable", projectDao.checkUserEditPermissionsForProject(dbConnection, userSettings.getRecentProject(), user));
         modelAndView.addObject("project", userSettings.getRecentProject());
         modelAndView.addObject("submitButtonText", "Update Project");
@@ -189,7 +189,7 @@ public class ProjectManagementController {
 
 		List<UserRolesInProject> allRoles = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
 
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Add Project User", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Add User to " + userSettings.getRecentProject() + " - Skroom", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("availableUserProjectRoles", allRoles);
 		modelAndView.addObject("userHasAllRoles", false);
@@ -238,7 +238,7 @@ public class ProjectManagementController {
 		List<UserRolesInProject> userRoles = userProjectContainer.get().getRoles();
 		List<UserRolesInProject> allRoles = userRolesInProjectDao.listAllUserRolesInProject(dbConnection);
 
-		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "Project User", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(Views.USERS_PROJECTS_FORM_JSP_LOCATION, "User roles in project - Skroom", userSettings.getRecentProject(), user, request);
 
 		modelAndView.addObject("ProjectUser", userProjectContainer.get());
 		modelAndView.addObject("availableUserProjectRoles", getUserAvailableRolesForProject(userRoles, allRoles));

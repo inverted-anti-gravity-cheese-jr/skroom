@@ -51,7 +51,7 @@ public class UserStoriesManagementController {
 
 	@RequestMapping(value = "addUserStory", method = RequestMethod.GET)
 	public ModelAndView addUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
+		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story - Skroom", userSettings.getRecentProject(), user, webRequest);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
@@ -71,7 +71,7 @@ public class UserStoriesManagementController {
 
 	@RequestMapping(value = "viewUserStory/{userStoryId}", method = RequestMethod.GET)
 	public ModelAndView editUserStory(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer userStoryId) {
-		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "Add new user story", userSettings.getRecentProject(), user, webRequest);
+		ModelAndView model = injector.getIndexForSiteName(USER_STORY_FORM_JSP_LOCATION, "User story details - Skroom", userSettings.getRecentProject(), user, webRequest);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 

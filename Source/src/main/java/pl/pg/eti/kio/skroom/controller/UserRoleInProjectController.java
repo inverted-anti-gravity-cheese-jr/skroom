@@ -54,7 +54,7 @@ public class UserRoleInProjectController {
     public ModelAndView userRoleInProject(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
         if (!checkPermission(user))
             return new ModelAndView("redirect:/");
-        ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Add userRoleInProject", userSettings.getRecentProject(), user, request);
+        ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Add user role - Skroom", userSettings.getRecentProject(), user, request);
         return model;
     }
 
@@ -73,7 +73,7 @@ public class UserRoleInProjectController {
         if (!checkPermission(user))
             return new ModelAndView("redirect:/");
 
-        ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit userRoleInProject", userSettings.getRecentProject(), user, request);
+        ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit user roles - Skroom", userSettings.getRecentProject(), user, request);
 
         Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 
@@ -119,7 +119,7 @@ public class UserRoleInProjectController {
             }
             return new ModelAndView("redirect:/admin");
         } else {
-            ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit userRoleInProject", userSettings.getRecentProject(), user, request);
+            ModelAndView model = injector.getIndexForSiteName(USERROLEINPROJECT_FORM_JSP_LOCATION, "Edit user roles - Skroom", userSettings.getRecentProject(), user, request);
             if (userRoleInProjectId != null) {
                 model.addObject("userRoleInProject", userRolesInProjectDao.fetchById(dbConnection, userRoleInProjectId));
             }

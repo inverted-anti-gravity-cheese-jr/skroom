@@ -60,7 +60,7 @@ public class IssuesManagmentController {
 
         List<Issue> issues = issueDao.listAllIssues(dbConnection, userSettings.getRecentProject());
 
-        ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues", userSettings.getRecentProject(), user, request);
+        ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUES_FORM_JSP_LOCATION, "Issues - Skroom", userSettings.getRecentProject(), user, request);
         model.addObject("projectIssues", issues);
         return model;
     }
@@ -177,7 +177,7 @@ public class IssuesManagmentController {
     }
 
     private ModelAndView showIssueModel(User user, UserSettings userSettings, Connection dbConnection, Issue view, Issue edit, List<String> errors) {
-        ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUE_FORM_JSP_LOCATION, "Issue", userSettings.getRecentProject(), user, request);
+        ModelAndView model = injector.getIndexForSiteName(Views.PROJECT_ISSUE_FORM_JSP_LOCATION, "Issue " + (view != null ? view.getName() : "") + " - Skroom", userSettings.getRecentProject(), user, request);
         model.addObject("projectIssue", view);
         model.addObject("projectIssueEdit", edit);
         model.addObject("availableIssueStatuses", issueDao.availableIssueStatuses(dbConnection, userSettings.getRecentProject()));

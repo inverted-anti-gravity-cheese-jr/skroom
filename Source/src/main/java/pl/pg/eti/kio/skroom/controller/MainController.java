@@ -73,7 +73,7 @@ public class MainController {
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
 		List<Task> taskList = taskDao.fetchTasks(dbConnection, userSettings.getRecentProject(), taskStatuses, userStories, sprints);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.DASHBOARD_JSP_LOCATION, "Dashboard - Skroom", userSettings.getRecentProject(), user, request);
 		model.addObject("list", taskList);
 
 		return model;
@@ -102,7 +102,7 @@ public class MainController {
 			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
 		}
 		
-		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.PRODUCT_BACKLOG_FORM_JSP_LOCATION, "Product Backlog - Skroom", userSettings.getRecentProject(), user, request);
 
 		List<UserStory> userStories = userStoryDao.fetchUserStoriesForProject(dbConnection, userSettings.getRecentProject());
 		int pages = userStories.size() / userStoriesPerPage;
@@ -136,7 +136,7 @@ public class MainController {
 			generatorService.generateAndUploadMissingSprint(dbConnection, userSettings.getRecentProject());
 		}
 		
-		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "sprintBacklog", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.SPRINT_BACKLOG_FORM_JSP_LOCATION, "Sprint Backlog - Skroom", userSettings.getRecentProject(), user, request);
 
 		List<Sprint> sprints = sprintDao.fetchAvailableSprintsForProject(dbConnection, userSettings.getRecentProject());
 		Sprint lastSprint = sprints.stream().sorted((s1, s2) -> s2.getStartDate().compareTo(s1.getStartDate())).findFirst().get();
@@ -194,7 +194,7 @@ public class MainController {
 		}
 
 
-		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.KANBAN_BOARD_FORM_JSP_LOCATION, "Kanban Board - Skroom", userSettings.getRecentProject(), user, request);
 		model.addObject("sprintsWithoutLast", sprints);
 		model.addObject("lastSprint", lastSprint);
 		model.addObject("sprintId", sprintId);
@@ -229,7 +229,7 @@ public class MainController {
 
 		ArrayList<UserStoryStatus> userStoryStatuses = userStoryStatusDao.listAllStatuses(dbConnection);
 
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"userAdmin", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_ADMIN_FORM_JSP_LOCATION,"Admin Panel - Skroom", userSettings.getRecentProject(), user, request);
 		model.addObject("canEdit", canEdit);
 		List<UserDao.UserContainer> allUsers = userDao.listAllUsers(dbConnection, userNameFilter);
 
@@ -246,13 +246,13 @@ public class MainController {
 
 	@RequestMapping(value = "/userSettings", method = RequestMethod.GET)
 	public ModelAndView showUserSettings(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.USER_SETTINGS_FORM_JSP_LOCATION, "User Settings - Skroom", userSettings.getRecentProject(), user, request);
 		return model;
 	}
 
 	@RequestMapping(value = "/selectProject", method = RequestMethod.GET)
 	public ModelAndView noProjectForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView model = injector.getIndexForSiteName(Views.NO_PROJECT_JSP_LOCATION, "Select project", userSettings.getRecentProject(), user, request);
+		ModelAndView model = injector.getIndexForSiteName(Views.NO_PROJECT_JSP_LOCATION, "Select project - Skroom", userSettings.getRecentProject(), user, request);
 
 		return model;
 	}

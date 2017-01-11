@@ -74,7 +74,7 @@ public class AccountManagementController {
 
 	@RequestMapping(value = "/editUser/{editUserName}/", method = RequestMethod.GET)
 	public ModelAndView editUser(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable String editUserName) {
-		ModelAndView model = injector.getIndexForSiteName(USER_FORM_JSP_LOCATION, "Edit user", userSettings.getRecentProject(), user, webRequest);
+		ModelAndView model = injector.getIndexForSiteName(USER_FORM_JSP_LOCATION, "Edit user - Skroom", userSettings.getRecentProject(), user, webRequest);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 

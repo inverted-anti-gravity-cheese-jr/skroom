@@ -48,7 +48,7 @@ public class TaskManagementController {
 
 	@RequestMapping(value = "addTask", method = RequestMethod.GET)
 	public ModelAndView addTaskForm(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings) {
-		ModelAndView modelAndView = injector.getIndexForSiteName(TASK_FORM_JSP_LOCATION, "addTask", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(TASK_FORM_JSP_LOCATION, "Create new task - Skroom", userSettings.getRecentProject(), user, request);
 
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
@@ -85,7 +85,7 @@ public class TaskManagementController {
 	
 	@RequestMapping("viewTask/{taskId}")
 	public ModelAndView viewTask(@ModelAttribute("loggedUser") User user, @ModelAttribute("userSettings") UserSettings userSettings, @PathVariable Integer taskId) {
-		ModelAndView modelAndView = injector.getIndexForSiteName(TASK_FORM_JSP_LOCATION, "viewTask", userSettings.getRecentProject(), user, request);
+		ModelAndView modelAndView = injector.getIndexForSiteName(TASK_FORM_JSP_LOCATION, "Task details - Skroom", userSettings.getRecentProject(), user, request);
 		Connection dbConnection = DatabaseSettings.getDatabaseConnection();
 		
 		List<TaskStatus> taskStatuses = taskStatusDao.fetchByProject(dbConnection, userSettings.getRecentProject());
