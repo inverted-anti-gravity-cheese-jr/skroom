@@ -1,0 +1,31 @@
+
+apply plugin: 'java'
+//apply plugin: 'application'
+
+build {
+	subprojects.each { subproject ->
+		println(subproject.tasks)
+		//subproject.defaultTasks.each
+	}
+}
+
+jar {
+	//project(':skroom-server').tasks.distZip.execute();
+	//gradleBuild {dir '../Server', tasks 'distZip'}
+	from fileTree('../Server/build/distributions/skroom-server-0.0.1.zip') {
+    	into("/")
+	}
+}
+
+task testTask {
+	subprojects.each { subproject ->
+		println(subproject.subprojects)
+	}
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
