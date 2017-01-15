@@ -1,25 +1,32 @@
-
 apply plugin: 'java'
-//apply plugin: 'application'
+apply plugin: 'application'
 
-build {
-	subprojects.each { subproject ->
-		println(subproject.tasks)
-		//subproject.defaultTasks.each
-	}
+mainClassName = "pl.pg.eti.kio.skroom.install.Installer"
+
+jar.dependsOn {
+	':skroom-server:distZip'
 }
 
 jar {
-	//project(':skroom-server').tasks.distZip.execute();
-	//gradleBuild {dir '../Server', tasks 'distZip'}
-	from fileTree('../Server/build/distributions/skroom-server-0.0.1.zip') {
-    	into("/")
+	manifest {
+		attributes(
+			'Main-Class': 'pl.pg.eti.kio.skroom.install.Installer'
+		)
 	}
-}
 
-task testTask {
-	subprojects.each { subproject ->
-		println(subproject.subprojects)
+	from fileTree('../Server/build/distributions/skroom-server-0.0.1.zip') {
+		into("/")
+	}
+	
+	from fileTree('../Source/src/main/db/ddl-sqlite') {
+		exclude("drop-all.sql")
+		into("/")
+	}
+	
+	from fileTree('../Source/src/main/db/mockup-sqlite') {
+		exclude("mockups.sql")
+		exclude("admin-account.sql")
+		into("/")
 	}
 }
 
@@ -28,4 +35,5 @@ repositories {
 }
 
 dependencies {
+	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
 }

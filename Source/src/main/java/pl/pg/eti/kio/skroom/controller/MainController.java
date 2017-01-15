@@ -46,7 +46,16 @@ public class MainController {
 
 	@PostConstruct
 	public void initDatabase() {
-		DatabaseSettings.initConnection("jdbc:sqlite:data.db");
+		if(DatabaseSettings.getDatabaseConnection() == null) {
+			System.out.println("===============================");
+			System.out.println("===============================");
+			System.out.println("===============================");
+			System.out.println("nil");
+			System.out.println("===============================");
+			System.out.println("===============================");
+			System.out.println("===============================");
+			DatabaseSettings.initConnection("jdbc:sqlite:data.db");
+		}
 	}
 
 	@ModelAttribute("loggedUser")

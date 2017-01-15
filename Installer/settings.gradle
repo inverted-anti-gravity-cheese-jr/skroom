@@ -3,5 +3,5 @@ include ':skroom'
 
 rootProject.name = 'skroom-installer'
 project(':skroom-server').projectDir = new File('../Server')
-project(':skroom').projectDir = new File('../Skroom')
+project(':skroom').projectDir = new File('../Source')
 
