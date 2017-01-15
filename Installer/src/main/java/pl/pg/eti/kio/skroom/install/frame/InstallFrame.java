@@ -19,36 +19,22 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JTextPane;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
 
-public class WelcomeFrame extends JFrame {
+import javax.swing.JButton;
+import javax.swing.JTextPane;
+import javax.swing.JProgressBar;
+
+public class InstallFrame extends JFrame {
 
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WelcomeFrame frame = new WelcomeFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public WelcomeFrame() {
+	public InstallFrame() {
 		setResizable(false);
 		setTitle("Skroom setup");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,36 +71,41 @@ public class WelcomeFrame extends JFrame {
 		}
 		catch (Exception e) { e.printStackTrace();}
 		
-		JLabel titleLabel = new JLabel("Welcome to Skroom Setup");
+		JLabel titleLabel = new JLabel("Installing Skroom");
 		titleLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPane.add(titleLabel, "4, 2, 5, 1");
 		
-		JTextPane txtpnThisWizardHelps = new JTextPane();
-		txtpnThisWizardHelps.setEditable(false);
-		txtpnThisWizardHelps.setText("This wizard helps you install and set up Skroom management application.\n\nTo continue, click Next.");
-		contentPane.add(txtpnThisWizardHelps, "4, 4, 5, 1, fill, fill");
+		JPanel panel = new JPanel();
+		contentPane.add(panel, "4, 4, 5, 1, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
-		JButton btnCancel = new JButton("Cancel");
+		JLabel lblInstallingSkroom = new JLabel("Installing Skroom...");
+		panel.add(lblInstallingSkroom, "2, 2");
+		
+		JProgressBar progressBar = new JProgressBar();
+		panel.add(progressBar, "2, 4");
+		
+		JLabel lblProgress = new JLabel("Progress");
+		panel.add(lblProgress, "2, 6");
 		
 		final JFrame thisFrame = this;
 		
-		btnCancel.addActionListener(new ActionListener() {
+		JButton btnClose = new JButton("Close");
+		btnClose.setEnabled(false);
+		contentPane.add(btnClose, "8, 6");
+		
+		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
-			}
-		});
-		contentPane.add(btnCancel, "6, 6");
-		
-		JButton btnNext = new JButton("Next");
-		contentPane.add(btnNext, "8, 6");
-		btnNext.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LicenseFrame fr = new LicenseFrame();
-				fr.setLastFrame(thisFrame);
-				thisFrame.setVisible(false);
-				fr.setVisible(true);
 			}
 		});
 	}

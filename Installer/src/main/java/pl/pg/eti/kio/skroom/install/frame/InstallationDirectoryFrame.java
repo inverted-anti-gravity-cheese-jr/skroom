@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,34 +20,22 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.JTextField;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
-public class WelcomeFrame extends JFrame {
+public class InstallationDirectoryFrame extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WelcomeFrame frame = new WelcomeFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField txtCprogramFilesskroom;
+	private JFrame lastFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public WelcomeFrame() {
+	public InstallationDirectoryFrame() {
 		setResizable(false);
 		setTitle("Skroom setup");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,17 +52,17 @@ public class WelcomeFrame extends JFrame {
 				ColumnSpec.decode("max(31dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(41dlu;default)"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(86dlu;default):grow"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("bottom:max(20dlu;default)"),}));
-		
+				new RowSpec[] {
+						FormSpecs.RELATED_GAP_ROWSPEC,
+						RowSpec.decode("max(41dlu;default)"),
+						FormSpecs.RELATED_GAP_ROWSPEC,
+						RowSpec.decode("max(86dlu;default):grow"),
+						FormSpecs.RELATED_GAP_ROWSPEC,
+						RowSpec.decode("bottom:max(20dlu;default)"),}));
+
 		JLabel iconLabel = new JLabel("");
 		contentPane.add(iconLabel, "2, 2, 1, 5");
-		
+
 		try {
 			Dimension d = new Dimension(iconLabel.getWidth(), iconLabel.getHeight());
 			BufferedImage bi = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("logo.png"));
@@ -84,49 +71,65 @@ public class WelcomeFrame extends JFrame {
 			iconLabel.setMaximumSize(d);
 		}
 		catch (Exception e) { e.printStackTrace();}
-		
-		JLabel titleLabel = new JLabel("Welcome to Skroom Setup");
+
+		JLabel titleLabel = new JLabel("Choose installation directory");
 		titleLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPane.add(titleLabel, "4, 2, 5, 1");
-		
-		JTextPane txtpnThisWizardHelps = new JTextPane();
-		txtpnThisWizardHelps.setEditable(false);
-		txtpnThisWizardHelps.setText("This wizard helps you install and set up Skroom management application.\n\nTo continue, click Next.");
-		contentPane.add(txtpnThisWizardHelps, "4, 4, 5, 1, fill, fill");
-		
-		JButton btnCancel = new JButton("Cancel");
-		
+
+		JPanel panel = new JPanel();
+		contentPane.add(panel, "4, 4, 5, 1, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("206px:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,},
+				new RowSpec[] {
+						RowSpec.decode("15px"),
+						FormSpecs.RELATED_GAP_ROWSPEC,
+						RowSpec.decode("max(24dlu;default)"),}));
+
+		JLabel lblChooseInstallationDirectory = new JLabel("Choose installation directory");
+		panel.add(lblChooseInstallationDirectory, "1, 1, left, center");
+
+		txtCprogramFilesskroom = new JTextField();
+		txtCprogramFilesskroom.setEditable(false);
+		txtCprogramFilesskroom.setText("C:\\Program files\\Skroom");
+		panel.add(txtCprogramFilesskroom, "1, 3, fill, default");
+		txtCprogramFilesskroom.setColumns(10);
+
 		final JFrame thisFrame = this;
-		
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
-			}
-		});
+
+		JButton btnBrowse = new JButton("Browse...");
+		panel.add(btnBrowse, "3, 3");
+
+		JButton btnCancel = new JButton("Cancel");
 		contentPane.add(btnCancel, "6, 6");
-		
-		JButton btnNext = new JButton("Next");
-		contentPane.add(btnNext, "8, 6");
-		btnNext.addActionListener(new ActionListener() {
-			
+		btnCancel.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LicenseFrame fr = new LicenseFrame();
-				fr.setLastFrame(thisFrame);
+				lastFrame.setVisible(true);
 				thisFrame.setVisible(false);
-				fr.setVisible(true);
+				thisFrame.removeAll();
+				thisFrame.dispose();
+			}
+		});
+
+		JButton btnNext = new JButton("Next");
+		contentPane.add(btnNext, "8, 6");
+
+		btnNext.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AdminPasswordFrame nextFrame = new AdminPasswordFrame();
+				nextFrame.setLastFrame(thisFrame);
+				thisFrame.setVisible(false);
+				nextFrame.setVisible(true);
 			}
 		});
 	}
-	
-	private void getSkroomImage() {
-		ImageIcon icon = null;
-		try {
-			BufferedImage img = ImageIO.read(new File(this.getClass().getResource("logo.png").getPath()));
-			icon = new ImageIcon(img);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	public void setLastFrame(JFrame frame) {
+		this.lastFrame = frame;
 	}
 }

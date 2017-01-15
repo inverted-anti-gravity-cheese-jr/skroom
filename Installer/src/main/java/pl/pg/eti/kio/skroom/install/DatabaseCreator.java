@@ -12,7 +12,15 @@ import java.sql.Statement;
 
 public class DatabaseCreator {
 	
-	public void createDatabase(String adminName, String adminEmail, String adminPassword, String secureQuestion, String secureAnswer) throws SQLException, IOException {
+	public class DatabaseSettings {
+		public String adminName;
+		public String adminEmail;
+		public String adminPassword;
+		public String secureQuestion;
+		public String secureAnswer;
+	}
+	
+	public void createDatabase(DatabaseSettings settings) throws SQLException, IOException {
 		Connection dbConnection = DriverManager.getConnection("jdbc:sqlite:data.db");
 		
 		String ddl = readSQLFile("ddl.sql", "UTF-8");
@@ -37,14 +45,14 @@ public class DatabaseCreator {
 		
 		PreparedStatement pstmt;
 		pstmt = dbConnection.prepareStatement("INSERT INTO USERS VALUES (NULL, ?, ?, NULL, 0);");
-		pstmt.setString(1, adminName);
-		pstmt.setString(2, adminEmail);
+		pstmt.setString(1, settings.adminName);
+		pstmt.setString(2, settings.adminEmail);
 		pstmt.execute();
 		
 		pstmt = dbConnection.prepareStatement("INSERT INTO USERS_SECURITY VALUES (NULL, 1, ?, \"SALT\", ?, ?, 1);");
-		pstmt.setString(1, adminPassword);
-		pstmt.setString(2, secureQuestion);
-		pstmt.setString(3, secureAnswer);
+		pstmt.setString(1, settings.adminPassword);
+		pstmt.setString(2, settings.secureQuestion);
+		pstmt.setString(3, settings.secureAnswer);
 		pstmt.execute();
 		
 		pstmt = dbConnection.prepareStatement("INSERT INTO USERS_SETTINGS VALUES (NULL, 1, -1, 10, 25, 5);");

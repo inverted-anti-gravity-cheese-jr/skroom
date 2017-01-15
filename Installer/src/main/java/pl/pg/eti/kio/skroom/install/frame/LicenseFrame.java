@@ -19,36 +19,22 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JTextPane;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
-public class WelcomeFrame extends JFrame {
+public class LicenseFrame extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WelcomeFrame frame = new WelcomeFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JFrame lastFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public WelcomeFrame() {
+	public LicenseFrame() {
 		setResizable(false);
 		setTitle("Skroom setup");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,48 +71,55 @@ public class WelcomeFrame extends JFrame {
 		}
 		catch (Exception e) { e.printStackTrace();}
 		
-		JLabel titleLabel = new JLabel("Welcome to Skroom Setup");
+		JLabel titleLabel = new JLabel("Skroom license");
 		titleLabel.setFont(new Font("Dialog", Font.BOLD, 18));
 		contentPane.add(titleLabel, "4, 2, 5, 1");
 		
-		JTextPane txtpnThisWizardHelps = new JTextPane();
-		txtpnThisWizardHelps.setEditable(false);
-		txtpnThisWizardHelps.setText("This wizard helps you install and set up Skroom management application.\n\nTo continue, click Next.");
-		contentPane.add(txtpnThisWizardHelps, "4, 4, 5, 1, fill, fill");
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, "4, 4, 5, 1, fill, fill");
 		
-		JButton btnCancel = new JButton("Cancel");
+		JPanel panel = new JPanel();
+		scrollPane.setViewportView(panel);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setText("This software is developed using MIT License\n\nCopyright (c) 2016 Wojciech Stanisławski\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
+		textPane.setEditable(false);
+		panel.add(textPane);
 		
 		final JFrame thisFrame = this;
 		
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				thisFrame.dispatchEvent(new WindowEvent(thisFrame, WindowEvent.WINDOW_CLOSING));
-			}
-		});
+		JButton btnCancel = new JButton("Back");
 		contentPane.add(btnCancel, "6, 6");
-		
-		JButton btnNext = new JButton("Next");
-		contentPane.add(btnNext, "8, 6");
-		btnNext.addActionListener(new ActionListener() {
+		btnCancel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LicenseFrame fr = new LicenseFrame();
-				fr.setLastFrame(thisFrame);
+				lastFrame.setVisible(true);
 				thisFrame.setVisible(false);
-				fr.setVisible(true);
+				thisFrame.removeAll();
+				thisFrame.dispose();
+			}
+		});
+		
+		JButton btnAgree = new JButton("I agree");
+		contentPane.add(btnAgree, "8, 6");
+		btnAgree.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				InstallationDirectoryFrame nextFrame = new InstallationDirectoryFrame();
+				nextFrame.setLastFrame(thisFrame);
+				thisFrame.setVisible(false);
+				nextFrame.setVisible(true);
 			}
 		});
 	}
 	
-	private void getSkroomImage() {
-		ImageIcon icon = null;
-		try {
-			BufferedImage img = ImageIO.read(new File(this.getClass().getResource("logo.png").getPath()));
-			icon = new ImageIcon(img);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public JFrame getLastFrame() {
+		return lastFrame;
+	}
+
+	public void setLastFrame(JFrame lastFrame) {
+		this.lastFrame = lastFrame;
 	}
 }
