@@ -3,16 +3,13 @@ package pl.pg.eti.kio.skroom.stateless;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import pl.pg.eti.kio.skroom.model.dba.Tables;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 @Service

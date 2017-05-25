@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import pl.pg.eti.kio.skroom.ResourcesBundlesService;
 import pl.pg.eti.kio.skroom.exception.signup.UserAccountCreationErrorException;
 import pl.pg.eti.kio.skroom.exception.signup.UserAlreadyExistsException;
 import pl.pg.eti.kio.skroom.model.Project;
@@ -27,6 +28,7 @@ import pl.pg.eti.kio.skroom.model.UserSecurity;
 import pl.pg.eti.kio.skroom.model.UserSettings;
 import pl.pg.eti.kio.skroom.model.dao.UserDao;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
+import pl.pg.eti.kio.skroom.settings.AccountManagementSettings;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 
 /**
@@ -51,6 +53,7 @@ public class AccountManagementController {
 	@Autowired private UserDao userDao;
 	@Autowired private DefaultTemplateDataInjector injector;
 	@Autowired private WebRequest webRequest;
+	@Autowired private ResourcesBundlesService bundlesService;
 
 	@ModelAttribute("loggedUser")
 	public User defaultNullUser() {
@@ -210,6 +213,8 @@ public class AccountManagementController {
 
 	private ModelAndView getLoginModel(String error) {
 		ModelAndView model = new ModelAndView(LOGIN_JSP_LOCATION);
+		model.addObject("canAnonymousCreateAccount", AccountManagementSettings.canAnonymousCreateAccount());
+		model.addObject("bundles", bundlesService.getBundles());
 		model.addObject("loginError", error);
 		return model;
 	}
