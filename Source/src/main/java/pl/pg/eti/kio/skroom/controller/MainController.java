@@ -22,6 +22,7 @@ import pl.pg.eti.kio.skroom.model.*;
 import pl.pg.eti.kio.skroom.model.dao.*;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
+import pl.pg.eti.kio.skroom.stateless.InitDao;
 
 /**
  * Main model and view controller.
@@ -43,19 +44,14 @@ public class MainController {
 	@Autowired private WebRequest request;
 	@Autowired private SprintGeneratorService generatorService;
 	@Autowired private UserRolesInProjectDao userRolesInProjectDao;
+	@Autowired private InitDao initDao;
 
 	@PostConstruct
 	public void initDatabase() {
 		if(DatabaseSettings.getDatabaseConnection() == null) {
-			System.out.println("===============================");
-			System.out.println("===============================");
-			System.out.println("===============================");
-			System.out.println("nil");
-			System.out.println("===============================");
-			System.out.println("===============================");
-			System.out.println("===============================");
 			DatabaseSettings.initConnection("jdbc:sqlite:data.db");
 		}
+		initDao.createDatabase();
 	}
 
 	@ModelAttribute("loggedUser")
