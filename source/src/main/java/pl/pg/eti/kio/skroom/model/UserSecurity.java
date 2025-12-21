@@ -1,6 +1,6 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
+import pl.pg.eti.kio.skroom.model.tables.records.UsersSecurityRecord;
 
 /**
  * User security data model class to manage in app.
@@ -9,92 +9,104 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersSecurityRecord;
  * @since 21.08.16
  */
 public class UserSecurity {
-	private int id;
-	private String password;
-	private String salt;
-	private String secureQuestion;
-	private String secureAnswer;
-	private boolean accepted;
 
-	public int getId() {
-		return id;
-	}
+    private int id;
+    private String password;
+    private String salt;
+    private String secureQuestion;
+    private String secureAnswer;
+    private boolean accepted;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getSalt() {
-		return salt;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+    public String getSalt() {
+        return salt;
+    }
 
-	public String getSecureQuestion() {
-		return secureQuestion;
-	}
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
-	public void setSecureQuestion(String secureQuestion) {
-		this.secureQuestion = secureQuestion;
-	}
+    public String getSecureQuestion() {
+        return secureQuestion;
+    }
 
-	public String getSecureAnswer() {
-		return secureAnswer;
-	}
+    public void setSecureQuestion(String secureQuestion) {
+        this.secureQuestion = secureQuestion;
+    }
 
-	public void setSecureAnswer(String secureAnswer) {
-		this.secureAnswer = secureAnswer;
-	}
+    public String getSecureAnswer() {
+        return secureAnswer;
+    }
 
-	public boolean isAccepted() {
-		return accepted;
-	}
+    public void setSecureAnswer(String secureAnswer) {
+        this.secureAnswer = secureAnswer;
+    }
 
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
+    public boolean isAccepted() {
+        return accepted;
+    }
 
-	@Override
-	public String toString() {
-		return "UserSecurity{" +
-				"id=" + id +
-				", password='" + password + '\'' +
-				", salt='" + salt + '\'' +
-				", secureQuestion='" + secureQuestion + '\'' +
-				", secureAnswer='" + secureAnswer + '\'' +
-				'}';
-	}
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
 
-	/**
-	 * Method for converting database records into model classes.
-	 *
-	 * @param record Database record fetched by jOOQ
-	 * @return Converted user
-	 */
-	public static UserSecurity fromDba(UsersSecurityRecord record) {
-		if(record == null) {
-			return null;
-		}
+    @Override
+    public String toString() {
+        return (
+            "UserSecurity{" +
+            "id=" +
+            id +
+            ", password='" +
+            password +
+            '\'' +
+            ", salt='" +
+            salt +
+            '\'' +
+            ", secureQuestion='" +
+            secureQuestion +
+            '\'' +
+            ", secureAnswer='" +
+            secureAnswer +
+            '\'' +
+            '}'
+        );
+    }
 
-		UserSecurity userSecurity = new UserSecurity();
+    /**
+     * Method for converting database records into model classes.
+     *
+     * @param record Database record fetched by jOOQ
+     * @return Converted user
+     */
+    public static UserSecurity fromDba(UsersSecurityRecord record) {
+        if (record == null) {
+            return null;
+        }
 
-		userSecurity.setId(record.getId());
-		userSecurity.setPassword(record.getPassword());
-		userSecurity.setSalt(record.getSalt());
-		userSecurity.setSecureQuestion(record.getSecureQuestion());
-		userSecurity.setSecureAnswer(record.getSecureAnswer());
-		userSecurity.setAccepted(record.getAccepted() == 1);
+        UserSecurity userSecurity = new UserSecurity();
 
-		return userSecurity;
-	}
+        userSecurity.setId(record.getId());
+        userSecurity.setPassword(record.getPassword());
+        userSecurity.setSalt(record.getSalt());
+        userSecurity.setSecureQuestion(record.getSecureQuestion());
+        userSecurity.setSecureAnswer(record.getSecureAnswer());
+        userSecurity.setAccepted(record.getAccepted() == 1);
+
+        return userSecurity;
+    }
 }

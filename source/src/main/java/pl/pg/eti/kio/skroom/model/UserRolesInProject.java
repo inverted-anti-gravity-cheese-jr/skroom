@@ -1,11 +1,12 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.model.dba.tables.records.UserRolesInProjectRecord;
+import pl.pg.eti.kio.skroom.model.tables.records.UserRolesInProjectRecord;
 
 /**
  * Created by Marek Czerniawski on 2016-11-21.
  */
 public class UserRolesInProject {
+
     private int id;
     private String role;
     private String color;
@@ -45,12 +46,20 @@ public class UserRolesInProject {
 
     @Override
     public String toString() {
-        return "UserRolesInProject{" +
-                "id=" + id +
-                ", role='" + role + '\'' +
-                ", color='" + color + '\'' +
-                ", privileges=" + privileges +
-                '}';
+        return (
+            "UserRolesInProject{" +
+            "id=" +
+            id +
+            ", role='" +
+            role +
+            '\'' +
+            ", color='" +
+            color +
+            '\'' +
+            ", privileges=" +
+            privileges +
+            '}'
+        );
     }
 
     /** Method for converting database records into model classes.

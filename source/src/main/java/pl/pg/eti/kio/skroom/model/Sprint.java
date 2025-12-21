@@ -1,8 +1,8 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.model.dba.tables.records.SprintsRecord;
-
+import java.time.ZoneOffset;
 import java.util.Date;
+import pl.pg.eti.kio.skroom.model.tables.records.SprintsRecord;
 
 /**
  * Model representation of a sprint.
@@ -11,73 +11,83 @@ import java.util.Date;
  * @since 05.12.16
  */
 public class Sprint {
-	private int id;
-	private String name;
-	private Date startDate;
-	private Date endDate;
-	private Project project;
 
-	public int getId() {
-		return id;
-	}
+    private int id;
+    private String name;
+    private Date startDate;
+    private Date endDate;
+    private Project project;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public Project getProject() {
-		return project;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public Project getProject() {
+        return project;
+    }
 
-	public static Sprint fromDba(SprintsRecord record, Project project) {
-		if(record == null) {
-			return null;
-		}
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
-		Sprint sprint = new Sprint();
+    public static Sprint fromDba(SprintsRecord record, Project project) {
+        if (record == null) {
+            return null;
+        }
 
-		sprint.setId(record.getId());
-		sprint.setName(record.getName());
-		sprint.setProject(project);
-		sprint.setStartDate(record.getStartDay());
-		sprint.setEndDate(record.getEndDay());
+        Sprint sprint = new Sprint();
 
-		return sprint;
-	}
+        sprint.setId(record.getId());
+        sprint.setName(record.getName());
+        sprint.setProject(project);
+        sprint.setStartDate(Date.from(record.getStartDay().atStartOfDay(ZoneOffset.systemDefault()).toInstant()));
+        sprint.setEndDate(Date.from(record.getEndDay().atStartOfDay(ZoneOffset.systemDefault()).toInstant()));
 
-	@Override
-	public String toString() {
-		return "Sprint [id=" + id + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", project=" + project + "]";
-	}
+        return sprint;
+    }
 
-	
+    @Override
+    public String toString() {
+        return (
+            "Sprint [id=" +
+            id +
+            ", name=" +
+            name +
+            ", startDate=" +
+            startDate +
+            ", endDate=" +
+            endDate +
+            ", project=" +
+            project +
+            "]"
+        );
+    }
 }

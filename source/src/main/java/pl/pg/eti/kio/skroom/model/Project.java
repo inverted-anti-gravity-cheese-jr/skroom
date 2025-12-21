@@ -1,6 +1,6 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
+import pl.pg.eti.kio.skroom.model.tables.records.ProjectsRecord;
 
 /**
  * Project model class to manage in app.
@@ -10,71 +10,79 @@ import pl.pg.eti.kio.skroom.model.dba.tables.records.ProjectsRecord;
  */
 public class Project {
 
-	private int id = -1;
-	private String name;
-	private String description;
-	private int defaultSprintLength;
+    private int id = -1;
+    private String name;
+    private String description;
+    private int defaultSprintLength;
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getDefaultSprintLength() {
-		return defaultSprintLength;
-	}
+    public int getDefaultSprintLength() {
+        return defaultSprintLength;
+    }
 
-	public void setDefaultSprintLength(int defaultSprintLength) {
-		this.defaultSprintLength = defaultSprintLength;
-	}
+    public void setDefaultSprintLength(int defaultSprintLength) {
+        this.defaultSprintLength = defaultSprintLength;
+    }
 
-	/**
-	 * Method for converting database records into model classes.
-	 *
-	 * @param record	Database project record
-	 * @return			Model project class
-	 */
-	public static Project fromDba(ProjectsRecord record) {
-		if (record == null) {
-			return null;
-		}
+    /**
+     * Method for converting database records into model classes.
+     *
+     * @param record	Database project record
+     * @return			Model project class
+     */
+    public static Project fromDba(ProjectsRecord record) {
+        if (record == null) {
+            return null;
+        }
 
-		Project project = new Project();
+        Project project = new Project();
 
-		project.setId(record.getId());
-		project.setName(record.getName());
-		project.setDescription(record.getDescription());
-		project.setDefaultSprintLength(record.getDefaultSprintLength());
+        project.setId(record.getId());
+        project.setName(record.getName());
+        project.setDescription(record.getDescription());
+        project.setDefaultSprintLength(record.getDefaultSprintLength());
 
-		return project;
-	}
+        return project;
+    }
 
-	@Override
-	public String toString() {
-		return "Project{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", defaultSprintLength=" + defaultSprintLength +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return (
+            "Project{" +
+            "id=" +
+            id +
+            ", name='" +
+            name +
+            '\'' +
+            ", description='" +
+            description +
+            '\'' +
+            ", defaultSprintLength=" +
+            defaultSprintLength +
+            '}'
+        );
+    }
 }

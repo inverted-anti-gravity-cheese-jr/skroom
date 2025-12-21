@@ -1,11 +1,12 @@
 package pl.pg.eti.kio.skroom.model;
 
-import pl.pg.eti.kio.skroom.model.dba.tables.records.IssuesRecord;
+import pl.pg.eti.kio.skroom.model.tables.records.IssuesRecord;
 
 /**
  * Created by Marek Czerniawski on 2017-01-05.
  */
 public class Issue {
+
     private int id;
     private String name;
     private String description;
@@ -15,7 +16,13 @@ public class Issue {
     private Task task;
     private Project project;
 
-    public static Issue fromDba(IssuesRecord record, TaskStatus status, User assignee, Task task, Project project) {
+    public static Issue fromDba(
+        IssuesRecord record,
+        TaskStatus status,
+        User assignee,
+        Task task,
+        Project project
+    ) {
         Issue issue = new Issue();
         issue.setId(record.getId());
         issue.setName(record.getName());

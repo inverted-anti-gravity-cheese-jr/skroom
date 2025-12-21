@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':database-entities')
     implementation 'org.jooq:jooq:3.20.10'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'

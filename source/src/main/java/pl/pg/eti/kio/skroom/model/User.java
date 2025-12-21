@@ -1,8 +1,8 @@
 package pl.pg.eti.kio.skroom.model;
 
 import pl.pg.eti.kio.skroom.exception.NoSuchUserRoleException;
-import pl.pg.eti.kio.skroom.model.dba.tables.records.UsersRecord;
 import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
+import pl.pg.eti.kio.skroom.model.tables.records.UsersRecord;
 
 /**
  * User model class to manage in app.
@@ -12,79 +12,90 @@ import pl.pg.eti.kio.skroom.model.enumeration.UserRole;
  */
 public class User {
 
-	private int id = -1;
-	private String name;
-	private String email;
-	private String avatar;
-	private UserRole role;
+    private int id = -1;
+    private String name;
+    private String email;
+    private String avatar;
+    private UserRole role;
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getAvatar() {
-		return avatar;
-	}
+    public String getAvatar() {
+        return avatar;
+    }
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
-	public UserRole getRole() {
-		return role;
-	}
+    public UserRole getRole() {
+        return role;
+    }
 
-	public void setRole(UserRole role) {
-		this.role = role;
-	}
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
 
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", email='" + email + '\'' +
-				", avatar='" + avatar + '\'' +
-				", role=" + role +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return (
+            "User{" +
+            "id=" +
+            id +
+            ", name='" +
+            name +
+            '\'' +
+            ", email='" +
+            email +
+            '\'' +
+            ", avatar='" +
+            avatar +
+            '\'' +
+            ", role=" +
+            role +
+            '}'
+        );
+    }
 
-	/**
-	 * Method for converting database records into model classes.
-	 *
-	 * @param record Database record fetched by jOOQ
-	 * @return Converted user
-	 * @throws NoSuchUserRoleException Thrown if wrong user role supplied (check your database)
-	 */
-	public static User fromDba(UsersRecord record) throws NoSuchUserRoleException {
-		User user = new User();
+    /**
+     * Method for converting database records into model classes.
+     *
+     * @param record Database record fetched by jOOQ
+     * @return Converted user
+     * @throws NoSuchUserRoleException Thrown if wrong user role supplied (check your database)
+     */
+    public static User fromDba(UsersRecord record)
+        throws NoSuchUserRoleException {
+        User user = new User();
 
-		user.setId(record.getId());
-		user.setName(record.getName());
-		user.setEmail(record.getEmail());
-		user.setAvatar(record.getAvatar());
-		user.setRole(UserRole.getByCode(record.getRole()));
+        user.setId(record.getId());
+        user.setName(record.getName());
+        user.setEmail(record.getEmail());
+        user.setAvatar(record.getAvatar());
+        user.setRole(UserRole.getByCode(record.getRole()));
 
-		return user;
-	}
+        return user;
+    }
 }

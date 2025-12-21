@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.xerial:sqlite-jdbc:3.51.1.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.jooq.jooq-codegen-gradle' version "3.20.10"
+}
+
+jooq {
+    configuration {
+        jdbc {
+            driver = "org.sqlite.JDBC"
+            url = "jdbc:sqlite:$projectDir/src/main/resources/schema.db"
+        }
+
+        generator {
+            database {
+                name = "org.jooq.meta.sqlite.SQLiteDatabase"
+                includes = ".*"
+            }
+            generate {}
+            target {
+                packageName = "pl.pg.eti.kio.skroom.model"
+                directory = "$projectDir/generated/src/main/java"
+            }
+        }
+    }
+}
+
+sourceSets.main.java.srcDirs += "generated/src/main/java"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jooq:jooq:3.20.10'
+}

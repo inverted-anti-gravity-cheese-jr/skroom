@@ -4,6 +4,7 @@
 .classpath
 build/
 bin/
+.settings/
 data.db
 Skroom.iml
 skroom.iml
