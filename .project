@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>skroom-installer</name>
-	<comment>Project skroom-installer created by Buildship.</comment>
+	<name>skroom</name>
+	<comment>Project skroom created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -16,7 +16,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1766096541010</id>
+			<id>1766313216356</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

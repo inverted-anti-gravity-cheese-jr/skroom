@@ -1,0 +1,4 @@
+rootProject.name='skroom'
+include 'database-entities'
+include 'source'
+include 'server'

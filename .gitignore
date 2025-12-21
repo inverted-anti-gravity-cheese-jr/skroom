@@ -1,0 +1,9 @@
+.idea/
+.gradle/
+.vscode/
+.classpath
+build/
+bin/
+data.db
+Skroom.iml
+skroom.iml
