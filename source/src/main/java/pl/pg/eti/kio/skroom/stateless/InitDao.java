@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Scanner;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,22 +76,10 @@ public class InitDao {
     }
 
     private String readSqlFile(String fileName) {
-        StringBuilder result = new StringBuilder();
-        File file = new File(
-            getClass().getClassLoader().getResource(fileName).getFile()
-        );
-
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                result.append(line);
-            }
-
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        try (var fis = InitDao.class.getClassLoader().getResourceAsStream(fileName)) {
+            return new String(fis.readAllBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        return result.toString();
     }
 }

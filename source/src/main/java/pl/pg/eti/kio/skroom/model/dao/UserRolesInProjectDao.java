@@ -1,6 +1,7 @@
 package pl.pg.eti.kio.skroom.model.dao;
 
-import static pl.pg.eti.kio.skroom.model.tables.UserRolesInProject.USER_ROLES_IN_PROJECT;
+
+import static pl.pg.eti.kio.skroom.model.Tables.USER_ROLES_IN_PROJECT;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 import pl.pg.eti.kio.skroom.model.Tables;
-import pl.pg.eti.kio.skroom.model.tables.UserRolesInProject;
+import pl.pg.eti.kio.skroom.model.UserRolesInProject;
 import pl.pg.eti.kio.skroom.model.tables.records.UserRolesInProjectRecord;
 import pl.pg.eti.kio.skroom.settings.DatabaseSettings;
 

@@ -163,16 +163,13 @@ public class SprintDao {
             .selectFrom(SPRINTS)
             .where(SPRINTS.PROJECT_ID.eq(project.getId()))
             .and(
-                SPRINTS.START_DAY.le(DSL.currentDate().add(new DayToSecond(1)))
+                SPRINTS.START_DAY.le(DSL.currentLocalDate().add(new DayToSecond(1)))
             )
             .fetch();
 
         for (SprintsRecord record : sprintsRecords) {
-            LocalDateTime start = record
-                .getStartDay()
-                .toLocalDate()
-                .atStartOfDay();
-            LocalDateTime end = record.getEndDay().toLocalDate().atStartOfDay();
+            LocalDateTime start = record.getStartDay().atStartOfDay();
+            LocalDateTime end = record.getEndDay().atStartOfDay();
             LocalDateTime today = LocalDate.now().atStartOfDay();
             if (
                 (start.isBefore(today) || start.isEqual(today)) &&
@@ -269,7 +266,7 @@ public class SprintDao {
         SprintsRecord nextRecord = query
             .selectFrom(SPRINTS)
             .where(SPRINTS.PROJECT_ID.eq(sprint.getProject().getId()))
-            .and(SPRINTS.START_DAY.eq(DSL.date(sprint.getEndDate())))
+            .and(SPRINTS.START_DAY.eq(DSL.localDate(LocalDate.from(sprint.getEndDate().toInstant()))))
             .fetchOne();
 
         return Sprint.fromDba(nextRecord, sprint.getProject());
